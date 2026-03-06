@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import RASignature from "./RASignature";
 
 export default function ServiceAgreement({
   clientName = "Client Name",
@@ -983,18 +984,29 @@ export default function ServiceAgreement({
                 </div>
               </div>
 
-              {/* Signature Row */}
+              {/* Signature Row with RA and Client signatures */}
               <div className="grid grid-cols-2 border-b-2 border-gray-900">
-                <div className="p-8 border-r-2 border-gray-900">
-                  <p className="border-b-2 border-black mt-4 h-16"></p>
+                <div className="p-8 border-r-2 border-gray-900 flex flex-col items-center justify-center">
+                  <div className="mb-2">
+                    <RASignature />
+                  </div>
                   <p className="text-xs font-bold text-center mt-1">
-                    Signature
+                    Signature (RA)
                   </p>
                 </div>
-                <div className="p-8">
-                  <p className="border-b-2 border-black mt-4 h-16"></p>
+                <div className="p-8 flex flex-col items-center justify-center">
+                  <div className="mb-2">
+                    {/* Placeholder for client signature, can be replaced with actual signature if available */}
+                    <div
+                      style={{
+                        width: 120,
+                        height: 60,
+                        borderBottom: "2px solid #000",
+                      }}
+                    ></div>
+                  </div>
                   <p className="text-xs font-bold text-center mt-1">
-                    Signature
+                    Signature (Client)
                   </p>
                 </div>
               </div>

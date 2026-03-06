@@ -1,4 +1,6 @@
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import fs from "fs";
+import path from "path";
 
 export async function generateCompleteAgreementPDF(agreementData) {
   try {
@@ -1025,25 +1027,83 @@ export async function generateCompleteAgreementPDF(agreementData) {
       "For Investor charter, MITC, risk, disclosures, and disclaimers, refund policy, t&c, Fraud Awareness, and other, please visit our website: TradeMilaan and read everything to avoid any future conflict of interest. ",
     );
 
-    // SIGNATURE SECTION
+    // SIGNATURE SECTION - Two Column Table (Client left, RA right)
+    addSpace(20);
+    // Table dimensions
+    const tableWidth = pageWidth - 2 * margin;
+    const colWidth = tableWidth / 2;
+    const tableHeight = 120;
+    const tableTop = yPosition;
+    const tableLeft = margin;
+    const rowHeight = tableHeight / 2;
 
-    addSpace(20);
-    drawSectionHeading("SIGNED AND DELIVERED", 14);
-    addSpace(20);
-    // Signature and Date labels (bold), with space for signature image or line, and date, as per sample
-    const labelFontSize = 14;
-    const valueFontSize = 12;
-    const labelYOffset = 0;
-    const valueYOffset = -22;
-    // Signature label
-    currentPage.drawText("Signature:", {
-      x: margin + 2,
-      y: yPosition + labelYOffset,
-      size: labelFontSize,
+    // Draw outer border
+    currentPage.drawRectangle({
+      x: tableLeft,
+      y: tableTop - tableHeight,
+      width: tableWidth,
+      height: tableHeight,
+      borderColor: rgb(0, 0, 0),
+      borderWidth: 1.2,
+    });
+    // Draw vertical divider
+    currentPage.drawLine({
+      start: { x: tableLeft + colWidth, y: tableTop },
+      end: { x: tableLeft + colWidth, y: tableTop - tableHeight },
+      color: rgb(0, 0, 0),
+      thickness: 1.2,
+    });
+    // Draw horizontal divider
+    currentPage.drawLine({
+      start: { x: tableLeft, y: tableTop - rowHeight },
+      end: { x: tableLeft + tableWidth, y: tableTop - rowHeight },
+      color: rgb(0, 0, 0),
+      thickness: 1.2,
+    });
+
+    // --- HEADERS ---
+    const headerFontSize = 11;
+    const cellPaddingX = 12;
+    const cellPaddingY = 8;
+    // Header row
+    currentPage.drawText("SIGNED AND DELIVERED", {
+      x: tableLeft + cellPaddingX,
+      y: tableTop - cellPaddingY - 2,
+      size: headerFontSize,
       font: fontBold,
     });
-    // Draw signature image or line next to label
-    let hasSignature = false;
+    currentPage.drawText('By the within named "User"', {
+      x: tableLeft + cellPaddingX,
+      y: tableTop - cellPaddingY - 18,
+      size: 10,
+      font: font,
+    });
+    currentPage.drawText("SIGNED AND DELIVERED", {
+      x: tableLeft + colWidth + cellPaddingX,
+      y: tableTop - cellPaddingY - 2,
+      size: headerFontSize,
+      font: fontBold,
+    });
+    currentPage.drawText('By the within named "Service provider"', {
+      x: tableLeft + colWidth + cellPaddingX,
+      y: tableTop - cellPaddingY - 18,
+      size: 10,
+      font: font,
+    });
+
+    // --- SIGNATURES (centered in upper cell) ---
+    // Calculate signature image area
+    const sigAreaTop = tableTop - rowHeight;
+    const sigAreaHeight = rowHeight - 28;
+    // Client signature (left)
+    let clientSigW = colWidth - 2 * cellPaddingX;
+    let clientSigH = sigAreaHeight - 10;
+    let clientSigX =
+      tableLeft +
+      cellPaddingX +
+      (clientSigW > 120 ? (clientSigW - 120) / 2 : 0);
+    let clientSigY = sigAreaTop + (sigAreaHeight - clientSigH) / 2 + 8;
+    let hasClientSignature = false;
     if (signatureData && typeof signatureData === "string") {
       try {
         let imageBuffer = null;
@@ -1057,64 +1117,124 @@ export async function generateCompleteAgreementPDF(agreementData) {
         }
         if (imageBuffer && imageBuffer.length > 0) {
           const signatureImage = await pdfDoc.embedPng(imageBuffer);
+          // Maintain aspect ratio, max width 120, max height clientSigH
+          let pngDims = signatureImage.scale(1);
+          let scale = Math.min(
+            120 / pngDims.width,
+            clientSigH / pngDims.height,
+            1,
+          );
+          let drawW = pngDims.width * scale;
+          let drawH = pngDims.height * scale;
+          let drawX = tableLeft + (colWidth - drawW) / 2;
+          let drawY = sigAreaTop + (sigAreaHeight - drawH) / 2 + 8;
           currentPage.drawImage(signatureImage, {
-            x: margin + 90,
-            y: yPosition - 6,
-            width: 180,
-            height: 28,
+            x: drawX,
+            y: drawY,
+            width: drawW,
+            height: drawH,
           });
-          hasSignature = true;
+          hasClientSignature = true;
         }
       } catch (imgErr) {
         // Draw placeholder line
         currentPage.drawLine({
-          start: { x: margin + 90, y: yPosition + 2 },
-          end: { x: margin + 270, y: yPosition + 2 },
+          start: {
+            x: tableLeft + cellPaddingX,
+            y: sigAreaTop + sigAreaHeight / 2,
+          },
+          end: {
+            x: tableLeft + colWidth - cellPaddingX,
+            y: sigAreaTop + sigAreaHeight / 2,
+          },
           color: rgb(0, 0, 0),
           thickness: 1.2,
         });
       }
     }
-    if (!hasSignature) {
+    if (!hasClientSignature) {
       currentPage.drawLine({
-        start: { x: margin + 90, y: yPosition + 2 },
-        end: { x: margin + 270, y: yPosition + 2 },
+        start: {
+          x: tableLeft + cellPaddingX,
+          y: sigAreaTop + sigAreaHeight / 2,
+        },
+        end: {
+          x: tableLeft + colWidth - cellPaddingX,
+          y: sigAreaTop + sigAreaHeight / 2,
+        },
         color: rgb(0, 0, 0),
         thickness: 1.2,
       });
     }
-    addSpace(32);
-    // Date label
-    currentPage.drawText("Date:", {
-      x: margin + 2,
-      y: yPosition + labelYOffset,
-      size: labelFontSize,
-      font: fontBold,
-    });
 
-    currentPage.drawText(`${signedDate}`, {
-      x: margin + 90,
-      y: yPosition + 2,
-      size: valueFontSize,
+    // RA signature (right)
+    let raSigW = colWidth - 2 * cellPaddingX;
+    let raSigH = sigAreaHeight - 10;
+    // --- RA signature (right) ---
+    // Use correct path relative to project root
+    let raSignaturePath = path.join(
+      process.cwd(),
+      "src",
+      "WhatsApp Image 2026-03-05 at 11.24.13 PM.jpeg",
+    );
+    let raSigBuffer = null;
+    let raImageDrawn = false;
+    try {
+      raSigBuffer = fs.readFileSync(raSignaturePath);
+      if (raSigBuffer && raSigBuffer.length > 0) {
+        const raSigImage = await pdfDoc.embedJpg(raSigBuffer);
+        // Maintain aspect ratio, max width 120, max height raSigH
+        let jpgDims = raSigImage.scale(1);
+        let scale = Math.min(120 / jpgDims.width, raSigH / jpgDims.height, 1);
+        let drawW = jpgDims.width * scale;
+        let drawH = jpgDims.height * scale;
+        let drawX = tableLeft + colWidth + (colWidth - drawW) / 2;
+        let drawY = sigAreaTop + (sigAreaHeight - drawH) / 2 + 8;
+        currentPage.drawImage(raSigImage, {
+          x: drawX,
+          y: drawY,
+          width: drawW,
+          height: drawH,
+        });
+        raImageDrawn = true;
+      }
+    } catch (err) {
+      // If image not found, fallback below
+    }
+    // Only draw line if image was not drawn
+    if (!raImageDrawn) {
+      currentPage.drawLine({
+        start: {
+          x: tableLeft + colWidth + cellPaddingX,
+          y: sigAreaTop + sigAreaHeight / 2,
+        },
+        end: {
+          x: tableLeft + tableWidth - cellPaddingX,
+          y: sigAreaTop + sigAreaHeight / 2,
+        },
+        color: rgb(0, 0, 0),
+        thickness: 1.2,
+      });
+    }
+
+    // --- NAMES ---
+    // Client name (left)
+    currentPage.drawText(`Name: ${clientName}`, {
+      x: tableLeft + cellPaddingX,
+      y: tableTop - tableHeight + cellPaddingY,
+      size: 12,
       font: font,
     });
-    addSpace(32);
-    drawWrappedText(
-      "Note: This requirement is in accordance with SEBI RA regulations of 2014, aimed at protecting investor interests. Any inaccuracies or discrepancies in retrieving KYC from the KRA agency will result in an immediate termination of Research Services, and you will be removed from the group without prior notice. ",
-    );
-    drawWrappedText("Read SEBI Circular for more information: ");
-    drawWrappedText(
-      "Verify registration at SEBI’s official portal: https://www.sebi.gov.in/sebiweb/other/OtherAction.do?doRecognisedFpi=yes&intmId=14",
-    );
-    drawWrappedText(
-      "MITC: https://www.sebi.gov.in/legal/circulars/feb-2025/most-important-terms-and-conditions-mitc-for-research-analysts_91965.html ",
-    );
-    drawWrappedText(
-      "Investor Charter for Research Analysts: https://www.sebi.gov.in/legal/circulars/jun-2025/investor-charter-for-research-analysts_94355.html",
-    );
-    drawWrappedText(
-      "Guidelines for Research Analyst: https://www.sebi.gov.in/legal/circulars/jan-2025/guidelines-for-research-analysts_90634.html",
-    );
+    // RA name (right)
+    currentPage.drawText(`Name: ${raName}`, {
+      x: tableLeft + colWidth + cellPaddingX,
+      y: tableTop - tableHeight + cellPaddingY,
+      size: 12,
+      font: font,
+    });
+
+    // Move yPosition below table for next content
+    yPosition = tableTop - tableHeight - 20;
 
     // Finalize and return
     const pdfBytes = await pdfDoc.save();
