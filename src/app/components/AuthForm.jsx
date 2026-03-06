@@ -23,7 +23,8 @@ export default function AuthForm({ type }) {
     e.preventDefault();
     setError("");
 
-    const payload = type === "register" ? { email, password, username } : { email, password };
+    const payload =
+      type === "register" ? { email, password, username } : { email, password };
 
     const res = await fetch(`/api/auth/${type}`, {
       method: "POST",
@@ -49,23 +50,29 @@ export default function AuthForm({ type }) {
         <div className="grid items-center gap-8 rounded-3xl border border-neutral-200/70 bg-white/80 p-6 shadow-[0_30px_80px_rgba(0,0,0,0.08)] backdrop-blur lg:grid-cols-2 lg:p-10">
           <div className="space-y-8">
             <div className="space-y-3">
-              
               <div className="space-y-2">
                 <h2 className="text-3xl font-bold text-neutral-900 md:text-4xl">
                   {type === "login" ? "Welcome back" : "Create your account"}
                 </h2>
                 <p className="text-sm text-neutral-600 md:text-base">
-                  Access AI-powered market insights and personalized strategies. Sign in securely to continue to your dashboard.
+                  Access AI-powered market insights and personalized strategies.
+                  Sign in securely to continue to your dashboard.
                 </p>
               </div>
             </div>
 
-            {error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{error}</p>}
+            {error && (
+              <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                {error}
+              </p>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
               {type === "register" && (
                 <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-neutral-800">Name</span>
+                  <span className="text-sm font-semibold text-neutral-800">
+                    Name
+                  </span>
                   <input
                     type="text"
                     placeholder="Your full name"
@@ -78,7 +85,9 @@ export default function AuthForm({ type }) {
               )}
 
               <label className="block space-y-2">
-                <span className="text-sm font-semibold text-neutral-800">Email</span>
+                <span className="text-sm font-semibold text-neutral-800">
+                  Email
+                </span>
                 <input
                   type="email"
                   placeholder="you@example.com"
@@ -90,7 +99,9 @@ export default function AuthForm({ type }) {
               </label>
 
               <label className="block space-y-2">
-                <span className="text-sm font-semibold text-neutral-800">Password</span>
+                <span className="text-sm font-semibold text-neutral-800">
+                  Password
+                </span>
                 <input
                   type="password"
                   placeholder="Enter a strong password"
@@ -119,14 +130,20 @@ export default function AuthForm({ type }) {
               {type === "login" ? (
                 <p>
                   Don’t have an account?{" "}
-                  <Link href="/register" className="font-semibold text-purple-600 underline cursor-pointer decoration-2 underline-offset-4">
+                  <Link
+                    href="/register"
+                    className="font-semibold text-purple-600 underline cursor-pointer decoration-2 underline-offset-4"
+                  >
                     Register here
                   </Link>
                 </p>
               ) : (
                 <p>
                   Already have an account?{" "}
-                  <Link href="/login" className="font-semibold text-neutral-900 underline decoration-lime-400 decoration-2 underline-offset-4">
+                  <Link
+                    href="/login"
+                    className="font-semibold text-neutral-900 underline decoration-lime-400 decoration-2 underline-offset-4"
+                  >
                     Login here
                   </Link>
                 </p>
@@ -136,13 +153,7 @@ export default function AuthForm({ type }) {
 
           <div className="relative hidden h-full min-h-[320px] overflow-hidden rounded-2xl border border-neutral-200/70 bg-gradient-to-br from-neutral-900 via-neutral-800 to-black shadow-[0_30px_80px_rgba(0,0,0,0.22)] lg:block">
             <div className="absolute inset-0 bg-gradient-to-tr from-lime-400/40 via-lime-200/10 to-transparent" />
-            <Image
-              src="/trademilaan.png"
-              alt="Trading analytics dashboard"
-              fill
-              className="object-cover opacity-90"
-              priority
-            />
+            {/* Image removed for backend-only mode */}
             <div className="absolute left-6 bottom-6 flex items-center gap-3 rounded-full bg-white/80 px-4 py-2 text-sm font-semibold text-neutral-900 shadow-lg shadow-lime-200/60 backdrop-blur">
               <span className="inline-flex h-2 w-2 rounded-full bg-lime-500" />
               Secure, SEBI-compliant access

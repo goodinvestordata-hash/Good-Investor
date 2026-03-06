@@ -22,12 +22,15 @@ export default function BuyNowModal({ onClose }) {
             </button>
 
             <div className="p-8 max-h-[80vh] overflow-y-auto">
-              <h2 className="text-2xl font-semibold text-slate-900 mb-4">Terms & Conditions</h2>
+              <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+                Terms & Conditions
+              </h2>
 
               <div className="h-48 overflow-y-auto border border-slate-200 rounded-lg p-4 text-sm text-slate-700 bg-slate-50">
                 <p>
-                  This is a dummy Terms & Conditions content. Investments are subject to market risk. No assured
-                  returns. Please review carefully before proceeding.
+                  This is a dummy Terms & Conditions content. Investments are
+                  subject to market risk. No assured returns. Please review
+                  carefully before proceeding.
                 </p>
               </div>
 
@@ -92,12 +95,7 @@ export default function BuyNowModal({ onClose }) {
       )}
 
       {/* STEP 4: AGREEMENT & E-SIGN */}
-      {step === 4 && (
-        <AgreementModal 
-          onClose={onClose} 
-          onSuccess={onClose} 
-        />
-      )}
+      {step === 4 && <AgreementModal onClose={onClose} />}
     </>
   );
 }

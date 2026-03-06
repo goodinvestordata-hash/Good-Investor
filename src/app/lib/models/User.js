@@ -20,28 +20,40 @@ const UserSchema = new mongoose.Schema(
     emailOtpExpiry: { type: Date },
 
     signature: {
-  type: String, // base64 or URL
-  default: null,
-},
-signatureType: {
-  type: String,
-  enum: ["typed", "drawn", "uploaded", null],
-  default: null,
-},
-
+      type: String, // base64 or URL
+      default: null,
+    },
+    signatureType: {
+      type: String,
+      enum: ["typed", "drawn", "uploaded", null],
+      default: null,
+    },
 
     role: {
       type: String,
       enum: ["admin", "user"],
       default: "user",
     },
-       // ⬇️ NEW FIELDS FOR PDF AGREEMENT
+    // ⬇️ NEW FIELDS FOR PDF AGREEMENT
     pdfAccepted: { type: Boolean, default: false },
     pdfAcceptedAt: { type: Date, default: null },
+
+    // Payment proofs
+    paymentProofs: [
+      {
+        fileUrl: { type: String },
+        fileName: { type: String },
+        uploadedAt: { type: Date, default: Date.now },
+        status: {
+          type: String,
+          enum: ["pending", "verified", "rejected"],
+          default: "pending",
+        },
+      },
+    ],
   },
-  
-  { timestamps: true }
+
+  { timestamps: true },
 );
 
-export default mongoose.models.User ||
-  mongoose.model("User", UserSchema);
+export default mongoose.models.User || mongoose.model("User", UserSchema);

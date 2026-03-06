@@ -1,39 +1,52 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
+import { useAuth } from "@/app/context/AuthContext";
 import ESignModal from "@/app/components/ESignModal";
-
-const AgreementViewer = dynamic(
-  () => import("@/app/components/AgreementViewer"),
-  { ssr: false }
-);
+import PaymentForm from "@/app/components/buy/PaymentForm";
+import ServiceAgreement from "@/components/ServiceAgreement";
 
 export default function AgreementModal({ onClose, onSuccess }) {
-  const [fileUrl, setFileUrl] = useState(null);
+  const { user } = useAuth();
   const [checked, setChecked] = useState(false);
   const [showSign, setShowSign] = useState(false);
-  const [signedPdf, setSignedPdf] = useState(null);
+  const [signedFileId, setSignedFileId] = useState(null);
+  const [showPayment, setShowPayment] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState(null);
+  const [signingData, setSigningData] = useState(null);
+  const [capturedAgreementHtml, setCapturedAgreementHtml] = useState("");
 
-  // Fetch agreement PDF
-  useEffect(() => {
-    const loadPDF = async () => {
-      try {
-        const res = await fetch("/api/agreement");
-        if (!res.ok) throw new Error("Failed to fetch PDF");
-        const data = await res.json();
-        if (data.fileUrl) setFileUrl(data.fileUrl);
-      } catch (err) {
-        console.error("PDF Load Failed:", err);
+  // Capture agreement HTML when user submits for signing
+  const captureAgreementHtml = () => {
+    try {
+      const agreementElement = document.querySelector(".agreement-text");
+      if (agreementElement) {
+        const clonedElement = agreementElement.cloneNode(true);
+        const html = clonedElement.innerHTML || "";
+        console.log("📄 Captured agreement HTML length:", html.length);
+        console.log("📄 First 200 chars:", html.substring(0, 200));
+        return html;
+      } else {
+        console.warn("⚠️ Agreement element not found in DOM");
+        return "";
       }
-    };
-
-    loadPDF();
-  }, []);
+    } catch (err) {
+      console.error("Error capturing agreement HTML:", err);
+      return "";
+    }
+  };
 
   // Submitting agreement acceptance
   const handleSubmit = async () => {
     try {
+      // Capture the agreement HTML while it's still in the DOM
+      const htmlContent = captureAgreementHtml();
+      if (!htmlContent) {
+        console.warn("⚠️ Warning: Agreement HTML was not captured");
+      }
+      setCapturedAgreementHtml(htmlContent);
+
+      // Accept agreement
       const res = await fetch("/api/agreement/accept", { method: "POST" });
       if (!res.ok) throw new Error("Failed to accept agreement");
       setShowSign(true);
@@ -43,9 +56,95 @@ export default function AgreementModal({ onClose, onSuccess }) {
   };
 
   // Called from ESignModal AFTER stamping
-  const handleSigned = (signedUrl) => {
-    setSignedPdf(signedUrl);  // store signed pdf url
-    setShowSign(false);       // close signing modal
+  const handleSigned = async (signedData) => {
+    try {
+      // Check if user is logged in
+      if (!user) {
+        throw new Error("User not authenticated. Please log in first.");
+      }
+
+      // Use the pre-captured agreement HTML from state
+      const agreementHtml = capturedAgreementHtml || "";
+
+      if (!agreementHtml) {
+        console.warn("⚠️ Warning: Agreement HTML is empty");
+      }
+
+      console.log(
+        "📝 Using captured agreement HTML, length:",
+        agreementHtml.length,
+      );
+      console.log("🔍 Signed data:", {
+        signedName: signedData.signedName,
+        signedTimestamp: signedData.signedTimestamp,
+        hasSignatureData: !!signedData.signatureUrl,
+      });
+
+      // Prepare secure signing data for backend
+      // Use available user fields with fallbacks
+      const clientName =
+        user?.fullName ||
+        user?.name ||
+        user?.username ||
+        user?.email?.split("@")[0] ||
+        "Unknown";
+      const clientPan = user?.panNumber || user?.pan || "NOT_PROVIDED";
+
+      const signingPayload = {
+        agreementHtml, // Now using pre-captured HTML
+        userId: user?._id || user?.id,
+        clientName,
+        clientPan,
+        signatureData: signedData.signatureUrl,
+        signedName: signedData.signedName,
+        signedTimestamp: signedData.signedTimestamp,
+        signatureTab: signedData.signatureTab,
+        ipAddress: null, // Will be captured by backend
+      };
+
+      console.log(
+        "📤 Sending signing payload with HTML length:",
+        agreementHtml.length,
+      );
+
+      setSigningData(signedData);
+
+      // Send to backend for secure PDF generation and storage
+      const res = await fetch("/api/agreement/sign-and-store", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(signingPayload),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.message || "Failed to sign and store agreement");
+      }
+
+      console.log(
+        "✅ Agreement successfully signed and stored. File ID:",
+        result.fileId,
+      );
+
+      // Store the returned file ID for downloading
+      setSignedFileId(result.fileId);
+      setShowSign(false);
+    } catch (err) {
+      console.error("❌ SIGNING ERROR:", err);
+      alert("Error signing agreement: " + err.message);
+    }
+  };
+
+  // Called when payment is completed
+  const [paymentResult, setPaymentResult] = useState(null);
+  const handlePaymentComplete = (paymentData) => {
+    setShowPayment(false);
+    if (typeof paymentData === "string") {
+      setPaymentResult({ success: false, error: paymentData });
+    } else {
+      setPaymentResult(paymentData);
+    }
   };
 
   return (
@@ -60,69 +159,154 @@ export default function AgreementModal({ onClose, onSuccess }) {
           </button>
 
           <div className="p-6 max-h-[80vh] overflow-y-auto">
-
-            {/* ======================= SIGNED PREVIEW MODE ======================= */}
-            {signedPdf ? (
-              <>
-                <h2 className="text-xl font-semibold mb-4">Review Signed Agreement</h2>
-
-                <iframe
-                  src={signedPdf}
-                  className="w-full h-[500px] border rounded-xl mb-4"
-                />
-
-                <div className="flex gap-4 justify-center">
-                  <a
-                    href={signedPdf}
-                    target="_blank"
-                    download="signed-agreement.pdf"
-                    className="px-4 py-2 rounded-lg bg-gray-200 text-gray-800"
-                  >
-                    Download PDF
-                  </a>
-
-                  <button
-                    onClick={() => onSuccess(signedPdf)}
-                    className="px-4 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700"
-                  >
-                    Continue to Payment
-                  </button>
-                </div>
-              </>
+            {/* ======================= PAYMENT FORM ======================= */}
+            {showPayment ? (
+              <PaymentForm
+                onPaymentComplete={handlePaymentComplete}
+                onBack={() => setShowPayment(false)}
+              />
+            ) : paymentResult ? (
+              <div className="flex flex-col items-center justify-center h-screen">
+                {paymentResult.success ? (
+                  <>
+                    <h2 className="text-2xl font-bold text-green-600 mb-4">
+                      Payment Successful!
+                    </h2>
+                    <p className="text-lg">Thank you for your payment.</p>
+                    {paymentResult.razorpay_payment_id ? (
+                      <button
+                        className="mt-4 px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+                        onClick={async () => {
+                          const params = new URLSearchParams({
+                            payment_id: paymentResult.razorpay_payment_id,
+                            name: paymentResult.name,
+                            email: paymentResult.email,
+                            phone: paymentResult.phone,
+                            amount: paymentResult.amount?.toString() || "4399",
+                          });
+                          const response = await fetch(
+                            `/api/payment/invoice?${params.toString()}`,
+                          );
+                          const blob = await response.blob();
+                          const url = window.URL.createObjectURL(blob);
+                          const link = document.createElement("a");
+                          link.href = url;
+                          link.download = `invoice-${paymentResult.razorpay_payment_id}.pdf`;
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                          window.URL.revokeObjectURL(url);
+                        }}
+                      >
+                        Download Invoice
+                      </button>
+                    ) : (
+                      <p className="mt-4 text-gray-500">
+                        Generating invoice...
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <h2 className="text-2xl font-bold text-red-600 mb-4">
+                      Payment Failed
+                    </h2>
+                    <p className="text-lg">
+                      {paymentResult.error ||
+                        "Payment was not successful. Please try again."}
+                    </p>
+                  </>
+                )}
+                <button
+                  onClick={() => setShowPayment(false)}
+                  className="mt-6 px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
+                >
+                  Back
+                </button>
+              </div>
             ) : (
               <>
-                {/* ======================= NORMAL AGREEMENT VIEW ======================= */}
-                <h2 className="text-xl font-semibold mb-4">User Agreement</h2>
+                {/* ======================= SIGNED AGREEMENT REVIEW THEN PAYMENT THEN DOWNLOAD ======================= */}
+                {showSign ? null : signedFileId ? (
+                  <>
+                    <h2 className="text-xl font-semibold mb-4">
+                      ✓ Agreement Successfully Signed
+                    </h2>
+                    <ServiceAgreement
+                      clientName={
+                        user?.fullName ||
+                        user?.name ||
+                        user?.username ||
+                        "Client Name"
+                      }
+                      clientPan={user?.panNumber || user?.pan || "PAN000000000"}
+                      signedDate={
+                        signingData?.signedTimestamp
+                          ? new Date(
+                              signingData.signedTimestamp,
+                            ).toLocaleDateString("en-IN")
+                          : new Date().toLocaleDateString("en-IN")
+                      }
+                    />
+                    <div className="flex flex-col gap-3 mt-6 border-t pt-4">
+                      {/* Download Button - Direct PDF download */}
+                      <a
+                        href={`/api/agreement/download/${signedFileId}`}
+                        download={`agreement-${signedFileId}.pdf`}
+                        className="px-6 py-3 rounded-lg bg-green-600 text-white hover:bg-green-700 text-center font-semibold flex items-center justify-center gap-2"
+                      >
+                        <span>📥</span> Download Signed Agreement (PDF)
+                      </a>
 
-                {!fileUrl && <p>Loading PDF...</p>}
-
-                {fileUrl && (
-                  <div className="border rounded-lg shadow mb-4">
-                    <AgreementViewer fileUrl={fileUrl} />
-                  </div>
-                )}
-
-                {fileUrl && (
-                  <div className="mt-2">
-                    <label className="flex items-center gap-2 text-sm">
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={(e) => setChecked(e.target.checked)}
-                      />
-                      I have read the Agreement and will proceed to E-Sign.
-                    </label>
-
-                    <button
-                      onClick={handleSubmit}
-                      disabled={!checked}
-                      className={`mt-4 px-4 py-2 rounded-lg text-white ${
-                        checked ? "bg-purple-600 hover:bg-purple-700" : "bg-gray-400"
-                      }`}
-                    >
-                      Submit & Continue
-                    </button>
-                  </div>
+                      {/* Payment Button */}
+                      <button
+                        onClick={() => setShowPayment(true)}
+                        disabled={showPayment}
+                        className={`px-6 py-3 rounded-lg font-semibold text-center ${
+                          showPayment
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-purple-600 text-white hover:bg-purple-700"
+                        }`}
+                      >
+                        Continue to Payment
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* ======================= NORMAL AGREEMENT VIEW ======================= */}
+                    <ServiceAgreement
+                      clientName={
+                        user?.fullName ||
+                        user?.name ||
+                        user?.username ||
+                        "Client Name"
+                      }
+                      clientPan={user?.panNumber || user?.pan || "PAN000000000"}
+                      signedDate={new Date().toLocaleDateString("en-IN")}
+                    />
+                    <div className="mt-2">
+                      <label className="flex items-center gap-2 text-sm">
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={(e) => setChecked(e.target.checked)}
+                        />
+                        I have read the Agreement and will proceed to E-Sign.
+                      </label>
+                      <button
+                        onClick={handleSubmit}
+                        disabled={!checked}
+                        className={`mt-4 px-4 py-2 rounded-lg text-white ${
+                          checked
+                            ? "bg-purple-600 hover:bg-purple-700"
+                            : "bg-gray-400"
+                        }`}
+                      >
+                        Submit & Continue
+                      </button>
+                    </div>
+                  </>
                 )}
               </>
             )}
@@ -133,7 +317,7 @@ export default function AgreementModal({ onClose, onSuccess }) {
       {/* ======================= SIGN MODAL ======================= */}
       {showSign && (
         <ESignModal
-          pdfUrl={fileUrl}
+          pdfUrl={pdfUrl}
           onClose={() => setShowSign(false)}
           onSaved={handleSigned}
         />
