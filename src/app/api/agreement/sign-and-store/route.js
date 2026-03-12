@@ -16,6 +16,7 @@ export async function POST(req) {
       signedName,
       signedTimestamp,
       signatureTab,
+      clientEmail,
     } = await req.json();
 
     // Debug log
@@ -103,6 +104,7 @@ export async function POST(req) {
       fileHash,
       status: "SIGNED",
       updatedAt: new Date(),
+      clientEmail,
     };
 
     // If agreement already exists, update it; otherwise create new

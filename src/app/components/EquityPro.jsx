@@ -40,7 +40,13 @@ export default function EquityPro() {
       </div>
 
       {/* Image */}
-      {/* Image removed for backend-only mode */}
+      <div className=" rounded-2xl p-6 flex justify-center">
+        <img
+          src="/service1.jpg"
+          alt="TradeMilaan Equity Pro"
+          className="rounded-2xl w-full h-auto object-cover"
+        />
+      </div>
     </section>
   );
 }

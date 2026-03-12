@@ -11,7 +11,7 @@ export default function BuyNowButton() {
         onClick={() => setOpen(true)}
         className="bg-green-600 text-white px-6 py-2 rounded"
       >
-        Buy Now
+        Buy Now @ 4399
       </button>
 
       {open && <BuyNowModal onClose={() => setOpen(false)} />}

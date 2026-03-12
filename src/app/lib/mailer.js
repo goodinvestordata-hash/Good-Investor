@@ -1,3 +1,35 @@
+// Send agreement PDF as attachment
+export async function sendAgreementPDFMail({ to, pdfBuffer, clientName }) {
+  const from =
+    process.env.MAIL_FROM ||
+    process.env.MAIL_USER ||
+    "trademilaan.data@gmail.com";
+
+  const mailOptions = {
+    from,
+    to,
+    subject: "Your Signed Agreement PDF - TradeMilaan",
+    text: `Dear ${clientName || "User"},\n\nPlease find attached your signed agreement PDF.\n\nRegards,\nTradeMilaan`,
+    attachments: [
+      {
+        filename: "agreement.pdf",
+        content: pdfBuffer,
+        contentType: "application/pdf",
+      },
+    ],
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Agreement PDF mail sent ✅", info);
+  } catch (err) {
+    console.error("Agreement PDF mail send failed ❌", err);
+    if (err && err.response) {
+      console.error("Mailer error response:", err.response);
+    }
+    throw err;
+  }
+}
 import nodemailer from "nodemailer";
 
 console.log("MAILER FILE LOADED");

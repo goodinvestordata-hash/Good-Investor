@@ -80,6 +80,9 @@ export default function AgreementModal({ onClose, onSuccess }) {
         hasSignatureData: !!signedData.signatureUrl,
       });
 
+      // Debug: Log user object to verify email presence
+      console.log("[DEBUG] User object before signing:", user);
+
       // Prepare secure signing data for backend
       // Use available user fields with fallbacks
       const clientName =
@@ -100,6 +103,7 @@ export default function AgreementModal({ onClose, onSuccess }) {
         signedTimestamp: signedData.signedTimestamp,
         signatureTab: signedData.signatureTab,
         ipAddress: null, // Will be captured by backend
+        clientEmail: user?.email || user?.primaryEmail || "",
       };
 
       console.log(

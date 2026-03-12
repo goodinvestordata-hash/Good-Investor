@@ -11,24 +11,31 @@ export default function ServiceAgreement({
   const [showTOC, setShowTOC] = useState(false);
 
   const sections = [
-    { id: "intro", title: "Introduction" },
     { id: "definitions", title: "1. Definitions" },
-    { id: "eligibility", title: "2. User Eligibility and Registration Terms" },
-    { id: "scope", title: "3. Agreement Scope" },
-    { id: "user-decl", title: "4. User Declarations" },
-    { id: "provider-decl", title: "5. Service Provider Declarations" },
+    { id: "eligibility", title: "2. Assent & Acceptance" },
+    { id: "scope", title: "3. Service Subscription and Obligations" },
+    { id: "user-decl", title: "4. Research Report Terms & Conditions" },
+    { id: "provider-decl", title: "5. Client Information & KYC" },
+    { id: "services", title: "6. Standard Terms of Service & Client Consent" },
+    { id: "obligations", title: "7. Disclosures by Sasikumar Peyyala" },
+    { id: "risks", title: "8. Payment Terms" },
+    { id: "disclaimers", title: "9. Risk Factors" },
+    { id: "grievance", title: "10. Additional Warnings and Disclaimers" },
+    { id: "conflict", title: "11. Conflict of Interest and Compliance" },
+    { id: "model-portfolio", title: "12. Model Portfolio" },
+    { id: "client-segregation", title: "13. Client-Level Segregation" },
+    { id: "grievance-redressal", title: "14. Grievance Redressal" },
+    { id: "service-suspension", title: "15. Service Suspension & Termination" },
+    { id: "jurisdiction", title: "16. Jurisdiction and Governing Law" },
+    { id: "amendments", title: "17. Amendments" },
+    { id: "indemnification", title: "18. Indemnification" },
     {
-      id: "services",
-      title: "6. Scope of Services",
+      id: "fatca",
+      title: "19. Residency and Tax Status Confirmation - FATCA Declaration",
     },
-    { id: "obligations", title: "7. User Obligations" },
-    { id: "risks", title: "8. Risk Disclosures" },
-    { id: "disclaimers", title: "9. Disclaimers" },
-    { id: "grievance", title: "10. Grievance Redressal" },
-    { id: "force-majeure", title: "11. Force Majeure Clause" },
-    { id: "severability", title: "12. Severability & Final Terms" },
-    { id: "annexure", title: "ANNEXURE - I" },
-    { id: "mitc", title: "Most Important Terms and Conditions (MITC)" },
+    { id: "cdd", title: "20. Customer Due Diligence (CDD)" },
+    { id: "mlro", title: "21. Money Laundering Reporting Officer (MLRO)" },
+    { id: "additional-info", title: "22. Additional Information" },
     { id: "signature", title: "Signature Section" },
   ];
 
@@ -103,35 +110,6 @@ export default function ServiceAgreement({
             </div>
           </div>
 
-          {/* Introduction Section */}
-          <div id="intro" className="mb-6 text-sm leading-relaxed">
-            <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
-              INTRODUCTION
-            </h3>
-            <p className="mb-3">
-              This Service Agreement ("Agreement") is made and entered into as
-              of <span className="font-bold">{signedDate}</span> (the "Signing
-              Date") by and between:
-            </p>
-
-            <p className="mb-3">
-              This Service Agreement ("Agreement") is made between{" "}
-              <span className="font-bold">Sasikumar Peyyala</span>, having
-              registered office at 1-2/4, 29/4, Kummaripalem center, Near DSM
-              High School, Vidyadharapuram, Krishna (hereinafter referred to as
-              "Service Provider" or "RA"); and{" "}
-              <span className="font-bold">{clientName}</span> with PAN Number:{" "}
-              <span className="font-bold">{clientPan}</span> (hereinafter
-              referred to as "User").
-            </p>
-
-            <p>
-              The Services Provider and the User are hereinafter individually
-              referred to as a "Party" and collectively referred to as the
-              "Parties".
-            </p>
-          </div>
-
           {/* Section 1: DEFINITIONS */}
           <div id="definitions" className="mb-6 text-sm">
             <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
@@ -139,19 +117,22 @@ export default function ServiceAgreement({
             </h3>
             <ul className="space-y-1 ml-4">
               <li>
-                <span className="font-bold">a. "User":</span> Any individual who
-                avails services after consenting to this agreement.
+                <span className="font-bold">a. Owner / We / Us / Our:</span>{" "}
+                Refers to Sasikumar Peyyala, the SEBI-registered Research
+                Analyst entity providing research and advisory services,
+                including its employees and affiliates.
+              </li>
+
+              <li>
+                <span className="font-bold">
+                  b. User / Client / You / Your:
+                </span>{" "}
+                Any individual or legal entity subscribing to or using the
+                research services provided by Sasikumar Peyyala.
               </li>
               <li>
-                <span className="font-bold">b. "Service Provider":</span> A
-                SEBI-registered Research Analyst (RA) with Number : INH000019327
-                and BSE Enlistment Number : 6469
-              </li>
-              <li>
-                <span className="font-bold">c. "Trademilaan":</span> refers to
-                the Brand owned by the Service Provider which is used for
-                managing facilitation of user KYC, digital signing of agreements
-                and record keeping.
+                <span className="font-bold">c. Parties:</span> Collectively
+                refers to Sasikumar Peyyala and the User/Client.
               </li>
             </ul>
           </div>
@@ -159,25 +140,22 @@ export default function ServiceAgreement({
           {/* Section 2: USER ELIGIBILITY AND REGISTRATION TERMS */}
           <div id="eligibility" className="mb-6 text-sm">
             <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
-              2. USER ELIGIBILITY AND REGISTRATION TERMS
+              2. Assent & Acceptance
             </h3>
             <ul className="space-y-1 ml-4">
               <li>
-                <span className="font-bold">a. Legal Competency:</span> Only
-                individuals who are legally competent to contract under
-                applicable law may register.
+                (a) By subscribing to or utilizing the research services, you
+                confirm that you have read, understood, and agreed to these
+                Terms of Service (TOS).
               </li>
               <li>
-                <span className="font-bold">
-                  b. Minimum Age & KYC Compliance:
-                </span>{" "}
-                The User affirms they are at least 18 years of age and that all
-                submitted details for KYC are current and accurate.
+                (b) If you do not agree with these terms, you should not avail
+                the services and may seek a refund immediately if applicable.
               </li>
               <li>
-                <span className="font-bold">c. Registration Requirements:</span>{" "}
-                Registration requires accurate information, completion of KYC,
-                and agreement to these terms.
+                (c) Access to research services is granted only upon acceptance
+                of these Terms and any additional relevant terms associated with
+                specific services.
               </li>
             </ul>
           </div>
@@ -185,23 +163,19 @@ export default function ServiceAgreement({
           {/* Section 3: AGREEMENT SCOPE */}
           <div id="scope" className="mb-6 text-sm">
             <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
-              3. AGREEMENT SCOPE
+              3. Service Subscription and Obligations
             </h3>
             <ul className="space-y-1 ml-4">
               <li>
-                <span className="font-bold">a. Nature of Services:</span> The
-                User desires to access non-exclusive, non-binding
-                recommendations from the Service Provider
+                (a) Subscription Confirmation: By accepting the research
+                services from Sasikumar Peyyala, you acknowledge voluntary
+                subscription and acceptance of the terms complying with SEBI
+                (Research Analyst) Regulations, 2014.
               </li>
               <li>
-                <span className="font-bold">b. Regulatory Compliance:</span> The
-                The Service Provider holds a valid SEBI registration:
-                SEBI:INH000019327 with registration date 07-January-2025.
-              </li>
-              <li>
-                <span className="font-bold">c. Use and Risk Disclosure:</span>{" "}
-                Recommendations are for the User’s personal investment decisions
-                and subject to market risks.
+                (b) Regulatory Compliance: Both the Client and Sasikumar Peyyala
+                must comply with all applicable SEBI laws, RA Regulations, and
+                government notifications as amended from time to time.
               </li>
             </ul>
           </div>
@@ -209,71 +183,83 @@ export default function ServiceAgreement({
           {/* Section 4: USER DECLARATIONS */}
           <div id="user-decl" className="mb-6 text-sm">
             <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
-              4. USER DECLARATIONS
+              Research Report Terms & Conditions
             </h3>
             <ul className="space-y-1 ml-4">
               <li>
-                <span className="font-bold">a.</span> The User understands
-                risks, makes investment decisions independently, and will not
-                hold the Service Provider or Signalz liable for financial loss.
+                (a) The recommendations provided in this report are based on
+                publicly available information we believe to be reliable and
+                accurate at the time of publication.
               </li>
               <li>
-                <span className="font-bold">b.</span> Any investment made based
-                on recommendations in research reports are subject to market
-                risks, and recommendations do not provide any assurance of
-                returns.
+                (b) Unless otherwise stated, our recommendations are intended
+                for a 12-month investment horizon.
               </li>
               <li>
-                <span className="font-bold">c.</span> There is no recourse to
-                claim any losses incurred on the investments made based on the
-                recommendations in the research report.
+                (c) Ratings provided are based on absolute returns (positive or
+                negative) and should be interpreted accordingly.
               </li>
               <li>
-                <span className="font-bold">d.</span>Any reliance placed on the
-                research report provided by the Service Provider shall be as per
-                the user’s own judgement and assessment of the conclusions
-                contained in the research report.
+                (c) Ratings provided are based on absolute returns (positive or
+                negative) and should be interpreted accordingly.
               </li>
               <li>
-                <span className="font-bold">e.</span> The User agrees to
-                maintain updated contact details and not to share confidential
-                Research content or login credentials.
+                (e) We reserve the right to revise or withdraw ratings due to
+                reassessment of valuation, market events, or lack of clarity.
               </li>
               <li>
-                <span className="font-bold">f.</span> In the event of RA
-                suspension or SEBI action, prepaid fees will be refunded
-                proportionately
+                (f) Opinions expressed are subject to change without notice, and
+                we are under no obligation to inform clients of such changes.
               </li>
               <li>
-                <span className="font-bold">g.</span> The User shall comply with
-                all applicable laws
+                (g) Clients are advised to carefully assess market risks,
+                including the possibility of partial or permanent capital loss.
               </li>
               <li>
-                <span className="font-bold">h.</span> User agrees to inform
-                service provider information related to family members who have
-                sought or are currently seeking services from services provider
-                in the given financial year.
+                (h) There is absolutely no scope for refunding losses incurred
+                from acting on any research report or commentary.
               </li>
               <li>
-                <span className="font-bold">i.</span> The Service Provider shall
-                never ask for the User's login credentials, OTPs, or access to
-                Trading, Demat, or Bank accounts. The User shall never share
-                such information with the Service Provider or authorize the
-                Service Provider to execute trades on their behalf.
+                (i) While pro-rata refunds may be considered for subscriptions
+                due to dissatisfaction, these are not tied to investment
+                outcomes.
               </li>
               <li>
-                <span className="font-bold">j.</span> User understands that in
-                case of pre-mature termination of the RA services by either the
-                User or the Service Provider, the User shall be entitled to seek
-                refund of proportionate fees only for unexpired period, after
-                deducting all the expenses Service Provider incurred to procure
-                the user and all statutory liabilities
+                (j) Sasikumar Peyyala, along with its partners, employees,
+                officers, and affiliates, expressly disclaims any liability for
+                loss or damages arising from unintentional errors or
+                omissions in any information or recommendations contained in the
+                research reports.
               </li>
               <li>
-                <span className="font-bold">k.</span> User understands that the
-                SEBI registration, Enlistment with RAASB, and NISM certification
-                do not guarantee the performance of the Service Provider or
-                assure any returns to the user.
+                (k) All reports, including third-party reports, are carefully
+                reviewed prior to dissemination to ensure accuracy and to avoid
+                misleading statements.
+              </li>
+              <li>
+                (l) A daily closing chart of securities is available at NSE:
+                https://charting.nseindia.com/ and BSE:
+                https://charting.bseindia.com/{" "}
+              </li>
+              <li>
+                (m) The view on securities is based on both technical and
+                fundamental analysis.
+              </li>
+              <li>
+                (n) Sasikumar Peyyala adheres strictly to SEBI (Research
+                Analyst) Regulations, 2014, and does not offer investment
+                advisory or PMS (Portfolio Management Services).{" "}
+              </li>
+              <li>
+                (o) All participants must follow the instructions provided
+                during our group calls. We do not offer any one-on-one
+                investment or trading services, as this is against RA
+                regulations.{" "}
+              </li>
+              <li>
+                (p) Please note that personal queries related to group calls
+                will not be entertained. Members are responsible for their own
+                profits and losses.
               </li>
             </ul>
           </div>
@@ -283,73 +269,18 @@ export default function ServiceAgreement({
             {/* Section 5: SERVICE PROVIDER DECLARATIONS */}
             <div id="provider-decl" className="mb-6 text-sm">
               <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
-                5. SERVICE PROVIDER DECLARATIONS
+                4. Client Information & KYC
               </h3>
               <ul className="space-y-1 ml-4">
                 <li>
-                  <span className="font-bold">a.Registration info:</span> It is
-                  duly registered with SEBI as an Research Analyst pursuant to
-                  the SEBI (Research Analysts) Regulations, 2014 and its
-                  registration details are:
-                  <ul className="space-y-1 ml-4 mt-1">
-                    <li>Registration Number: INH000019327</li>
-                    <p className="text-lg font-bold text-red-700">
-                      {signedDate}
-                    </p>
-                    <li>
-                      This registration is valid and subsisting as of the date
-                      of execution of this Agreement.
-                    </li>
-                  </ul>
+                  (a) Clients must provide complete and accurate personal and
+                  financial details as required by Sasikumar Peyyala standard
+                  KYC format.
                 </li>
                 <li>
-                  <span className="font-bold">
-                    b. Research-Based Signals Without Return Guarantee:
-                  </span>{" "}
-                  Recommendations are based on analysis but do not assure
-                  returns
-                </li>
-                <li>
-                  <span className="font-bold">
-                    c. Fee Compliance and Advance Collection:
-                  </span>
-                  Fee charged by Service Provider to the User will be subject to
-                  the maximum of amount prescribed by SEBI/ Research Analyst
-                  Administration and Supervisory Body (RAASB).
-                </li>
-                <li>
-                  <span className="font-bold">d.</span> Service Provider is
-                  charging fees in advance as agreed by the User. This advance
-                  does not exceed the period stipulated by SEBI; and in the
-                  event of premature termination, refunds will be issued
-                  proportionately after necessary deductions.
-                </li>
-                <li>
-                  <span className="font-bold">e.</span> Service Provider cannot
-                  execute/carry out any trade (purchase/sell transaction) on
-                  behalf of the User.
-                </li>
-                <li>
-                  <span className="font-bold">f.</span> Fees to Service Provider
-                  is paid by the User through any of the specified modes like
-                  cheque, online bank transfer, UPI, etc. Cash payment is not
-                  allowed.
-                </li>
-                <li>
-                  <span className="font-bold">g.</span> Abide by the applicable
-                  regulations/ circulars/ directions specified by SEBI and RAASB
-                  from time to time in relation to disclosure and mitigation of
-                  any actual or potential conflict of interest. The Service
-                  Provider will endeavor to promptly inform the User of any
-                  conflict of interest that may affect the services being
-                  rendered to the User
-                </li>
-                <li>
-                  <span className="font-bold">h.</span> Any
-                  assured/guaranteed/fixed returns schemes or any other schemes
-                  of similar nature are prohibited by law. Hence, no scheme of
-                  this nature is being offered to the User by the Service
-                  Provider.
+                  (b) Supporting documentation as per SEBI and RAASB guidelines
+                  must be submitted and will be verified with the KYC
+                  Registration Agency (KRA) regularly.
                 </li>
               </ul>
             </div>
@@ -357,24 +288,57 @@ export default function ServiceAgreement({
             {/* Section 6: SCOPE OF SERVICES */}
             <div id="services" className="mb-6 text-sm">
               <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
-                6. SCOPE OF SERVICES
+                5. Standard Terms of Service & Client Consent
               </h3>
+              <h5 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
+                Clients agree and certify:
+              </h5>
               <ul className="space-y-1 ml-4">
                 <li>
-                  <span className="font-bold">a. Access to Services:</span>{" "}
-                  Research services and Recommendations will be provided only to
-                  registered Users for duration as per subscription terms
-                  through the Signalz platform.
+                  (a) I / We have read and understood the provisions of the SEBI
+                  (Research Analyst) Regulations, 2014.
                 </li>
                 <li>
-                  <span className="font-bold">b. Binding Terms:</span> Users
-                  availing services are bound by the Terms of Service provided
-                  on the official website
+                  (b) I / We have subscribed to the research service for
+                  personal use only and will exercise independent judgment
+                  before relying on the report's conclusions.
+                </li>
+                <h3>
+                  Awareness of the following risk factors and disclaimers:
+                </h3>
+                <li>
+                  (a) “Investment in securities market are subject to market
+                  risks. Read all the related documents carefully before
+                  investing.”
                 </li>
                 <li>
-                  <span className="font-bold">c. Binding Terms:</span> The
-                  latest Terms of Service can be accessed at
-                  https://www.trademilaan.in/tnc
+                  (b) Holding open positions without stop-loss or target prices
+                  can lead to significant losses; clients should exit such
+                  positions if a 20% loss threshold is reached.
+                </li>
+                <li>
+                  (c) Market conditions can cause partial or total loss of
+                  invested capital.
+                </li>
+                <li>
+                  (d) “Registration granted by SEBI and certification from NISM
+                  do not guarantee the performance of the intermediary nor
+                  assure returns to investors.”
+                </li>
+                <li>
+                  (e) Past performance is not indicative of future results.
+                </li>
+                <li>
+                  (f) There is no guarantee of returns on recommendations.
+                </li>
+                <li>
+                  (g) No claims or compensation can be made for losses arising
+                  from acting on research recommendations.
+                </li>
+                <li>
+                  (f) Strictly follow our group/platform instructions; no
+                  specific and separate instructions based on personal
+                  queries.{" "}
                 </li>
               </ul>
             </div>
@@ -382,32 +346,39 @@ export default function ServiceAgreement({
             {/* Section 7: USER OBLIGATIONS */}
             <div id="obligations" className="mb-6 text-sm">
               <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
-                7. USER OBLIGATIONS
+                6. Disclosures by Sasikumar Peyyala:
               </h3>
               <ul className="space-y-1 ml-4">
                 <li>
-                  <span className="font-bold">a. Sole Discretion in Use:</span>{" "}
-                  User may choose to act on recommendations at their sole
-                  discretion.
+                  (a) SEBI Registration Name:
+                  <span className="font-bold"> Sasikumar Peyyala</span>{" "}
                 </li>
                 <li>
-                  <span className="font-bold">b. Compliance Obligations:</span>{" "}
-                  The User shall furnish information as requested for
-                  compliance.
+                  (b) SEBI Registration Number:
+                  <span className="font-bold"> 1234</span>{" "}
                 </li>
                 <li>
-                  <span className="font-bold">
-                    c. Restriction on Redistribution:
-                  </span>{" "}
-                  User shall not distribute service content through any medium
-                  without authorization.
+                  (c) Registration Date:{" "}
+                  <span className="font-bold">Jan 07, 2025 </span>{" "}
                 </li>
                 <li>
-                  <span className="font-bold">
-                    d. Intellectual Property Rights:
-                  </span>{" "}
-                  Research Service and content is protected and must not be
-                  reused without any prior permission or applicable laws
+                  (d) Trade Name or Website:
+                  <span className="font-bold">Jan 07, 2025 </span> (Note:
+                  Official Sasikumar Peyyala Website)
+                </li>
+                <li>
+                  (f) Maximum fee charged: ₹1.51 Lakhs plus GST per annum (from
+                  Individual clients, not applicable to non-individual clients
+                  as per current SEBI RA regulations)
+                </li>
+                <li>
+                  (g) No assurance or guarantee of return is provided on
+                  research recommendations.
+                </li>
+                <li>
+                  (h) The Research Analyst declares no conflict of interest and
+                  no other professional businesses adversely affecting
+                  independence.
                 </li>
               </ul>
             </div>
@@ -415,78 +386,29 @@ export default function ServiceAgreement({
             {/* Section 8: RISK DISCLOSURES */}
             <div id="risks" className="mb-6 text-sm">
               <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
-                8. RISK DISCLOSURES
+                7. Payment Terms
               </h3>
               <ul className="space-y-1 ml-4">
                 <li>
-                  <span className="font-bold">i) Market Risks Warning:</span>{" "}
-                  "Investment in securities market are subject to market risks.
-                  Read all the related documents carefully before investing."
+                  (a) Fees for services must be paid promptly using the
+                  authorized modes and channels prescribed by Sasikumar Peyyala.
                 </li>
                 <li>
-                  <span className="font-bold">ii) Loss Possibility:</span>{" "}
-                  Market risks may result in partial or permanent loss of
-                  investments under certain market conditions.
+                  (b) Accepted payment methods and details are available on the
+                  official website.
                 </li>
                 <li>
-                  <span className="font-bold">iii) SEBI Registration:</span>{" "}
-                  Registration granted by SEBI and certification from NISM do
-                  not guarantee the performance of the intermediary nor assure
-                  returns to investors.
-                </li>
-                <li>
-                  <span className="font-bold">iv) Past Performance:</span> Past
-                  performance is not indicative of future results.
+                  (c) Clients requesting service termination and refunds will be
+                  eligible for pro-rata refunds as per SEBI guidelines and
+                  Sasikumar Peyyala Refund Policy.
                 </li>
                 <li>
                   <span className="font-bold">
-                    v) Risk Associated with Open Positions:
-                  </span>{" "}
-                  Our recommendations may be open; we may not provide any
-                  stop-loss or target price in securities recommendations. This
-                  will cause a huge loss on your portfolio in adverse market
-                  conditions, company events or any event that may impact market
-                  movement.
-                </li>
-                <li>
-                  <span className="font-bold">vi) Technical Risk:</span>{" "}
-                  Algorithmic trading systems depend on technology, including
-                  internet connectivity, server uptime, broker APIs, and
-                  third-party software. Any failure, delay, or malfunction in
-                  these components may result in unintended trades or losses.
-                </li>
-                <li>
-                  <span className="font-bold">vii) Operational Risk:</span>{" "}
-                  There is a risk that the algorithm may not function as
-                  intended due to bugs, logic errors, incorrect parameter
-                  settings, or misinterpretation of market data. Manual
-                  intervention may be required at times, especially in extreme
-                  conditions.
-                </li>
-                <li>
-                  <span className="font-bold">
-                    viii) Regulatory and Broker Compliance:
-                  </span>{" "}
-                  All users must ensure that their algorithmic activities comply
-                  with SEBI rules, exchange guidelines, and broker requirements.
-                  Unauthorised access, misuse of systems, or violation of margin
-                  norms can result in penalties or suspension.
-                </li>
-                <li>
-                  <span className="font-bold">
-                    ix) Discretion and Responsibility:
-                  </span>{" "}
-                  Users must understand that executing trades based on signals
-                  or algorithms is at their own discretion. It is your
-                  responsibility to assess suitability based on your financial
-                  condition, risk tolerance, and trading knowledge.
-                </li>
-                <li>
-                  <span className="font-bold">x) No Fiduciary Duty:</span> The
-                  service provider does not act as a portfolio manager or
-                  fiduciary. The role is limited to providing tools,
-                  infrastructure, or signals, not managing client funds in any
-                  case.
+                    (d) If you engage with such unauthorized persons, including
+                    our employees or associates, or accept return guarantees
+                    without officially informing the company, the company will
+                    not be liable for any resulting losses or liabilities.
+                  </span>
                 </li>
               </ul>
             </div>
@@ -497,506 +419,654 @@ export default function ServiceAgreement({
             {/* Section 9: DISCLAIMERS */}
             <div id="disclaimers" className="mb-6 text-sm">
               <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
-                9. DISCLAIMERS
+                8. Risk Factors
               </h3>
               <ul className="space-y-1 ml-4">
                 <li>
-                  <span className="font-bold">a.</span> Neither the Service
-                  Provider nor Algotest guarantees returns.
+                  (a) Investments carry inherent market, financial, operational,
+                  regulatory, litigation, and credit risks, among others.
+                  Detailed examples include fluctuations in market conditions,
+                  changes in laws, cyber risks, supply chain issues, and legal
+                  disputes.
                 </li>
                 <li>
-                  <span className="font-bold">b.</span> Algotest is not
-                  responsible for accuracy of the content provided by Service
-                  Provider or the advices given outside of Algotest platform.
-                </li>
-              </ul>
-            </div>
-
-            {/* Section 10: GRIEVANCE REDRESSAL */}
-            <div id="grievance" className="mb-6 text-sm">
-              <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
-                10. GRIEVANCE REDRESSAL
-              </h3>
-              <ul className="space-y-1 ml-4">
-                <li>
-                  <span className="font-bold">a. Step 1:</span> Email initial
-                  complaints to spkumar.researchanalyst@gmail.com
+                  (b) Market Risk Warning: Investment in securities markets is
+                  subject to market risks. Read all related documents carefully
+                  before investing.
                 </li>
                 <li>
-                  <span className="font-bold">b. Step 2:</span> Escalate
-                  unresolved issues to spkumar.researchanalyst@gmail.com.
+                  (c) Open Positions Risk: Positions without specified stop-loss
+                  or target levels are riskier with significantly higher loss
+                  potential.
                 </li>
                 <li>
-                  <span className="font-bold">c. Step 3:</span> If unresolved,
-                  lodge with SEBI via SCORES (www.scores.sebi.gov.in) or Smart
-                  ODR (https://smartodr.in).
+                  (d) Futures & Options Risks: High risk involved; suitable only
+                  for investors with appropriate risk appetite.
                 </li>
                 <li>
-                  <span className="font-bold">d.</span> All grievances will be
-                  addressed within 21 (twenty-one) business days or as per
-                  latest SEBI RA Regulations.
-                </li>
-              </ul>
-            </div>
-
-            {/* Section 11: FORCE MAJEURE CLAUSE */}
-            <div id="force-majeure" className="mb-6 text-sm">
-              <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
-                11. KYC & Force Majeure
-              </h3>
-              <ul className="space-y-1 ml-4">
-                <li>
-                  <span className="font-bold">a.</span> If the User's KYC (Know
-                  Your Customer) details are not available or registered with a
-                  KYC Registration Agency (KRA) at the time of subscribing to a
-                  Service Provider, the User will not be able to avail the
-                  services until the KYC is registered/approved by KRA agency.
+                  (d) Futures & Options Risks: High risk involved; suitable only
+                  for investors with appropriate risk appetite.
                 </li>
                 <li>
-                  <span className="font-bold">b.</span> KYC verification with
-                  the relevant KRA is mandatory before subscribing to any
-                  service
-                </li>
-                <li>
-                  <span className="font-bold">c.</span> Users must ensure their
-                  KYC is successfully registered with a KRA before proceeding
-                  with any subscription.
-                </li>
-                <li>
-                  <span className="font-bold">d.</span> Neither Service Provider
-                  nor Algotest will be liable for service disruptions due to
-                  force majeure events.
-                </li>
-                <li>
-                  <span className="font-bold">e.</span> The Service provider
-                  including its principals, partners, employees, affiliates,
-                  agents, representatives, and subcontractors, shall not be
-                  liable for losses or damages caused by or resulting from any
-                  event of force majeure beyond its control including, but not
-                  limited to, acts of civil or military authority, national
-                  emergencies, fire, flood, catastrophe, act of God, explosion,
-                  war, riot, theft, accident, nationalization, expropriation,
-                  currency restrictions, pandemic, lock-down imposed by
-                  governmental authorities, other measures taken by any
-                  government or agency of any country, state or territory in the
-                  world, actions taken by any regulatory authority regulating
-                  asset managers, amendments to Applicable Laws, industrial
-                  action or labour disturbances of any nature amongst employees
-                  of Service provider or of its agents or of any third parties,
-                  boycotts, work stoppages, power failures or breakdowns in
-                  communication links or equipment (including, but not limited
-                  to, loss of electronic data), international conflicts, violent
-                  or armed actions, acts of terrorism, insurrection, revolution,
-                  or failure or disruption of any relevant stock exchange,
-                  clearinghouse, clearing or settlement systems or market.
-                </li>
-                <li>
-                  <span className="font-bold">f.</span> In the event of
-                  equipment breakdowns beyond Service provider's and Algotest's
-                  control, the Service provider shall take reasonable steps to
-                  minimize service interruptions but shall have no liability
-                  with respect thereto.
-                </li>
-                <li>
-                  <span className="font-bold">g.</span> The Service provider
-                  also disclaim any liability for future consequences arising
-                  under the Prevention of Money Laundering Act, 2002, or any
-                  analogous legislation, regulations, or rules.
-                </li>
-              </ul>
-            </div>
-
-            {/* Section 12: SEVERABILITY & FINAL TERMS */}
-            <div id="severability" className="mb-6 text-sm">
-              <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
-                12. SEVERABILITY & FINAL TERMS
-              </h3>
-              <ul className="space-y-1 ml-4">
-                <li>
-                  <span className="font-bold">a.</span> If any part of the
-                  Agreement is held unenforceable, the remaining provisions will
-                  remain in effect.
-                </li>
-                <li>
-                  <span className="font-bold">b.</span> Key terms regarding
-                  tenure, jurisdiction, termination, and arbitration are defined
-                  in Appendix 1.
-                </li>
-                <li>
-                  <span className="font-bold">c.</span> The User acknowledges
-                  that they have reviewed and understood these description as
-                  provided by the Service provider of subscription.
+                  <span className="font-bold">
+                    (f) There is no recourse or right to claim compensation for
+                    losses arising from investment decisions based on research
+                    recommendations/calls.
+                  </span>
                 </li>
               </ul>
             </div>
           </div>
-
-          {/* PAGE 4 - ANNEXURE-I */}
-          <div id="annexure" className="mt-12 pt-8 border-t-4 border-gray-800">
-            <h3 className="font-bold text-lg mb-4 pb-2 border-b-2 border-gray-400">
-              ANNEXURE - I
+          {/* Section 10: GRIEVANCE REDRESSAL */}
+          <div id="grievance" className="mb-6 text-sm">
+            <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
+              9. Additional Warnings and Disclaimers
             </h3>
+            <ul className="space-y-1 ml-4">
+              <li>
+                (a) No warranties or guarantees are made regarding the accuracy,
+                results, or reliability of research, including on social media
+                platforms.
+              </li>
+              <li>
+                (b) AI and Algo Tools are used occasionally, supporting
+                fundamental and technical analysis; risks include data bias,
+                system failures, and security breaches, which can cause
+                Investments or Portfolio loss.
+              </li>
+              <li>
+                (c) Client confidentiality and data security are strictly
+                maintained.
+              </li>
+            </ul>
+          </div>
 
+          {/* Section 11: FORCE MAJEURE CLAUSE */}
+          <div id="conflict" className="mb-6 text-sm">
+            <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
+              10. Conflict of Interest and Compliance
+            </h3>
+            <ul className="space-y-1 ml-4">
+              <li>
+                (a) Sasikumar Peyyala fully complies with SEBI’s disclosure and
+                conflict of interest policies.
+              </li>
+              <li>
+                (b) There are no conflicts, financial interests, or compensation
+                arrangements from subject companies influencing research
+                reports.
+              </li>
+            </ul>
+          </div>
+
+          {/* Section 12: SEVERABILITY & FINAL TERMS */}
+          <div id="model-portfolio" className="mb-6 text-sm">
+            <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
+              11. Model Portfolio
+            </h3>
+            <ul className="space-y-1 ml-4">
+              <li>
+                (a) When applicable, model portfolios will be recommended in
+                strict adherence to SEBI guidelines, but should be used for
+                informational purposes only.
+              </li>
+            </ul>
+          </div>
+
+          <div id="client-segregation" className="mb-6 text-sm">
+            <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
+              12. Client-Level Segregation
+            </h3>
+            <ul className="space-y-1 ml-4">
+              <li>
+                (a) Existing clients cannot receive both research and
+                distribution services from the same group/family.
+              </li>
+              <li>
+                (b) New clients must select only one service at onboarding,
+                either research or distribution.
+              </li>
+            </ul>
+          </div>
+
+          <div id="grievance-redressal" className="mb-6 text-sm">
+            <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
+              13. Grievance Redressal
+            </h3>
+            <ul className="space-y-1 ml-4">
+              <li>
+                (a) Clients should report issues such as non-receipt or
+                deficiencies in reports to the designated personnel:
+              </li>
+              <li>
+                Name:
+                <span className="font-bold"> Sasikumar Peyyala</span>
+              </li>
+              <li>
+                Email:
+                <span className="font-bold">
+                  {" "}
+                  spkumar.researchanalyst@gmail.com
+                </span>
+              </li>
+              <li>
+                Phone:
+                <span className="font-bold"> +91 77022 62206</span>
+              </li>
+              <li>
+                Complaints will be addressed within 7 business days or as per
+                SEBI timelines.
+              </li>
+              <li>Unresolved complaints can be escalated to SEBI through:</li>
+              <li>
+                {" "}
+                SEBI SCORES:{" "}
+                <span className="font-bold">https://scores.sebi.gov.in/</span>
+              </li>
+              <li>
+                SEBI ODR:{" "}
+                <span className="font-bold">https://smartodr.in/</span>
+              </li>
+              <li>
+                SEBI Toll-Free:
+                <span className="font-bold">1800 22 7575 or 1800 266 7575</span>
+              </li>
+            </ul>
+          </div>
+          {/* PAGE 4 - ANNEXURE-I */}
+          <div id="service-suspension" className="mb-6 text-sm">
+            <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
+              14. Service Suspension & Termination
+            </h3>
+            <ul className="space-y-1 ml-4">
+              <li>
+                Sasikumar Peyyala reserves the right to suspend or terminate
+                service with or without notice in case of:
+              </li>
+              <li>(a) Violation of TOS (Terms and Conditions)</li>
+              <li>(b) Regulatory direction</li>
+              <li>(c) Non-payment beyond grace periods</li>
+              <li>
+                <span class="font-bold">
+                  Refunds on termination or registration suspension will be made
+                  on a pro-rata basis as per applicable SEBI regulations.
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <div id="jurisdiction" className="mb-6 text-sm">
+            <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
+              15. Jurisdiction and Governing Law
+            </h3>
+            <ul className="space-y-1 ml-4">
+              <li>
+                (a) These Terms of Service are governed by Indian law,
+                specifically SEBI regulations.
+              </li>
+              <li>
+                (b) Any disputes will be subject to the exclusive jurisdiction
+                of courts located in VIJAYAWADA, ANDHRA PRADESH.
+              </li>
+            </ul>
+          </div>
+
+          <div id="amendments" className="mb-6 text-sm">
+            <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
+              16. Amendments
+            </h3>
+            <ul className="space-y-1 ml-4">
+              <li>
+                (a) The Owner may update or modify these Terms in accordance
+                with SEBI regulations.
+              </li>
+              <li>
+                (b) Material changes will be notified on the website or via
+                email.
+              </li>
+              <li>
+                (c) Continued use of services signifies acceptance of updated
+                terms.
+              </li>
+            </ul>
+          </div>
+
+          <div id="indemnification" className="mb-6 text-sm">
+            <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
+              17. Indemnification
+            </h3>
+            <ul className="space-y-1 ml-4">
+              <li>
+                (a) You agree to indemnify and hold harmless Sasikumar Peyyala,
+                its officers, and employees against all claims arising from your
+                breach of these Terms or misuse of the service.
+              </li>
+            </ul>
+          </div>
+          <div id="fatca" className="mb-6 text-sm">
+            <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
+              18. Residency and Tax Status Confirmation - FATCA Declaration:
+            </h3>
+            <ul className="space-y-1 ml-4">
+              <li>
+                <span className="font-bold">I am a resident of India.</span>
+              </li>
+              <li>
+                <span className="font-bold">
+                  {" "}
+                  I am NOT a politically exposed person.
+                </span>
+              </li>
+              <li>
+                <span className="font-bold">
+                  {" "}
+                  I am a tax resident of India.
+                </span>
+              </li>
+              <li>
+                <span className="font-bold">
+                  Any changes in residency, tax status, or political
+                  circumstances must be updated promptly—usually within 30
+                  days.{" "}
+                </span>
+              </li>
+              <li>
+                <span className="font-bold">
+                  The client bears full responsibility for any
+                  misrepresentation.{" "}
+                </span>
+              </li>
+              <li>
+                <span className="font-bold">
+                  Data will be disclosed to the authorized Indian authorities
+                  upon request to ensure compliance.{" "}
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <div id="cdd" className="mt-12 pt-8 border-t-4 border-gray-800">
+            <h3 className="font-bold text-lg mb-4 pb-2 border-b-2 border-gray-400">
+              19. Customer Due Diligence (CDD)
+            </h3>
+            <h4>
+              Customer Due Diligence (CDD) Procedure as per SEBI Guidelines
+            </h4>
+            <h4>Key Features of the SEBI CDD Procedure</h4>
             <div className="mb-4 text-sm">
-              <p className="mb-2">
-                This Agreement shall be effective as of{" "}
-                <span className="font-bold">{signedDate}</span> (the "Effective
-                Date").
+              <li>
+                Identification and verification of the client and beneficial
+                owner through prescribed KYC documents at the onset of any
+                account-based relationship or for transactions exceeding
+                ₹50,000.
+              </li>
+
+              <li>
+                Gathering information regarding the purpose and intended nature
+                of the business relationship from the client.
+              </li>
+
+              <li>
+                Assessing the client's business, ownership structure, and
+                control patterns to evaluate risk.
+              </li>
+
+              <li>
+                Special due diligence (Enhanced Due Diligence - EDD) is required
+                for clients belonging to special categories (CSC), which include
+                non-residents, politically exposed persons (PEPs),
+                high-net-worth individuals, trusts, NGOs, and clients from
+                high-risk jurisdictions.
+              </li>
+
+              <li>
+                Ongoing monitoring of transactions throughout the relationship
+                to ensure alignment with the client's profile, source of funds,
+                and risk rating.
+              </li>
+
+              <li>
+                Reliance on third parties for CDD is allowed if they are
+                regulated, supervised, and adhere to AML/CFT regulations, along
+                with maintaining proper records and transparency.
+              </li>
+              <li>
+                Digital KYC processes have been implemented, including in-person
+                verification via video and electronic Aadhaar authentication, to
+                facilitate seamless client onboarding.
+              </li>
+              <h2>Important Note</h2>
+              <p>
+                According to the Research Analyst Regulations, there are certain
+                restrictions on collecting client data, such as investment
+                amounts, goals, liabilities, and more, as these fall under the
+                jurisdiction of the Investment Adviser Regulation.{" "}
               </p>
-
-              <div className="mb-3">
-                <p className="font-bold mb-1">a) Acceptance</p>
-                <p>
-                  This Agreement shall be deemed accepted by the User upon
-                  acknowledgement or signature. However, the Agreement shall not
-                  become operational until the User has completed both the
-                  payment and KYC (Know Your Customer) process.
-                </p>
-              </div>
-
-              <div className="mb-3">
-                <p className="font-bold mb-1">b) Pre-Service Period</p>
-                <p>
-                  If the User accepts this Agreement but does not complete the
-                  subscription purchase (including payment and KYC), the
-                  Agreement shall remain valid for a period of thirty (30)
-                  calendar days from the date of acceptance and User fulfill the
-                  payment and KYC requirements within this period, the Agreement
-                  shall be activated and the start and end dates of the services
-                  will be communicated to the User via email or other written
-                  communication.
-                </p>
-              </div>
-
-              <div className="mb-3">
-                <p className="font-bold mb-1">c) Service Activation</p>
-                <p>
-                  The service period will commence only upon successful
-                  completion of payment and KYC. The activation date shall be
-                  the date on which both conditions are fulfilled. The end date
-                  of the services will be calculated based on the agreed service
-                  duration from the activation date. These dates shall be
-                  officially communicated to the User and shall form an integral
-                  part of this Agreement.
-                </p>
-              </div>
-
-              <div className="mb-3">
-                <p className="font-bold mb-1">d) Expiry</p>
-                <p>
-                  If the payment and KYC are not completed within the thirty
-                  (30) day window, the Agreement shall automatically expire, and
-                  neither party shall hold any rights or obligations under this
-                  Agreement unless a new agreement is executed.
-                </p>
-              </div>
-
-              <div className="mb-3">
-                <p className="font-bold mb-1">e) Fees</p>
-                <p>
-                  The User agrees to pay the Service Provider the applicable
-                  fees for the services, including any statutory taxes or
-                  levies. The payments shall be made through the designated
-                  payment gateways or processors as specified by Algotest. The
-                  Research Analyst (RA) shall collect the total fee from the
-                  User. The fee will be processed through Algotest's configured
-                  payment gateway, which will split the payment—allocating the
-                  advisory fee to the RA and the facilitation/delivery charges
-                  to Algotest.
-                </p>
-              </div>
-
-              <div className="mb-3">
-                <p className="font-bold mb-1">f) Arbitration</p>
-                <p>
-                  The Parties agree to act in good faith to resolve any disputes
-                  or differences arising under or related to this Agreement
-                  through mutual discussion.
-                </p>
-                <p>
-                  If disputes remain unresolved, they shall be submitted to
-                  arbitration per SEBI's grievance redressal mechanism, if
-                  applicable. In cases beyond SEBI's jurisdiction, arbitration
-                  will be conducted as per the Arbitration and Conciliation Act,
-                  1996, including amendments thereto.
-                </p>
-              </div>
+              <p>
+                To protect everyone's best interests, we will maintain a record
+                of each client's KYC for future reference and report any
+                suspicious activities to the Financial Intelligence Unit (FIU).
+              </p>
             </div>
           </div>
 
-          {/* PAGE 5 - ANNEXURE-I continuation */}
-          <div className="mt-8 text-sm">
-            <div className="mb-4 text-sm">
-              <div className="mb-3">
-                <p className="font-bold mb-1">
-                  g) Governing Law and Jurisdiction
-                </p>
-                <p>
-                  This Agreement shall be governed and interpreted in accordance
-                  with the laws of India. The Parties agree to submit to the
-                  exclusive jurisdiction of the courts of Andhra Pradesh for any
-                  legal proceedings.
-                </p>
-              </div>
-
-              <div className="mb-3">
-                <p className="font-bold mb-1">h) Service Identification</p>
-                <p>
-                  This Agreement specifically pertains to the service titled
-                  "Service Name" as displayed on Algotest, hereinafter referred
-                  to as "the Service".
-                </p>
-                <p className="mt-2">
-                  The Service is being provided by Sasikumar Peyyala
-                  (hereinafter referred to as "the Service Provider") and
-                  purchased by the User. This clause ensures clarity by
-                  explicitly stating that the Agreement applies only to the
-                  above-mentioned service among the various offerings by the
-                  Service Provider.
-                </p>
-              </div>
-
-              <div className="mb-3">
-                <p className="font-bold mb-1">
-                  i) Termination Process and Refund Timeline
-                </p>
-                <p>
-                  The User shall be eligible for a pro-rata refund as per the
-                  refund clause. Any eligible refund shall be processed by the
-                  Service Provider within 15 business days from the date of
-                  confirmation of termination. Access to subscription services
-                  shall cease at the end of the notice period. Refunds will be
-                  applicable only to the advisory fee component; delivery and
-                  facilitation charges are non-refundable, being costs already
-                  incurred for service activation.
-                </p>
-              </div>
-
-              <div className="mb-3">
-                <p className="font-bold mb-1">j) Subscription Description</p>
-                <p>
-                  The subscription availed by the User is governed by the
-                  description and scope provided by the Service Provider. This
-                  includes features, limitations, and specific deliverables
-                  associated with the subscription and is hereby incorporated
-                  into this Agreement by reference.
-                </p>
-                <p className="mt-2">
-                  The Service Provider reserves the right to revise or update
-                  the subscription description due to changes in scope,
-                  structure, or regulatory compliance. Users will be notified of
-                  such changes via their registered email. Continued use of the
-                  services for more than 7 days post-notification shall be
-                  considered acceptance of the new terms. If the User disagrees,
-                  they may opt to discontinue and seek a proportionate refund in
-                  line with the refund policy.
-                </p>
-              </div>
-
-              <div className="mb-3">
-                <p className="font-bold mb-1">
-                  k) Subscription Details and Service Selection
-                </p>
-                <p>
-                  The final combination of services, mentorship arrangements,
-                  and related subscription specifics shall be selected by the
-                  User at the time of payment, not at the time of executing the
-                  Most Important Terms and Conditions (MITC).
-                </p>
-                <p className="mt-2">
-                  MITC execution is done at the subscription level and does not
-                  imply finalization of service combinations. The exact
-                  subscription start and end dates will be confirmed and
-                  communicated via email upon activation and shall be considered
-                  a binding part of this Agreement.
-                </p>
-              </div>
-            </div>
+          <div id="mlro" className="mb-6 text-sm">
+            <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
+              20. Money Laundering Reporting Officer (MLRO)
+            </h3>
+            <h4>Report any suspicious transaction to our MLRO department: </h4>
+            <ul className="space-y-1 ml-4">
+              <li>
+                Name:
+                <span className="font-bold"> Sasikumar Peyyala</span>
+              </li>
+              <li>
+                Email:
+                <span className="font-bold">
+                  {" "}
+                  spkumar.researchanalyst@gmail.com
+                </span>
+              </li>
+              <li>
+                Phone:
+                <span className="font-bold"> +91 77022 62206</span>
+              </li>
+            </ul>
+          </div>
+          <div id="additional-info" className="mb-6 text-sm">
+            <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
+              21. Additional Information
+            </h3>
+            <ul className="space-y-1 ml-4">
+              <li>
+                (a) Full terms, disclaimers, disclosures, investor charters,
+                MITC, refund policies, and regulatory disclosures are available
+                on the official website: TradeMilaan
+              </li>
+              <h3 className="font-bold">
+                Most Important Terms and Conditions (MITC)
+              </h3>
+              <li>Applicable to Research Services by Sasikumar Peyyala</li>
+              <li>SEBI Registration Number: </li>
+              <h3 className="font-bold">Non-Execution of Trades</h3>
+              <li>
+                (a) Sasikumar Peyyala does not execute or carry out any purchase
+                or sell transactions on behalf of clients.
+              </li>
+              <li>
+                (b) Clients are strictly advised NOT to permit the Research
+                Analyst (RA) or its representatives to execute trades on their
+                behalf.
+              </li>
+              <h3 className="font-bold"> Fee Limits and Payment Terms</h3>
+              <li>
+                (a) Fees charged to individual and Hindu Undivided Family (HUF)
+                clients shall not exceed the limits prescribed by SEBI/RAASB.
+              </li>
+              <li>
+                (b) Currently, the maximum fee is ₹1,51,000 per annum per family
+                for all research services combined.
+              </li>
+              <li>(c) This fee limit excludes statutory charges.</li>
+              <li>
+                (d) Fee limits do not apply to non-individual clients or
+                accredited investors.
+              </li>
+              <li>
+                (e) Fees may be charged in advance for a period not exceeding
+                one Year unless otherwise agreed.
+              </li>
+              <li>
+                (f) In case of premature termination, clients will receive a
+                refund of fees on a pro-rata basis for the unexpired service
+                period.
+              </li>
+              <li>
+                (g) Acceptable modes of payment include cheque, online bank
+                transfer, UPI, and other SEBI-approved methods. Cash payments
+                are strictly prohibited.
+              </li>
+              <li>
+                (h) Optionally, clients can use the Centralized Fee Collection
+                Mechanism (CeFCoM) managed by BSE Limited (recognized RAASB) to
+                make payments securely.
+              </li>
+              <h3 className="font-bold"> Conflict of Interest</h3>
+              <li>
+                (a) The RA strictly abides by SEBI and RAASB regulations
+                requiring timely disclosure and mitigation of any actual or
+                potential conflicts of interest.
+              </li>
+              <li>
+                (b) Clients will be promptly informed of any conflict that may
+                affect their research services.
+              </li>
+              <h3 className="font-bold"> Prohibition of Guaranteed Returns</h3>
+              <li>
+                (a) Any schemes involving assured, guaranteed, or fixed returns
+                are expressly prohibited by law and shall never be offered by
+                the RA.
+              </li>
+              <li>
+                (b) The RA does not guarantee profits, accuracy, or risk-free
+                investments through its research.
+              </li>
+              <h3 className="font-bold">Investor SAFETY REMINDERS</h3>
+              <h3 className="font-bold">
+                {" "}
+                Make all fee payments ONLY through:
+              </h3>
+              <li>(a) The official website of Sasikumar Peyyala.</li>
+              <li>(b) Direct bank account in the firm's name</li>
+              <li>
+                (c) CeFCoM link or SEBI-authorized payment methods like valid
+                UPI
+              </li>
+              <li>
+                (d) Never make payments to personal UPI IDs, unofficial bank
+                accounts, or through unverified third-party links.
+              </li>
+              <li>
+                If you have any doubt, contact our Compliance Officer
+                immediately:
+              </li>
+              <h3 class="font-bold"> Security and Privacy Reminders</h3>
+              <li>
+                (a) The RA will never request client's login credentials or OTPs
+                for trading/demat/bank accounts.
+              </li>
+              <li>
+                (b) Clients must never share such sensitive information with
+                anyone, including the RA.
+              </li>
+              <h3 className="font-bold">
+                Optional Centralized Fee Collection Mechanism (CeFCoM)
+              </h3>
+              <li>
+                (a) CeFCoM helps investors direct payments securely to
+                legitimate SEBI-registered advisors.
+              </li>
+              <li>
+                (b) Enables investors to track payments made to research
+                analysts.
+              </li>
+              <li>
+                (c) Investors can request CeFCoM payment links directly from
+                registered Research Analysts and pay using authorized channels.
+              </li>
+              <h3 className="font-bold">
+                Protection Against Social Media Scams
+              </h3>
+              <h4 className="font-bold"> Common Scam Tactics to Watch For:</h4>
+              <li>
+                (a) Unsolicited Invitations: Beware of unsolicited messages or
+                links inviting you to WhatsApp groups offering “VIP” trading
+                tips or free courses.
+              </li>
+              <li>
+                (b) Fake Profiles: Scammers may create fraudulent identities
+                impersonating market experts or RA representatives.
+              </li>
+              <li>
+                (c) Impersonations: Persons may masquerade as SEBI-registered
+                intermediaries, well-known CEOs, or public figures.
+              </li>
+              <li>
+                (d) Fake Testimonials: Fraudulent groups show fabricated success
+                stories to lure investors into transferring funds with false
+                promises of high returns.
+              </li>
+              <h3 className="font-bold">Guidelines to Protect Yourself:</h3>
+              <li>
+                (a) Engage only with SEBI-registered intermediaries whose
+                credentials are verified.
+              </li>
+              <li>
+                (b) Verify registration at SEBI’s official portal:
+                https://www.sebi.gov.in/sebiweb/other/OtherAction.do?doRecognisedFpi=yes&intmId=14
+              </li>
+              <li>
+                (c) Perform financial transactions only through official trading
+                apps of SEBI-registered intermediaries:
+                https://investor.sebi.gov.in/Investor-support.html
+              </li>
+              <li>
+                (d) Always communicate via authentic email addresses provided on
+                SEBI’s portal.
+              </li>
+              <h3 className="font-bold">Tips from the RA to Avoid Scams:</h3>
+              <li>
+                1. Search the registered name of your RA on SEBI’s official
+                website.
+              </li>
+              <li>
+                2. Obtain RA’s official email/phone details from SEBI’s listing.
+              </li>
+              <li>3. Initiate communication using the official email only.</li>
+              <li>
+                4. If you receive communication from an unrecognized or personal
+                email, disregard it as a potential scam.
+              </li>
+              <li>
+                5. Always pay after verifying details through SEBI check:
+                https://siportal.sebi.gov.in/intermediary/sebi-check and to a
+                @valid UPI-ID and through Centralized Fee Collection Mechanism
+                for Investment Advisers and Research Analysts (CeFCoM).{" "}
+              </li>
+              <h3 className="font-bold">
+                SEBI again advises investors to exercise extreme caution:
+              </h3>
+              <li>
+                (1) Verify registration of entities before investing at:
+                https://www.sebi.gov.in/intermediaries.html{" "}
+              </li>
+              <li>
+                (2) Carry out transactions only through authentic trading apps
+                of SEBI-registered intermediaries after verification at:
+                https://investor.sebi.gov.in/Investor-support.html{" "}
+              </li>
+              <li>
+                (3) Use “Validated UPI Handles” (“@valid” UPI IDs of
+                SEBI-registered investor-facing intermediaries) and the “SEBI
+                Check” platform by visiting
+                https://siportal.sebi.gov.in/intermediary/sebi-check or through
+                the Saarthi app, for secure investor payments (refer Press
+                Release No. 64/2025)
+              </li>
+              <li>Cyber Crime Reporting Portal: https://cybercrime.gov.in/ </li>
+              <li>
+                Report online financial fraud at the National Cybercrime
+                Helpline number 1930
+              </li>
+              <li>
+                Register Your Financial Fraud complaint:
+                https://cybercrime.gov.in/Webform/Accept.aspx{" "}
+              </li>
+              <li>
+                Cyber Crime Help:
+                https://cybercrime.gov.in/Webform/Crime_NodalGrivanceList.aspx{" "}
+              </li>
+              <li>
+                Register Your Financial Fraud complaint:
+                https://cybercrime.gov.in/Webform/Accept.aspx{" "}
+              </li>
+              <li>
+                Cyber Crime Help:
+                https://cybercrime.gov.in/Webform/Crime_NodalGrivanceList.aspx{" "}
+              </li>
+              <li>
+                Learning Video Gallery:
+                https://cybercrime.gov.in/Webform/video-category.aspx{" "}
+              </li>
+              <li>
+                For Investor charter, MITC, risk, disclosures, and disclaimers,
+                refund policy, t&c, Fraud Awareness, and other, please visit our
+                website: RAWEBSITE and read everything to avoid any future
+                conflict of interest.{" "}
+              </li>
+              <h3 className="font-bold">
+                Note: This requirement is in accordance with SEBI RA regulations
+                of 2014, aimed at protecting investor interests. Any
+                inaccuracies or discrepancies in retrieving KYC from the KRA
+                agency will result in an immediate termination of Research
+                Services, and you will be removed from the group without prior
+                notice.{" "}
+              </h3>
+              <li>Read SEBI Circular for more information: </li>
+              <li>
+                Verify registration at SEBI’s official portal:
+                https://www.sebi.gov.in/sebiweb/other/OtherAction.do?doRecognisedFpi=yes&intmId=14
+              </li>
+              <li>
+                MITC:
+                https://www.sebi.gov.in/legal/circulars/feb-2025/most-important-terms-and-conditions-mitc-for-research-analysts_91965.html{" "}
+              </li>
+              <li>
+                Investor Charter for Research Analysts:
+                https://www.sebi.gov.in/legal/circulars/jun-2025/investor-charter-for-research-analysts_94355.html
+              </li>
+              <li>
+                Guidelines for Research Analyst:
+                https://www.sebi.gov.in/legal/circulars/jan-2025/guidelines-for-research-analysts_90634.html
+              </li>
+            </ul>
           </div>
 
-          {/* PAGE 6-7 - MOST IMPORTANT TERMS AND CONDITIONS */}
-          <div id="mitc" className="mt-12 pt-8 border-t-4 border-gray-800">
-            <div className="mb-6 text-sm bg-yellow-50 p-4 border-l-8 border-yellow-600 rounded">
-              <p className="font-bold mb-2">
-                MOST IMPORTANT TERMS AND CONDITIONS (MITC)
-              </p>
-              <p className="text-xs italic mb-3">
-                [Forming part of the Terms and Conditions for providing research
-                services]
-              </p>
-
-              <ol className="space-y-2 ml-4">
-                <li>
-                  <span className="font-bold">1.</span> These terms and
-                  conditions, and consent thereon, are for the research services
-                  provided by the Research Analyst (RA) and RA cannot
-                  execute/carry out any trade (purchase/sell transaction) on
-                  behalf of, the client. Thus, the clients are advised not to
-                  permit RA to execute any trade on their behalf.
-                </li>
-                <li>
-                  <span className="font-bold">2.</span> The fee charged by RA to
-                  the client will be subject to the maximum of amount prescribed
-                  by SEBI/ Research Analyst Administration and Supervisory Body
-                  (RAASB) from time to time (applicable only for Individual and
-                  HUF Clients).
-                  <ul className="space-y-1 ml-4 mt-1">
-                    <li>
-                      a. The current fee limit is Rs 1,51,000/- per annum per
-                      family of client for all research services of the RA.
-                    </li>
-                    <li>
-                      b. The fee limit does not include statutory charges.
-                    </li>
-                    <li>
-                      c. The fee limits do not apply to a non-individual client
-                      / accredited investor.
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <span className="font-bold">3.</span> RA may charge fees in
-                  advance if agreed by the client. Such advance shall not exceed
-                  the period stipulated by SEBI; presently it is one quarter. In
-                  case of pre-mature termination of the RA services by either
-                  the client or the RA, the client shall be entitled to seek
-                  refund of proportionate fees only for unexpired period.
-                </li>
-                <li>
-                  <span className="font-bold">4.</span> Fees to RA may be paid
-                  by the client through any of the specified modes like cheque,
-                  online bank transfer, UPI, etc. Cash payment is not allowed.
-                  Optionally the client can make payments through Centralized
-                  Fee Collection Mechanism (CeFCoM) managed by BSE Limited (i.e.
-                  currently recognized RAASB).
-                </li>
-                <li>
-                  <span className="font-bold">5.</span> The RA is required to
-                  abide by the applicable regulations/ circulars/ directions
-                  specified by SEBI and RAASB from time to time in relation to
-                  disclosure and mitigation of any actual or potential conflict
-                  of interest. The RA will endeavor to promptly inform the
-                  client of any conflict of interest that may affect the
-                  services being rendered to the client.
-                </li>
-                <li>
-                  <span className="font-bold">6.</span> Any
-                  assured/guaranteed/fixed returns schemes or any other schemes
-                  of similar nature are prohibited by law. No scheme of this
-                  nature shall be offered to the client by the RA.
-                </li>
-                <li>
-                  <span className="font-bold">7.</span> The RA cannot guarantee
-                  returns, profits, accuracy, or risk-free investments from the
-                  use of the RA's research services. All opinions, projections,
-                  estimates of the RA are based on the analysis of available
-                  data under certain assumptions as of the date of
-                  preparation/publication of research report.
-                </li>
-                <li>
-                  <span className="font-bold">8.</span> Any investment made
-                  based on recommendations in research reports are subject to
-                  market risks, and recommendations do not provide any assurance
-                  of returns. There is no recourse to claim any losses incurred
-                  on the investments made based on the recommendations in the
-                  research report. Any reliance placed on the research report
-                  provided by the RA shall be as per the client's own judgement
-                  and assessment of the conclusions contained in the research
-                  report.
-                </li>
-                <li>
-                  <span className="font-bold">9.</span> The SEBI registration,
-                  Enlistment with RAASB, and NISM certification do not guarantee
-                  the performance of the RA or assure any returns to the client.
-                </li>
-                <li>
-                  <span className="font-bold">10.</span> For any grievances:
-                  <ul className="space-y-1 ml-4 mt-1">
-                    <li>
-                      Step 1: the client should first contact the RA using the
-                      details on its website or following contact details: (RA
-                      to provide details as per "Grievance Redressal /
-                      Escalation Matrix")
-                    </li>
-                    <li>
-                      Step 2: If the resolution is unsatisfactory, the client
-                      can also lodge grievances through SEBI's SCORES platform
-                      at www.scores.sebi.gov.in
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <span className="font-bold">11.</span> Clients are required to
-                  keep contact details, including email id and mobile number/s
-                  updated with the RA at all times.
-                </li>
-                <li>
-                  <span className="font-bold">12.</span> The RA shall never ask
-                  for the client's login credentials and OTPs for the client's
-                  Trading Account, Demat Account and Bank Account. Never share
-                  such information with anyone including RA.
-                </li>
-              </ol>
-
-              <div className="mt-6 pt-4 border-t-2 border-yellow-400">
-                <p className="font-bold mb-2">Investor Charter</p>
-                <p>
-                  For investor charter please visit:
-                  www.trademilaan.in/investor-charter
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* PAGE 8 - SIGNATURE SECTION */}
           <div id="signature" className="mt-12 pt-8 border-t-4 border-gray-800">
             <h3 className="font-bold text-lg mb-6 pb-2 border-b-2 border-gray-400">
               SIGNATURE SECTION
             </h3>
 
-            {/* Signature Table - Two Columns */}
             <div className="border-2 border-gray-900 mb-6">
-              {/* Header Row */}
               <div className="grid grid-cols-2 border-b-2 border-gray-900">
                 <div className="p-4 border-r-2 border-gray-900 font-bold text-center text-sm">
-                  SIGNED AND DELIVERED
-                  <br />
-                  <span className="text-xs font-normal">
-                    By the within named "Service Provider"
-                  </span>
-                </div>
-                <div className="p-4 font-bold text-center text-sm">
                   SIGNED AND DELIVERED
                   <br />
                   <span className="text-xs font-normal">
                     By the within named "User"
                   </span>
                 </div>
+                <div className="p-4 font-bold text-center text-sm">
+                  SIGNED AND DELIVERED
+                  <br />
+                  <span className="text-xs font-normal">
+                    By the within named "Service Provider"
+                  </span>
+                </div>
               </div>
 
-              {/* Name Row */}
               <div className="grid grid-cols-2 border-b-2 border-gray-900">
                 <div className="p-4 border-r-2 border-gray-900">
-                  <p className="font-bold text-sm">Name: Sasikumar Peyyala</p>
+                  <p className="font-bold text-sm">Name: {clientName}</p>
                 </div>
                 <div className="p-4">
-                  <p className="font-bold text-sm">Name: {clientName}</p>
+                  <p className="font-bold text-sm">Name: Sasikumar Peyyala</p>
                 </div>
               </div>
 
-              {/* Signature Row with RA and Client signatures */}
               <div className="grid grid-cols-2 border-b-2 border-gray-900">
-                <div className="p-8 border-r-2 border-gray-900 flex flex-col items-center justify-center">
+                <div className="p-8 flex flex-col items-center justify-center border-r-2 border-gray-900">
                   <div className="mb-2">
-                    <RASignature />
-                  </div>
-                  <p className="text-xs font-bold text-center mt-1">
-                    Signature (RA)
-                  </p>
-                </div>
-                <div className="p-8 flex flex-col items-center justify-center">
-                  <div className="mb-2">
-                    {/* Placeholder for client signature, can be replaced with actual signature if available */}
                     <div
                       style={{
                         width: 120,
@@ -1009,24 +1079,27 @@ export default function ServiceAgreement({
                     Signature (Client)
                   </p>
                 </div>
+                <div className="p-8 flex flex-col items-center justify-center">
+                  <p className="text-xs font-bold text-center mt-1">
+                    Signature (RA)
+                  </p>
+                </div>
               </div>
 
-              {/* Details Row */}
               <div className="grid grid-cols-2">
-                <div className="p-4 border-r-2 border-gray-900 text-xs">
-                  <p className="font-bold">SEBI RA Number: INH000019327</p>
-                  <p>Registration Date: 07-January-2025</p>
-                  <p className="mt-2">Date: _________________</p>
-                </div>
                 <div className="p-4 text-xs">
                   <p className="font-bold">PAN: {clientPan}</p>
                   <p>Signed by: {clientName}</p>
                   <p className="mt-2">Date: {signedDate}</p>
                 </div>
+                <div className="p-4 border-r-2 border-gray-900 text-xs">
+                  <p className="font-bold">SEBI RA Number: INH000019327</p>
+                  <p>Registration Date: 07-January-2025</p>
+                  <p className="mt-2">Date: _________________</p>
+                </div>
               </div>
             </div>
 
-            {/* Footer */}
             <div className="text-center text-xs text-gray-600 mt-8 pt-4 border-t-2 border-gray-400">
               <p className="font-bold mb-2">DIGITAL CERTIFICATE</p>
               <p>[Electronic Signature Verified]</p>

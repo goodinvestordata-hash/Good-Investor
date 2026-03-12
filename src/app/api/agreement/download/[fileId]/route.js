@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import connectDB from "@/app/lib/db";
 import SignedAgreement from "@/app/lib/models/SignedAgreement";
 import { generateCompleteAgreementPDF } from "@/app/lib/generateCompletePDF";
+import { sendAgreementPDFMail } from "@/app/lib/mailer";
 
 export async function GET(req, { params }) {
   try {
@@ -68,6 +69,29 @@ export async function GET(req, { params }) {
         pdfBuffer.length,
         "bytes",
       );
+      // Send PDF to user and admin
+      const userEmail = agreement.clientEmail; // Ensure this field exists in your model
+      const adminEmail = "spkumar.researchanalyst@gmail.com";
+      const clientName = agreement.clientName || "User";
+      // Send PDF to user and admin, await both and log results
+      const mailResults = [];
+      if (userEmail) {
+        try {
+          await sendAgreementPDFMail({ to: userEmail, pdfBuffer, clientName });
+          mailResults.push(`User mail sent to ${userEmail}`);
+        } catch (err) {
+          mailResults.push(`User mail FAILED to ${userEmail}: ${err.message}`);
+        }
+      } else {
+        mailResults.push("No user email found, not sending to user");
+      }
+      try {
+        await sendAgreementPDFMail({ to: adminEmail, pdfBuffer, clientName });
+        mailResults.push(`Admin mail sent to ${adminEmail}`);
+      } catch (err) {
+        mailResults.push(`Admin mail FAILED to ${adminEmail}: ${err.message}`);
+      }
+      console.log("Agreement PDF mail results:", mailResults);
     } catch (pdfErr) {
       console.error("PDF generation failed:", pdfErr);
       return NextResponse.json(

@@ -13,6 +13,11 @@ const signedAgreementSchema = new mongoose.Schema(
       required: false,
       default: "Unknown",
     },
+    clientEmail: {
+      type: String,
+      required: false,
+      default: null,
+    },
     clientPan: {
       type: String,
       required: false,
