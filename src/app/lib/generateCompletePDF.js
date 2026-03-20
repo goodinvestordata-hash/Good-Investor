@@ -10,11 +10,11 @@ export async function generateCompleteAgreementPDF(agreementData) {
       agreementData.signedDate || new Date().toLocaleDateString("en-IN");
     const signatureData = agreementData.signatureData || "";
 
-    const raName = "Sasikumar Peyyala"; // agreementData.raName || "RA NAME";
+    const raName = "Eeda Damodara Rao"; // agreementData.raName || "RA NAME";
 
-    let raNumber = "INH000019327";
+    let raNumber = "INH000024967";
 
-    const bseEnlistment = agreementData.bseEnlistment || "6469";
+    const bseEnlistment = agreementData.bseEnlistment || "6938";
     const raWebsite = "TRADEMILAAN";
 
     // Create a new PDF document

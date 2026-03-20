@@ -36,7 +36,7 @@ export default function BuyNowModal({ onClose }) {
                       <span className="font-bold">
                         a. Owner / We / Us / Our:
                       </span>{" "}
-                      Refers to Sasikumar Peyyala, the SEBI-registered Research
+                      Refers to Eeda Damodara Rao, the SEBI-registered Research
                       Analyst entity providing research and advisory services,
                       including its employees and affiliates.
                     </li>
@@ -46,11 +46,11 @@ export default function BuyNowModal({ onClose }) {
                         b. User / Client / You / Your:
                       </span>{" "}
                       Any individual or legal entity subscribing to or using the
-                      research services provided by Sasikumar Peyyala.
+                      research services provided by Eeda Damodara Rao.
                     </li>
                     <li>
                       <span className="font-bold">c. Parties:</span>{" "}
-                      Collectively refers to Sasikumar Peyyala and the
+                      Collectively refers to Eeda Damodara Rao and the
                       User/Client.
                     </li>
                   </ul>
@@ -88,15 +88,15 @@ export default function BuyNowModal({ onClose }) {
                   <ul className="space-y-1 ml-4">
                     <li>
                       (a) Subscription Confirmation: By accepting the research
-                      services from Sasikumar Peyyala, you acknowledge voluntary
+                      services from Eeda Damodara Rao, you acknowledge voluntary
                       subscription and acceptance of the terms complying with
                       SEBI (Research Analyst) Regulations, 2014.
                     </li>
                     <li>
-                      (b) Regulatory Compliance: Both the Client and Sasikumar
-                      Peyyala must comply with all applicable SEBI laws, RA
-                      Regulations, and government notifications as amended from
-                      time to time.
+                      (b) Regulatory Compliance: Both the Client and Eeda
+                      Damodara Rao Peyyala must comply with all applicable SEBI
+                      laws, RA Regulations, and government notifications as
+                      amended from time to time.
                     </li>
                   </ul>
                 </div>
@@ -151,7 +151,7 @@ export default function BuyNowModal({ onClose }) {
                       to investment outcomes.
                     </li>
                     <li>
-                      (j) Sasikumar Peyyala, along with its partners, employees,
+                      (j) Eeda Damodara Rao, along with its partners, employees,
                       officers, and affiliates, expressly disclaims any
                       liability for loss or damages arising from unintentional
                       errors or omissions in any information or recommendations
@@ -172,7 +172,7 @@ export default function BuyNowModal({ onClose }) {
                       fundamental analysis.
                     </li>
                     <li>
-                      (n) Sasikumar Peyyala adheres strictly to SEBI (Research
+                      (n) Eeda Damodara Rao adheres strictly to SEBI (Research
                       Analyst) Regulations, 2014, and does not offer investment
                       advisory or PMS (Portfolio Management Services).{" "}
                     </li>
@@ -200,7 +200,7 @@ export default function BuyNowModal({ onClose }) {
                     <ul className="space-y-1 ml-4">
                       <li>
                         (a) Clients must provide complete and accurate personal
-                        and financial details as required by Sasikumar Peyyala
+                        and financial details as required by Eeda Damodara Rao
                         standard KYC format.
                       </li>
                       <li>
@@ -273,19 +273,19 @@ export default function BuyNowModal({ onClose }) {
                   {/* Section 7: USER OBLIGATIONS */}
                   <div id="obligations" className="mb-6 text-sm">
                     <h3 className="font-bold text-lg mb-3 pb-2 border-b-2 border-gray-400">
-                      6. Disclosures by Sasikumar Peyyala:
+                      6. Disclosures by Eeda Damodara Rao:
                     </h3>
                     <ul className="space-y-1 ml-4">
                       <li>
                         (a) SEBI Registration Name:
                         <span className="font-bold">
                           {" "}
-                          Sasikumar Peyyala
+                          Eeda Damodara Rao
                         </span>{" "}
                       </li>
                       <li>
                         (b) SEBI Registration Number:
-                        <span className="font-bold"> 1234</span>{" "}
+                        <span className="font-bold"> INH000024967</span>{" "}
                       </li>
                       <li>
                         (c) Registration Date:{" "}
@@ -294,7 +294,7 @@ export default function BuyNowModal({ onClose }) {
                       <li>
                         (d) Trade Name or Website:
                         <span className="font-bold">Jan 07, 2025 </span> (Note:
-                        Official Sasikumar Peyyala Website)
+                        Official Eeda Damodara Rao Website)
                       </li>
                       <li>
                         (f) Maximum fee charged: ₹1.51 Lakhs plus GST per annum
@@ -322,8 +322,8 @@ export default function BuyNowModal({ onClose }) {
                     <ul className="space-y-1 ml-4">
                       <li>
                         (a) Fees for services must be paid promptly using the
-                        authorized modes and channels prescribed by Sasikumar
-                        Peyyala.
+                        authorized modes and channels prescribed by Eeda
+                        Damodara Rao.
                       </li>
                       <li>
                         (b) Accepted payment methods and details are available
@@ -332,7 +332,7 @@ export default function BuyNowModal({ onClose }) {
                       <li>
                         (c) Clients requesting service termination and refunds
                         will be eligible for pro-rata refunds as per SEBI
-                        guidelines and Sasikumar Peyyala Refund Policy.
+                        guidelines and Eeda Damodara Rao Refund Policy.
                       </li>
                       <li>
                         <span className="font-bold">
@@ -423,7 +423,7 @@ export default function BuyNowModal({ onClose }) {
                   </h3>
                   <ul className="space-y-1 ml-4">
                     <li>
-                      (a) Sasikumar Peyyala fully complies with SEBI’s
+                      (a) Eeda Damodara Rao fully complies with SEBI’s
                       disclosure and conflict of interest policies.
                     </li>
                     <li>
@@ -475,7 +475,7 @@ export default function BuyNowModal({ onClose }) {
                     </li>
                     <li>
                       Name:
-                      <span className="font-bold"> Sasikumar Peyyala</span>
+                      <span className="font-bold"> Eeda Damodara Rao</span>
                     </li>
                     <li>
                       Email:
@@ -580,8 +580,8 @@ export default function BuyNowModal({ onClose }) {
                   </h3>
                   <ul className="space-y-1 ml-4">
                     <li>
-                      (a) You agree to indemnify and hold harmless Sasikumar
-                      Peyyala, its officers, and employees against all claims
+                      (a) You agree to indemnify and hold harmless Eeda Damodara
+                      Rao, its officers, and employees against all claims
                       arising from your breach of these Terms or misuse of the
                       service.
                     </li>
@@ -711,7 +711,7 @@ export default function BuyNowModal({ onClose }) {
                   <ul className="space-y-1 ml-4">
                     <li>
                       Name:
-                      <span className="font-bold"> Sasikumar Peyyala</span>
+                      <span className="font-bold"> Eeda Damodara Rao</span>
                     </li>
                     <li>
                       Email:
@@ -741,12 +741,12 @@ export default function BuyNowModal({ onClose }) {
                       Most Important Terms and Conditions (MITC)
                     </h3>
                     <li>
-                      Applicable to Research Services by Sasikumar Peyyala
+                      Applicable to Research Services by Eeda Damodara Rao
                     </li>
-                    <li>SEBI Registration Number: </li>
+                    <li>SEBI Registration Number: INH000024967</li>
                     <h3 className="font-bold">Non-Execution of Trades</h3>
                     <li>
-                      (a) Sasikumar Peyyala does not execute or carry out any
+                      (a) Eeda Damodara Rao does not execute or carry out any
                       purchase or sell transactions on behalf of clients.
                     </li>
                     <li>
@@ -816,7 +816,7 @@ export default function BuyNowModal({ onClose }) {
                       {" "}
                       Make all fee payments ONLY through:
                     </h3>
-                    <li>(a) The official website of Sasikumar Peyyala.</li>
+                    <li>(a) The official website of Eeda Damodara Rao.</li>
                     <li>(b) Direct bank account in the firm's name</li>
                     <li>
                       (c) CeFCoM link or SEBI-authorized payment methods like
@@ -830,7 +830,10 @@ export default function BuyNowModal({ onClose }) {
                       If you have any doubt, contact our Compliance Officer
                       immediately:
                     </li>
-                    <h3 class="font-bold"> Security and Privacy Reminders</h3>
+                    <h3 className="font-bold">
+                      {" "}
+                      Security and Privacy Reminders
+                    </h3>
                     <li>
                       (a) The RA will never request client's login credentials
                       or OTPs for trading/demat/bank accounts.
