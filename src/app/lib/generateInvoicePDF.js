@@ -100,7 +100,7 @@ export async function generateInvoicePDF(invoiceData) {
 
   y -= 20;
 
-  page.drawText("SASIKUMAR PEYYALA", {
+  page.drawText("Eeda Damodara Rao", {
     x: margin,
     y,
     size: 22,
@@ -118,7 +118,7 @@ export async function generateInvoicePDF(invoiceData) {
 
   y -= 20;
 
-  page.drawText("SEBI® Research Analyst: INH000016977", {
+  page.drawText("SEBI® Research Analyst: INH000024967", {
     x: margin,
     y,
     size: 11,
