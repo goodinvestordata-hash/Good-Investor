@@ -60,10 +60,10 @@ export default function ContactDetails() {
                 Email
               </h3>
               <a
-                href="mailto:spkumar.researchanalyst@gmail.com"
+                href="mailto:damu.researchanalyst@gmail.com"
                 className="text-lg text-neutral-900 hover:text-purple-600 transition-colors break-all"
               >
-                spkumar.researchanalyst@gmail.com
+                damu.researchanalyst@gmail.com
               </a>
             </div>
           </div>
@@ -96,8 +96,8 @@ export default function ContactDetails() {
                 Address
               </h3>
               <p className="text-sm text-neutral-900">
-                1 2 4, 29 4 Kummaripalem Centerr, Near D S M, High School,
-                Vidyadharapuram, Vijayawada, VIJAYAWADA, ANDHRA PRADESH, 520012
+                T2601, MY HOME TRIDASA,TELLAPUR SANGA REDDY, HYDERABAD,
+                TELANGANA, 502032
               </p>
             </div>
           </div>

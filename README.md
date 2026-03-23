@@ -8,7 +8,7 @@ Good Investor is a cutting-edge platform that empowers traders and investors wit
 
 ## 🎯 About Good Investor
 
-Good Investor is built by **Sasikumar Peyyala**, a SEBI-registered research analyst with 9+ years of experience in financial markets. The platform leverages AI and machine learning to provide:
+Good Investor is built by **Eeda Damodara Rao**, a SEBI-registered research analyst with 9+ years of experience in financial markets. The platform leverages AI and machine learning to provide:
 
 - **Real-time market analysis** for equity, options, and commodities
 - **Personalized trading strategies** tailored to individual investor profiles
@@ -357,7 +357,7 @@ This project is proprietary and owned by **Good Investor**. Unauthorized copying
 
 ## 📞 Contact & Support
 
-- **Email** - spkumar.researchanalyst@gmail.com
+- **Email** - damu.researchanalyst@gmail.com
 - **Phone** - 077022 62206
 - **Address** - 124, 2940 Kummaripalem Center, Near DSM High School, Vidyadharapuram, Vijayawada, ANDHRA PRADESH, 520012
 - **Website** - [www.Good Investor.com](https://www.Good Investor.com)
@@ -374,6 +374,6 @@ This project is proprietary and owned by **Good Investor**. Unauthorized copying
 
 ---
 
-**Built with ❤️ by Sasikumar Peyyala & Team**
+**Built with ❤️ by Eeda Damodara Rao & Team**
 
 _Last Updated: December 30, 2025_

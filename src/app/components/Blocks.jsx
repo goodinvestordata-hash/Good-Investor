@@ -157,7 +157,7 @@ const AboutBlock = () => (
     <p>
       Our mission is empowering traders.{" "}
       <span className="text-slate-500">
-        Sasikumar Peyyala leverages advanced AI and machine learning to simplify
+        Eeda Damodara Rao leverages advanced AI and machine learning to simplify
         complex market data into actionable insights. With nine years of
         financial expertise, we develop research-driven models that help traders
         and investors make smarter, faster, and more confident decisions in

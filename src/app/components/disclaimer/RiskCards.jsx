@@ -30,11 +30,9 @@ const risks = [
   },
   {
     title: "SEBI SPECIFIED MECHANISM FOR FEE COLLECTION",
-    desc: "All research service fees must be paid online via SASIKUMAR PEYYALA account gateway or CeFCoM other payments aren’t valid",
+    desc: "All research service fees must be paid online via Eeda Damodara Rao account gateway or CeFCoM other payments aren’t valid",
   },
 ];
-
-
 
 import { motion } from "framer-motion";
 import { WobbleCard } from "../ui/wobble-card";
@@ -66,7 +64,10 @@ const cardVariants = {
 export default function RiskCards() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-white to-white py-16 px-4">
-      <div className="pointer-events-none absolute inset-0 opacity-40 blur-3xl" aria-hidden>
+      <div
+        className="pointer-events-none absolute inset-0 opacity-40 blur-3xl"
+        aria-hidden
+      >
         <div className="absolute left-10 top-20 h-56 w-56 rounded-full bg-red-300/15" />
         <div className="absolute right-10 bottom-20 h-64 w-64 rounded-full bg-orange-300/12" />
       </div>

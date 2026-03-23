@@ -59,7 +59,7 @@ const Footer = () => {
               About Us
             </h3>
             <p className="text-neutral-300 leading-relaxed text-sm">
-              Sasikumar Peyyala is a SEBI-registered research analyst with a
+              Eeda Damodara Rao is a SEBI-registered research analyst with a
               deep passion for AI and machine learning-driven trading
               strategies. With over nine years of experience in financial
               markets.
@@ -153,7 +153,7 @@ const Footer = () => {
               </a>
 
               <a
-                href="mailto:spkumar.researchanalyst@gmail.com"
+                href="mailto:damu.researchanalyst@gmail.com"
                 className="flex items-center gap-3 text-neutral-300 hover:text-lime-400 transition-colors duration-300 group break-all"
               >
                 <svg
@@ -164,7 +164,7 @@ const Footer = () => {
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                 </svg>
-                spkumar.researchanalyst@gmail.com
+                damu.researchanalyst@gmail.com
               </a>
 
               <div className="flex items-start gap-3 text-neutral-300 group">
@@ -180,9 +180,8 @@ const Footer = () => {
                   />
                 </svg>
                 <span className="leading-relaxed">
-                  1 2 4, 29 4 Kummaripalem Centerr, Near D S M, High School,
-                  Vidyadharapuram, Vijayawada, VIJAYAWADA, ANDHRA PRADESH,
-                  520012
+                  T2601, MY HOME TRIDASA,TELLAPUR SANGA REDDY, HYDERABAD,
+                  TELANGANA, 502032
                 </span>
               </div>
             </div>

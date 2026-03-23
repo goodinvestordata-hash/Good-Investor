@@ -481,7 +481,7 @@ export default function BuyNowModal({ onClose }) {
                       Email:
                       <span className="font-bold">
                         {" "}
-                        spkumar.researchanalyst@gmail.com
+                        damu.researchanalyst@gmail.com
                       </span>
                     </li>
                     <li>
@@ -521,7 +521,7 @@ export default function BuyNowModal({ onClose }) {
                   </h3>
                   <ul className="space-y-1 ml-4">
                     <li>
-                      Sasikumar Peyyala reserves the right to suspend or
+                      Eeda Damodara Rao reserves the right to suspend or
                       terminate service with or without notice in case of:
                     </li>
                     <li>(a) Violation of TOS (Terms and Conditions)</li>
@@ -717,7 +717,7 @@ export default function BuyNowModal({ onClose }) {
                       Email:
                       <span className="font-bold">
                         {" "}
-                        spkumar.researchanalyst@gmail.com
+                        damu.researchanalyst@gmail.com
                       </span>
                     </li>
                     <li>

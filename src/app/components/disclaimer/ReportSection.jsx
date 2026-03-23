@@ -8,7 +8,7 @@ export default function ReportSection() {
     {
       icon: FiMail,
       label: "Email",
-      value: "spkumar.researchanalyst@gmail.com",
+      value: "damu.researchanalyst@gmail.com",
       color: "from-blue-500 to-cyan-500",
     },
     {
@@ -39,7 +39,10 @@ export default function ReportSection() {
 
   return (
     <section className="relative overflow-hidden py-16 px-4">
-      <div className="pointer-events-none absolute inset-0 opacity-40 blur-3xl" aria-hidden>
+      <div
+        className="pointer-events-none absolute inset-0 opacity-40 blur-3xl"
+        aria-hidden
+      >
         <div className="absolute left-8 top-12 h-56 w-56 rounded-full bg-blue-300/15" />
         <div className="absolute right-8 bottom-12 h-64 w-64 rounded-full bg-emerald-300/12" />
       </div>
@@ -50,10 +53,12 @@ export default function ReportSection() {
             Compliance & Support
           </p>
           <h2 className="text-3xl md:text-4xl font-bold text-neutral-900">
-            Report any unethical practices to our support/compliance team or SEBI.
+            Report any unethical practices to our support/compliance team or
+            SEBI.
           </h2>
           <p className="text-base text-slate-600 max-w-2xl mx-auto">
-            We're committed to maintaining the highest ethical standards. Reach out anytime.
+            We're committed to maintaining the highest ethical standards. Reach
+            out anytime.
           </p>
         </div>
 
@@ -71,15 +76,22 @@ export default function ReportSection() {
               whileHover={{ y: -6 }}
               className="relative overflow-hidden rounded-2xl border border-slate-200/70 bg-white/90 p-8 shadow-[0_18px_50px_rgba(17,24,39,0.08)] backdrop-blur"
             >
-              <div className={`absolute -right-12 -top-12 h-32 w-32 rounded-full bg-gradient-to-br ${color} opacity-10 transition-transform duration-500 group-hover:scale-150`} aria-hidden />
+              <div
+                className={`absolute -right-12 -top-12 h-32 w-32 rounded-full bg-gradient-to-br ${color} opacity-10 transition-transform duration-500 group-hover:scale-150`}
+                aria-hidden
+              />
 
               <div className="relative z-10 flex flex-col items-center text-center space-y-4">
-                <div className={`flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br ${color} text-white shadow-lg`}>
+                <div
+                  className={`flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br ${color} text-white shadow-lg`}
+                >
                   <Icon size={24} />
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-lg font-semibold text-neutral-900">{label}</h3>
+                  <h3 className="text-lg font-semibold text-neutral-900">
+                    {label}
+                  </h3>
                   <p className="text-sm md:text-base font-medium text-slate-700 break-all">
                     {value}
                   </p>

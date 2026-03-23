@@ -119,8 +119,8 @@ export async function sendTermsAndConditionsMail(email) {
 
               <p style="font-size:13px;color:#4b5563;">
                 For grievances, contact
-                <a href="mailto:spkumar.researchanalyst@gmail.com">
-                  spkumar.researchanalyst@gmail.com
+                <a href="mailto:damu.researchanalyst@gmail.com">
+                  damu.researchanalyst@gmail.com
                 </a>
                 or approach SEBI via SCORES.
               </p>

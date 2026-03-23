@@ -48,15 +48,15 @@ export default function ComplaintBoard() {
         <section>
           <h2 className="text-2xl font-bold mb-3">Grievance Officer Details</h2>
           <p>
-            <b>Name:</b> SASIKUMAR PEYYALA
+            <b>Name:</b> Eeda Damodara Rao
           </p>
           <p>
             <b>Email:</b>{" "}
             <a
-              href="mailto:spkumar.researchanalyst@gmail.com"
+              href="mailto:damu.researchanalyst@gmail.com"
               className="text-blue-600 underline"
             >
-              spkumar.researchanalyst@gmail.com
+              damu.researchanalyst@gmail.com
             </a>
           </p>
           <p>
@@ -97,9 +97,9 @@ export default function ComplaintBoard() {
         <section>
           <h2 className="text-2xl font-bold mb-3">Our Commitment</h2>
           <p>
-            Trademilaan is committed to fair practices and investor protection.
-            All complaints are handled with confidentiality and in compliance
-            with SEBI regulations.
+            Good Investor is committed to fair practices and investor
+            protection. All complaints are handled with confidentiality and in
+            compliance with SEBI regulations.
           </p>
         </section>
       </div>

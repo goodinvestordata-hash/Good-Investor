@@ -684,13 +684,7 @@ export async function generateCompleteAgreementPDF(agreementData) {
       2,
     );
     drawWrappedText(`Name: ${raName} `, 11, 0, false, 2);
-    drawWrappedText(
-      `Email: spkumar.researchanalyst@gmail.com `,
-      11,
-      0,
-      false,
-      2,
-    );
+    drawWrappedText(`Email: damu.researchanalyst@gmail.com `, 11, 0, false, 2);
     drawWrappedText(`Phone: +91 77022 62206 `, 11, 0, false, 2);
     drawWrappedText(
       `Complaints will be addressed within 7 business days or as per SEBI timelines. Unresolved complaints can be escalated to SEBI through:`,
@@ -852,7 +846,7 @@ export async function generateCompleteAgreementPDF(agreementData) {
     drawSectionHeading("20. Money Laundering Reporting Officer (MLRO)");
     drawWrappedText(`Name: ${raName}`);
     drawWrappedText("Phone: +91 77022 62206");
-    drawWrappedText("Mail: spkumar.researchanalyst@gmail.com");
+    drawWrappedText("Mail: damu.researchanalyst@gmail.com");
     addSpace(8);
     drawSectionHeading("21. Additional Information");
     drawWrappedText(

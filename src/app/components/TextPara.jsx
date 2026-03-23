@@ -17,7 +17,7 @@ export default function TextPara() {
         </motion.h3>
 
         <StaggeredText
-          text="Sasikumar Peyyala leverages advanced AI and machine learning to simplify complex market data into actionable insights. With nine years of financial expertise, he develops research-driven models that help traders and investors make smarter, faster, and more confident decisions in dynamic markets."
+          text="Eeda Damodara Rao leverages advanced AI and machine learning to simplify complex market data into actionable insights. With nine years of financial expertise, he develops research-driven models that help traders and investors make smarter, faster, and more confident decisions in dynamic markets."
           className="text-4xl leading-snug"
         />
       </div>

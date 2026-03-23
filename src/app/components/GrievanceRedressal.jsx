@@ -25,7 +25,7 @@ export default function GrievanceRedressal() {
           <h2 className="text-2xl font-bold mb-4">SEBI Registration Details</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <p>
-              <b>Registered Name:</b> SASIKUMAR PEYYALA
+              <b>Registered Name:</b> Eeda Damodara Rao
             </p>
             <p>
               <b>Trade Name / Website:</b> www.Good Investor.com
@@ -72,20 +72,20 @@ export default function GrievanceRedressal() {
           <h2 className="text-2xl font-bold mb-4">Key Officials & Contacts</h2>
           <div className="space-y-2">
             <p>
-              <b>CEO:</b> SASIKUMAR PEYYALA | 📞 +91 77022 62206 | ✉️
-              SPKUMAR.RESEARCHANALYST@GMAIL.COM
+              <b>CEO:</b> Eeda Damodara Rao | 📞 +91 77022 62206 | ✉️
+              damu.researchanalyst@gmail.com
             </p>
             <p>
-              <b>Principal Officer:</b> SASIKUMAR PEYYALA | 📞 +91 77022 62206 |
-              ✉️ SPKUMAR.RESEARCHANALYST@GMAIL.COM
+              <b>Principal Officer:</b> Eeda Damodara Rao | 📞 +91 77022 62206 |
+              ✉️ damu.researchanalyst@gmail.com
             </p>
             <p>
-              <b>Compliance Officer:</b> SASIKUMAR PEYYALA | 📞 +91 77022 62206
-              | ✉️ SPKUMAR.RESEARCHANALYST@GMAIL.COM
+              <b>Compliance Officer:</b> Eeda Damodara Rao | 📞 +91 77022 62206
+              | ✉️ damu.researchanalyst@gmail.com
             </p>
             <p>
-              <b>Head – Customer Support:</b> SASIKUMAR PEYYALA | 📞 +91 77022
-              62206 | ✉️ SPKUMAR.RESEARCHANALYST@GMAIL.COM
+              <b>Head – Customer Support:</b> Eeda Damodara Rao | 📞 +91 77022
+              62206 | ✉️ damu.researchanalyst@gmail.com
             </p>
           </div>
         </section>
@@ -103,10 +103,10 @@ export default function GrievanceRedressal() {
             Support is unavailable on weekends and public holidays. You may
             still write to us at{" "}
             <a
-              href="mailto:spkumar.researchanalyst@gmail.com"
+              href="mailto:damu.researchanalyst@gmail.com"
               className="text-blue-600 underline"
             >
-              SPKUMAR.RESEARCHANALYST@GMAIL.COM
+              damu.researchanalyst@gmail.com
             </a>
             .
           </p>
@@ -119,10 +119,10 @@ export default function GrievanceRedressal() {
             If you are dissatisfied with our services, kindly raise your initial
             complaint to{" "}
             <a
-              href="mailto:spkumar.researchanalyst@gmail.com"
+              href="mailto:damu.researchanalyst@gmail.com"
               className="text-blue-600 underline"
             >
-              SPKUMAR.RESEARCHANALYST@GMAIL.COM
+              damu.researchanalyst@gmail.com
             </a>{" "}
             or contact <b>+91 77022 62206</b>.
           </p>
@@ -210,7 +210,7 @@ export default function GrievanceRedressal() {
           </h2>
           <p>
             Ensure that RA service fees are paid only to the bank account of the
-            registered Research Analyst “SASIKUMAR PEYYALA” or through verified
+            registered Research Analyst “Eeda Damodara Rao” or through verified
             payment gateways / CeFCoM. Payments outside these channels will not
             be considered valid.
           </p>

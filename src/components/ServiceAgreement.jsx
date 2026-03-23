@@ -17,7 +17,7 @@ export default function ServiceAgreement({
     { id: "user-decl", title: "4. Research Report Terms & Conditions" },
     { id: "provider-decl", title: "5. Client Information & KYC" },
     { id: "services", title: "6. Standard Terms of Service & Client Consent" },
-    { id: "obligations", title: "7. Disclosures by Sasikumar Peyyala" },
+    { id: "obligations", title: "7. Disclosures by Eeda Damodara Rao" },
     { id: "risks", title: "8. Payment Terms" },
     { id: "disclaimers", title: "9. Risk Factors" },
     { id: "grievance", title: "10. Additional Warnings and Disclaimers" },
@@ -546,7 +546,7 @@ export default function ServiceAgreement({
                 Email:
                 <span className="font-bold">
                   {" "}
-                  spkumar.researchanalyst@gmail.com
+                  damu.researchanalyst@gmail.com
                 </span>
               </li>
               <li>
@@ -764,7 +764,7 @@ export default function ServiceAgreement({
                 Email:
                 <span className="font-bold">
                   {" "}
-                  spkumar.researchanalyst@gmail.com
+                  damu.researchanalyst@gmail.com
                 </span>
               </li>
               <li>
