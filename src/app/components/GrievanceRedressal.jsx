@@ -57,13 +57,12 @@ export default function GrievanceRedressal() {
         <section>
           <h2 className="text-2xl font-bold mb-4">Office Addresses</h2>
           <p>
-            <b>Registered Office:</b> 1-2/4, 29/4 Kummaripalem Center, Near DSM
-            High School, Vidyadharapuram, Vijayawada, Andhra Pradesh – 520012
+            <b>Registered Office:</b> T2601, MY HOME TRIDASA,TELLAPUR SANGA
+            REDDY, HYDERABAD, TELANGANA, 502032
           </p>
           <p className="mt-2">
-            <b>Correspondence Office:</b> 1-2/4, 29/4 Kummaripalem Center, Near
-            DSM High School, Vidyadharapuram, Vijayawada, Andhra Pradesh –
-            520012
+            <b>Correspondence Office:</b> T2601, MY HOME TRIDASA,TELLAPUR SANGA
+            REDDY, HYDERABAD, TELANGANA, 502032
           </p>
         </section>
 
@@ -124,7 +123,7 @@ export default function GrievanceRedressal() {
             >
               damu.researchanalyst@gmail.com
             </a>{" "}
-            or contact <b>+91 77022 62206</b>.
+            or contact <b>+91 9704648777</b>.
           </p>
           <p className="mt-2">
             If unresolved after 7 days, you may escalate to SEBI through:

@@ -551,7 +551,7 @@ export default function ServiceAgreement({
               </li>
               <li>
                 Phone:
-                <span className="font-bold"> +91 77022 62206</span>
+                <span className="font-bold"> +91 9704648777</span>
               </li>
               <li>
                 Complaints will be addressed within 7 business days or as per
@@ -769,7 +769,7 @@ export default function ServiceAgreement({
               </li>
               <li>
                 Phone:
-                <span className="font-bold"> +91 77022 62206</span>
+                <span className="font-bold"> +91 9704648777</span>
               </li>
             </ul>
           </div>

@@ -722,7 +722,7 @@ export default function BuyNowModal({ onClose }) {
                     </li>
                     <li>
                       Phone:
-                      <span className="font-bold"> +91 77022 62206</span>
+                      <span className="font-bold"> +91 9704648777</span>
                     </li>
                   </ul>
                 </div>
