@@ -1,9 +1,10 @@
-import MITCHero from '@/app/components/MITCHero';
-import MITCContent from '@/app/components/MITCContent';
+import MITCHero from "@/app/components/MITCHero";
+import MITCContent from "@/app/components/MITCContent";
 
 export const metadata = {
-  title: "MITC - Trademilaan",
-  description: "Most Important Terms and Conditions for Trademilaan trading services.",
+  title: "MITC - Good Investor",
+  description:
+    "Most Important Terms and Conditions for Good Investor trading services.",
 };
 
 export default function MITCPage() {

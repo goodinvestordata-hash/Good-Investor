@@ -21,8 +21,8 @@ export default function RefundPolicy() {
       {/* ===== Content ===== */}
       <div className="max-w-5xl mx-auto px-6 py-14 space-y-8 text-gray-800 leading-relaxed">
         <p>
-          At <b>Trademilaan</b>, we believe in transparency and fairness when it
-          comes to the fees you pay for our research and advisory services.
+          At <b>Good Investor</b>, we believe in transparency and fairness when
+          it comes to the fees you pay for our research and advisory services.
           Please read the following refund policy carefully before subscribing
           to our services:
         </p>
@@ -63,8 +63,8 @@ export default function RefundPolicy() {
           </h2>
           <ul className="list-disc pl-6 space-y-2">
             <li>
-              Subscription fees are charged on fixed cycles (monthly,
-              quarterly, annually).
+              Subscription fees are charged on fixed cycles (monthly, quarterly,
+              annually).
             </li>
             <li>
               Partial-month or pro-rata refunds are not provided, except at the
@@ -79,8 +79,8 @@ export default function RefundPolicy() {
           </h2>
           <ul className="list-disc pl-6 space-y-2">
             <li>
-              If the RA’s SEBI registration is suspended for more than 60 days or
-              permanently cancelled, clients are eligible for a refund of the
+              If the RA’s SEBI registration is suspended for more than 60 days
+              or permanently cancelled, clients are eligible for a refund of the
               unutilized subscription amount from the effective date.
             </li>
             <li>
@@ -116,8 +116,8 @@ export default function RefundPolicy() {
               not guarantee profits or returns.
             </li>
             <li>
-              No refunds will be entertained for market losses or dissatisfaction
-              with investment outcomes.
+              No refunds will be entertained for market losses or
+              dissatisfaction with investment outcomes.
             </li>
           </ul>
         </section>

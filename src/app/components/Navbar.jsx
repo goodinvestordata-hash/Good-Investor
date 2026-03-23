@@ -51,7 +51,7 @@ export function Navbar() {
             onClick={closeMobile}
           >
             <p className="text-sm sm:text-base md:text-lg font-semibold leading-tight truncate">
-              Trademilaan
+              Good Inverstor
             </p>
           </Link>
         </div>

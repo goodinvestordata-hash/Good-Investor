@@ -1,10 +1,11 @@
-import ContactHero from '@/app/components/ContactHero';
-import ContactDetails from '@/app/components/ContactDetails';
-import ContactForm from '@/app/components/ContactForm';
+import ContactHero from "@/app/components/ContactHero";
+import ContactDetails from "@/app/components/ContactDetails";
+import ContactForm from "@/app/components/ContactForm";
 
 export const metadata = {
-  title: "Contact Us - Trademilaan",
-  description: "Get in touch with Trademilaan. We're here to help with your trading queries and support needs.",
+  title: "Contact Us - Good Investor",
+  description:
+    "Get in touch with Good Investor. We're here to help with your trading queries and support needs.",
 };
 
 export default function ContactPage() {

@@ -154,7 +154,7 @@ export default function AuthForm({ type }) {
           <div className="relative hidden h-full min-h-[320px] overflow-hidden rounded-2xl border border-neutral-200/70 bg-gradient-to-br from-neutral-900 via-neutral-800 to-black shadow-[0_30px_80px_rgba(0,0,0,0.22)] lg:block">
             <div className="absolute inset-0 bg-gradient-to-tr from-lime-400/40 via-lime-200/10 to-transparent" />
             <Image
-              src="/trademilaan.png"
+              src="/Good Investor.png"
               alt="Trading analytics dashboard"
               fill
               className="object-cover opacity-90"

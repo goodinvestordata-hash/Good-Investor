@@ -21,7 +21,7 @@ export default function ComplaintBoard() {
       {/* ===== Content ===== */}
       <div className="max-w-5xl mx-auto px-6 py-14 space-y-8 text-gray-800 leading-relaxed">
         <p>
-          At <b>Trademilaan</b>, we are committed to providing transparent and
+          At <b>Good Investor</b>, we are committed to providing transparent and
           professional research services. If you have any concerns, issues, or
           complaints regarding our services, you may raise them through this
           Complaint Board.
@@ -35,8 +35,8 @@ export default function ComplaintBoard() {
               Grievance Officer.
             </li>
             <li>
-              Mention your registered name, contact details, and subscription
-              ID (if applicable).
+              Mention your registered name, contact details, and subscription ID
+              (if applicable).
             </li>
             <li>
               Clearly describe the issue and attach supporting documents, if

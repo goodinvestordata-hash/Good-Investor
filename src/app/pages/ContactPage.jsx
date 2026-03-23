@@ -1,8 +1,8 @@
-// File: trademilaan/src/pages/ContactPage.jsx
-import React from 'react';
-import ContactHero from '@/components/ContactHero';
-import ContactDetails from '@/components/ContactDetails';
-import ContactForm from '@/components/ContactForm';
+// File: Good Investor/src/pages/ContactPage.jsx
+import React from "react";
+import ContactHero from "@/components/ContactHero";
+import ContactDetails from "@/components/ContactDetails";
+import ContactForm from "@/components/ContactForm";
 
 const ContactPage = () => {
   return (

@@ -781,7 +781,7 @@ export default function ServiceAgreement({
               <li>
                 (a) Full terms, disclaimers, disclosures, investor charters,
                 MITC, refund policies, and regulatory disclosures are available
-                on the official website: TradeMilaan
+                on the official website: Good Investor
               </li>
               <h3 className="font-bold">
                 Most Important Terms and Conditions (MITC)
@@ -870,7 +870,7 @@ export default function ServiceAgreement({
                 If you have any doubt, contact our Compliance Officer
                 immediately:
               </li>
-              <h3 class="font-bold"> Security and Privacy Reminders</h3>
+              <h3 className="font-bold"> Security and Privacy Reminders</h3>
               <li>
                 (a) The RA will never request client's login credentials or OTPs
                 for trading/demat/bank accounts.

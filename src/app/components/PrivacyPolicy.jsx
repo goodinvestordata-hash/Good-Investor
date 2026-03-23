@@ -28,11 +28,11 @@ export default function PrivacyPolicy() {
             “our”, “us”) collect, use, share, protect or otherwise process your
             personal data through our website{" "}
             <a
-              href="https://trademilaan.in/"
+              href="https://Good Investor.in/"
               target="_blank"
               className="text-blue-600 underline"
             >
-              https://trademilaan.in/
+              https://Good Investor.in/
             </a>{" "}
             (“Platform”). By using this Platform, you agree to be governed by
             this Privacy Policy and the laws of India. If you do not agree,
@@ -141,7 +141,8 @@ export default function PrivacyPolicy() {
             By using the Platform, you consent to the collection, use, storage,
             and processing of your data in accordance with this Privacy Policy.
             You may withdraw consent by writing to our Grievance Officer with
-            the subject line <b>“Withdrawal of consent for processing personal data”</b>.
+            the subject line{" "}
+            <b>“Withdrawal of consent for processing personal data”</b>.
           </p>
           <p className="mt-2">
             Withdrawal of consent is not retrospective and may affect your

@@ -126,7 +126,7 @@ export async function generateInvoicePDF(invoiceData) {
     color: rgb(0.7, 0.1, 0.1),
   });
 
-  page.drawText("Trade Name or Website: www.trademilaan.in", {
+  page.drawText("Trade Name or Website: www.Good Investor.in", {
     x: 310,
     y,
     size: 10,
@@ -297,7 +297,7 @@ export async function generateInvoicePDF(invoiceData) {
     "11. If you wish to activate our various package services, please contact us to proceed.",
     "12. The services are valid for the specified duration from the payment date.",
     "13. If the services are not activated due to technical reasons, you can reach us for a refund within 2 additional months of research services will be provided. In the event of a refund, one month's service will be held as a retention fee.",
-    "14. To review the terms and conditions for each of our research services, please visit our website at www.trademilaan.in.",
+    "14. To review the terms and conditions for each of our research services, please visit our website at www.Good Investor.in.",
   ];
 
   for (const t of terms) {

@@ -193,11 +193,11 @@ const Footer = () => {
         <div className="border-t border-white/10 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-neutral-400">
             <p className="text-center md:text-left">
-              Trademilaan Copyright©{currentYear}. All Right Reserved.
+              Good Investor Copyright©{currentYear}. All Right Reserved.
             </p>
             <p className="text-center md:text-right">
               Design & Developed by{" "}
-              <span className="text-lime-400 font-semibold">Trademilaan</span>
+              <span className="text-lime-400 font-semibold">Good Investor</span>
             </p>
           </div>
         </div>

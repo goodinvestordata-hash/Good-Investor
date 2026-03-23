@@ -11,36 +11,38 @@ cloudinary.config({
 export async function uploadToCloudinary(
   fileBuffer,
   filename,
-  folder = "trademilaan/documents"
+  folder = "Good Investor/documents",
 ) {
   return new Promise((resolve, reject) => {
     const baseName = filename.replace(/\.[^/.]+$/, ""); // remove extension
 
-    cloudinary.uploader.upload_stream(
-      {
-        folder,
-        public_id: baseName,
-        resource_type: "image", // IMPORTANT
-        format: "pdf",          // FORCE PDF FORMAT
-        type: "upload",
-        overwrite: true,
-        use_filename: true,
-        unique_filename: false,
-      },
-      (error, result) => {
-        if (error) {
-          console.error("Cloudinary PDF upload error:", error);
-          return reject(error);
-        }
+    cloudinary.uploader
+      .upload_stream(
+        {
+          folder,
+          public_id: baseName,
+          resource_type: "image", // IMPORTANT
+          format: "pdf", // FORCE PDF FORMAT
+          type: "upload",
+          overwrite: true,
+          use_filename: true,
+          unique_filename: false,
+        },
+        (error, result) => {
+          if (error) {
+            console.error("Cloudinary PDF upload error:", error);
+            return reject(error);
+          }
 
-        resolve({
-          publicId: result.public_id,
-          url: result.secure_url,       // viewable in browser
-          format: result.format,        // should be "pdf"
-          resourceType: result.resource_type, // should be "image"
-        });
-      }
-    ).end(fileBuffer);
+          resolve({
+            publicId: result.public_id,
+            url: result.secure_url, // viewable in browser
+            format: result.format, // should be "pdf"
+            resourceType: result.resource_type, // should be "image"
+          });
+        },
+      )
+      .end(fileBuffer);
   });
 }
 

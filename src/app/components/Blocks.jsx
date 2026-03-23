@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
@@ -7,7 +7,10 @@ import { FiArrowRight, FiMail, FiMapPin } from "react-icons/fi";
 export const RevealBento = () => {
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-white via-[#f7f9ff] to-white px-4 py-12">
-      <div className="pointer-events-none absolute inset-0 opacity-60 blur-3xl" aria-hidden>
+      <div
+        className="pointer-events-none absolute inset-0 opacity-60 blur-3xl"
+        aria-hidden
+      >
         <div className="absolute left-10 top-16 h-64 w-64 rounded-full bg-[#9BE749]/30" />
         <div className="absolute right-12 bottom-28 h-72 w-72 rounded-full bg-[#6d5bff]/25" />
       </div>
@@ -52,7 +55,7 @@ const Block = ({ className, ...rest }) => {
       }}
       className={twMerge(
         "col-span-4 rounded-xl border border-slate-200/70 bg-white/90 p-6 shadow-[0_20px_60px_rgba(17,24,39,0.08)] backdrop-blur",
-        className
+        className,
       )}
       {...rest}
     />
@@ -65,7 +68,7 @@ const HeaderBlock = () => (
       📊
     </div>
     <h1 className="mb-12 text-4xl font-semibold leading-tight text-neutral-900">
-      Trademilaan. {" "}
+      Good Investor.{" "}
       <span className="text-slate-500 font-normal">
         AI-Powered Market Insights for Smarter Trading.
       </span>
@@ -86,8 +89,8 @@ const HoverLiftBlock = ({ title, description }) => {
       whileHover="hover"
       animate="rest"
       variants={{
-        rest: {y: 0},
-        hover: {y: -4},
+        rest: { y: 0 },
+        hover: { y: -4 },
       }}
       transition={{
         type: "spring",
@@ -97,7 +100,6 @@ const HoverLiftBlock = ({ title, description }) => {
       className="relative col-span-6 md:col-span-3 h-48 cursor-pointer rounded-xl"
     >
       <div className="relative h-full overflow-hidden rounded-xl border border-slate-200/70 bg-white/95 p-5 shadow-sm transition hover:-translate-y-1 hover:border-[#9BE749] hover:shadow-[0_18px_40px_rgba(109,91,255,0.22)]">
-        
         {/* Title (always visible) */}
         <motion.h3
           variants={{
@@ -150,14 +152,16 @@ const SocialsBlock = () => (
   </>
 );
 
-
-
 const AboutBlock = () => (
   <Block className="col-span-12 text-3xl leading-snug text-neutral-900">
     <p>
       Our mission is empowering traders.{" "}
       <span className="text-slate-500">
-        Sasikumar Peyyala leverages advanced AI and machine learning to simplify complex market data into actionable insights. With nine years of financial expertise, we develop research-driven models that help traders and investors make smarter, faster, and more confident decisions in dynamic markets.
+        Sasikumar Peyyala leverages advanced AI and machine learning to simplify
+        complex market data into actionable insights. With nine years of
+        financial expertise, we develop research-driven models that help traders
+        and investors make smarter, faster, and more confident decisions in
+        dynamic markets.
       </span>
     </p>
   </Block>
@@ -166,13 +170,17 @@ const AboutBlock = () => (
 const LocationBlock = () => (
   <Block className="col-span-12 flex flex-col items-center gap-4 md:col-span-3">
     <FiMapPin className="text-3xl text-[#6d5bff]" />
-    <p className="text-center text-lg text-slate-600">Vijayawada, Andhra Pradesh</p>
+    <p className="text-center text-lg text-slate-600">
+      Vijayawada, Andhra Pradesh
+    </p>
   </Block>
 );
 
 const EmailListBlock = () => (
   <Block className="col-span-12 md:col-span-9">
-    <p className="mb-3 text-lg text-neutral-900">Get Market Insights & Updates</p>
+    <p className="mb-3 text-lg text-neutral-900">
+      Get Market Insights & Updates
+    </p>
     <form
       onSubmit={(e) => e.preventDefault()}
       className="flex items-center gap-2"

@@ -21,7 +21,7 @@ export default function ServiceAgreement({ serviceName, signingDate }) {
       <p>
         This Service Agreement (“Agreement”) is made between
         <br />
-        Sasikumar Peyyala, having registered office at
+        Eeda Damodara Rao, having registered office at
         <br />
         1-2/4, 29/4, Kummaripalem center, Near DSM High School, Vidyadharapuram,
         Krishna, (hereinafter referred to as “Service Provider” or “RA”)
@@ -623,11 +623,11 @@ export default function ServiceAgreement({ serviceName, signingDate }) {
         <p>
           For investor charter please visit :{" "}
           <a
-            href="www.trademilaan.in/investor-charter"
+            href="www.Good Investor.in/investor-charter"
             target="_blank"
             rel="noopener noreferrer"
           >
-            www.trademilaan.in/investor-charter
+            www.Good Investor.in/investor-charter
           </a>
         </p>
       </div>

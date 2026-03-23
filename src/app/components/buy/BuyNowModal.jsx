@@ -734,8 +734,8 @@ export default function BuyNowModal({ onClose }) {
                     <li>
                       (a) Full terms, disclaimers, disclosures, investor
                       charters, MITC, refund policies, and regulatory
-                      disclosures are available on the official website:
-                      TradeMilaan
+                      disclosures are available on the official website: Good
+                      Investor
                     </li>
                     <h3 className="font-bold">
                       Most Important Terms and Conditions (MITC)

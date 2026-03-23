@@ -5,7 +5,6 @@ export default function GrievanceRedressal() {
     <div className="w-full bg-white">
       {/* ===== Hero Banner ===== */}
       <div className="relative h-[260px] w-full flex items-center justify-center">
-       
         <div className="absolute inset-0 bg-black/60"></div>
         <h1 className="relative z-10 text-white text-4xl md:text-5xl font-bold">
           Grievance Redressal
@@ -15,19 +14,28 @@ export default function GrievanceRedressal() {
       {/* ===== Content ===== */}
       <div className="max-w-6xl mx-auto px-6 py-14 space-y-10 text-gray-800 leading-relaxed">
         <p>
-          At <b>Trademilaan</b>, we are committed to addressing investor concerns
-          in a fair, transparent, and timely manner. Below are the details of
-          our grievance redressal mechanism in accordance with SEBI guidelines.
+          At <b>Good Investor</b>, we are committed to addressing investor
+          concerns in a fair, transparent, and timely manner. Below are the
+          details of our grievance redressal mechanism in accordance with SEBI
+          guidelines.
         </p>
 
         {/* SEBI REGISTRATION DETAILS */}
         <section>
           <h2 className="text-2xl font-bold mb-4">SEBI Registration Details</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <p><b>Registered Name:</b> SASIKUMAR PEYYALA</p>
-            <p><b>Trade Name / Website:</b> www.trademilaan.com</p>
-            <p><b>Type of Registration:</b> Research Analyst</p>
-            <p><b>Registration No:</b> INH000019327</p>
+            <p>
+              <b>Registered Name:</b> SASIKUMAR PEYYALA
+            </p>
+            <p>
+              <b>Trade Name / Website:</b> www.Good Investor.com
+            </p>
+            <p>
+              <b>Type of Registration:</b> Research Analyst
+            </p>
+            <p>
+              <b>Registration No:</b> INH000019327
+            </p>
             <p>
               <b>Validity:</b> Jan 07, 2025 – Perpetual
             </p>
@@ -49,12 +57,13 @@ export default function GrievanceRedressal() {
         <section>
           <h2 className="text-2xl font-bold mb-4">Office Addresses</h2>
           <p>
-            <b>Registered Office:</b> 1-2/4, 29/4 Kummaripalem Center, Near DSM High
-            School, Vidyadharapuram, Vijayawada, Andhra Pradesh – 520012
+            <b>Registered Office:</b> 1-2/4, 29/4 Kummaripalem Center, Near DSM
+            High School, Vidyadharapuram, Vijayawada, Andhra Pradesh – 520012
           </p>
           <p className="mt-2">
-            <b>Correspondence Office:</b> 1-2/4, 29/4 Kummaripalem Center, Near DSM
-            High School, Vidyadharapuram, Vijayawada, Andhra Pradesh – 520012
+            <b>Correspondence Office:</b> 1-2/4, 29/4 Kummaripalem Center, Near
+            DSM High School, Vidyadharapuram, Vijayawada, Andhra Pradesh –
+            520012
           </p>
         </section>
 
@@ -62,10 +71,22 @@ export default function GrievanceRedressal() {
         <section>
           <h2 className="text-2xl font-bold mb-4">Key Officials & Contacts</h2>
           <div className="space-y-2">
-            <p><b>CEO:</b> SASIKUMAR PEYYALA | 📞 +91 77022 62206 | ✉️ SPKUMAR.RESEARCHANALYST@GMAIL.COM</p>
-            <p><b>Principal Officer:</b> SASIKUMAR PEYYALA | 📞 +91 77022 62206 | ✉️ SPKUMAR.RESEARCHANALYST@GMAIL.COM</p>
-            <p><b>Compliance Officer:</b> SASIKUMAR PEYYALA | 📞 +91 77022 62206 | ✉️ SPKUMAR.RESEARCHANALYST@GMAIL.COM</p>
-            <p><b>Head – Customer Support:</b> SASIKUMAR PEYYALA | 📞 +91 77022 62206 | ✉️ SPKUMAR.RESEARCHANALYST@GMAIL.COM</p>
+            <p>
+              <b>CEO:</b> SASIKUMAR PEYYALA | 📞 +91 77022 62206 | ✉️
+              SPKUMAR.RESEARCHANALYST@GMAIL.COM
+            </p>
+            <p>
+              <b>Principal Officer:</b> SASIKUMAR PEYYALA | 📞 +91 77022 62206 |
+              ✉️ SPKUMAR.RESEARCHANALYST@GMAIL.COM
+            </p>
+            <p>
+              <b>Compliance Officer:</b> SASIKUMAR PEYYALA | 📞 +91 77022 62206
+              | ✉️ SPKUMAR.RESEARCHANALYST@GMAIL.COM
+            </p>
+            <p>
+              <b>Head – Customer Support:</b> SASIKUMAR PEYYALA | 📞 +91 77022
+              62206 | ✉️ SPKUMAR.RESEARCHANALYST@GMAIL.COM
+            </p>
           </div>
         </section>
 
@@ -79,14 +100,15 @@ export default function GrievanceRedressal() {
             <b>Time:</b> 11:00 AM to 5:00 PM
           </p>
           <p className="mt-2">
-            Support is unavailable on weekends and public holidays. You may still
-            write to us at{" "}
+            Support is unavailable on weekends and public holidays. You may
+            still write to us at{" "}
             <a
               href="mailto:spkumar.researchanalyst@gmail.com"
               className="text-blue-600 underline"
             >
               SPKUMAR.RESEARCHANALYST@GMAIL.COM
-            </a>.
+            </a>
+            .
           </p>
         </section>
 
@@ -193,8 +215,8 @@ export default function GrievanceRedressal() {
             be considered valid.
           </p>
           <p className="mt-2">
-            Always request payment invoices from the RA’s registered email ID and
-            report suspicious activity immediately.
+            Always request payment invoices from the RA’s registered email ID
+            and report suspicious activity immediately.
           </p>
           <ul className="list-disc pl-6 mt-3 space-y-2">
             <li>

@@ -11,7 +11,10 @@ export async function POST(req) {
     const file = formData.get("file");
 
     if (!file) {
-      return NextResponse.json({ message: "No file provided" }, { status: 400 });
+      return NextResponse.json(
+        { message: "No file provided" },
+        { status: 400 },
+      );
     }
 
     // buffer conversion
@@ -20,18 +23,26 @@ export async function POST(req) {
     const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
 
     // upload pdf
-    const upload = await uploadToCloudinary(buffer, safeName, "trademilaan/agreements");
+    const upload = await uploadToCloudinary(
+      buffer,
+      safeName,
+      "Good Investor/agreements",
+    );
 
     if (!upload || !upload.secureUrl || !upload.publicId) {
       console.error("Cloudinary Upload Failed:", upload);
-      return NextResponse.json({ message: "Cloudinary upload failed" }, { status: 500 });
+      return NextResponse.json(
+        { message: "Cloudinary upload failed" },
+        { status: 500 },
+      );
     }
 
     // get last version
     const lastVersion = await Agreement.findOne().sort({ version: -1 });
-    const newVersion = lastVersion && !isNaN(lastVersion.version)
-      ? Number(lastVersion.version) + 1
-      : 1;
+    const newVersion =
+      lastVersion && !isNaN(lastVersion.version)
+        ? Number(lastVersion.version) + 1
+        : 1;
 
     // save db
     const newAgreement = await Agreement.create({
@@ -45,7 +56,6 @@ export async function POST(req) {
       version: newAgreement.version,
       pdfUrl: newAgreement.pdfUrl,
     });
-
   } catch (err) {
     console.error("Agreement Upload Error:", err);
     return NextResponse.json({ message: "Upload failed" }, { status: 500 });

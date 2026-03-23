@@ -3,13 +3,13 @@ export async function sendAgreementPDFMail({ to, pdfBuffer, clientName }) {
   const from =
     process.env.MAIL_FROM ||
     process.env.MAIL_USER ||
-    "trademilaan.data@gmail.com";
+    "Good Investor.data@gmail.com";
 
   const mailOptions = {
     from,
     to,
-    subject: "Your Signed Agreement PDF - TradeMilaan",
-    text: `Dear ${clientName || "User"},\n\nPlease find attached your signed agreement PDF.\n\nRegards,\nTradeMilaan`,
+    subject: "Your Signed Agreement PDF - Good Investor",
+    text: `Dear ${clientName || "User"},\n\nPlease find attached your signed agreement PDF.\n\nRegards,\nGood Investor`,
     attachments: [
       {
         filename: "agreement.pdf",
@@ -69,7 +69,7 @@ export async function sendTermsAndConditionsMail(email) {
   const from =
     process.env.MAIL_FROM ||
     process.env.MAIL_USER ||
-    "trademilaan.data@gmail.com";
+    "Good Investor.data@gmail.com";
 
   // ---------- HTML EMAIL ----------
   const html = `
@@ -81,7 +81,7 @@ export async function sendTermsAndConditionsMail(email) {
           <!-- Header -->
           <tr>
             <td style="background:#0f172a;padding:20px;text-align:center;">
-              <h1 style="color:#22c55e;margin:0;font-size:22px;">TradeMilaan</h1>
+              <h1 style="color:#22c55e;margin:0;font-size:22px;">Good Investor</h1>
               <p style="color:#cbd5e1;margin:4px 0 0;font-size:13px;">
                 SEBI Registered Research Analyst
               </p>
@@ -92,7 +92,7 @@ export async function sendTermsAndConditionsMail(email) {
           <tr>
             <td style="padding:24px;color:#111827;">
               <p style="font-size:15px;margin-top:0;">
-                Thank you for signing up with <strong>TradeMilaan</strong>.
+                Thank you for signing up with <strong>Good Investor</strong>.
               </p>
 
               <p style="font-size:14px;">
@@ -136,7 +136,7 @@ export async function sendTermsAndConditionsMail(email) {
                 Investments are subject to market risks.
               </p>
               <p style="margin:8px 0 0;">
-                © ${new Date().getFullYear()} TradeMilaan. All rights reserved.
+                © ${new Date().getFullYear()} Good Investor. All rights reserved.
               </p>
             </td>
           </tr>
@@ -151,9 +151,9 @@ export async function sendTermsAndConditionsMail(email) {
     const info = await transporter.sendMail({
       from,
       to: email,
-      subject: "TradeMilaan – Terms & Conditions",
+      subject: "Good Investor – Terms & Conditions",
       html,
-      replyTo: "trademilaan.data@gmail.com",
+      replyTo: "Good Investor.data@gmail.com",
     });
 
     console.log("MAIL SENT ✅", info.messageId);

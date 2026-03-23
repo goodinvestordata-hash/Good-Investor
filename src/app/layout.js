@@ -6,10 +6,8 @@ import Footer from "./components/Footer";
 
 import { CursorTrailer } from "./components/CursorTrailer";
 
-import { AuthProvider} from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
 import AppFrame from "./components/AppFrame";
-
-
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,8 +20,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Trademilaan - AI-Powered Market Insights",
-  description: "Empowering traders with AI-driven market insights. SEBI-registered research analyst providing expert trading strategies for equity, options, and commodities.",
+  title: "Good Investor - AI-Powered Market Insights",
+  description:
+    "Empowering traders with AI-driven market insights. SEBI-registered research analyst providing expert trading strategies for equity, options, and commodities.",
 };
 
 export default function RootLayout({ children }) {
@@ -37,9 +36,7 @@ export default function RootLayout({ children }) {
       >
         <CursorTrailer />
         <AuthProvider>
-          <AppFrame>
-            {children}
-          </AppFrame>
+          <AppFrame>{children}</AppFrame>
         </AuthProvider>
       </body>
     </html>

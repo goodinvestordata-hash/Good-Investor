@@ -43,12 +43,13 @@ export async function GET() {
     return NextResponse.json(
       { message: err.message },
       {
-        status: err.message.includes("Unauthorized") ||
+        status:
+          err.message.includes("Unauthorized") ||
           err.message.includes("Invalid token") ||
           err.message.includes("Admin access required")
-          ? 403
-          : 500
-      }
+            ? 403
+            : 500,
+      },
     );
   }
 }
@@ -63,14 +64,21 @@ export async function POST(request) {
     const file = formData.get("file");
 
     if (!file) {
-      return NextResponse.json({ message: "File is required" }, { status: 400 });
+      return NextResponse.json(
+        { message: "File is required" },
+        { status: 400 },
+      );
     }
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
 
-    const cloudinaryResult = await uploadToCloudinary(buffer, safeName, "trademilaan/agreements");
+    const cloudinaryResult = await uploadToCloudinary(
+      buffer,
+      safeName,
+      "Good Investor/agreements",
+    );
 
     const last = await Agreement.findOne().sort({ version: -1 });
     const newVersion = last ? last.version + 1 : 1;
@@ -101,7 +109,10 @@ export async function DELETE(request) {
     const id = searchParams.get("id");
 
     if (!id) {
-      return NextResponse.json({ message: "Agreement ID required" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Agreement ID required" },
+        { status: 400 },
+      );
     }
 
     const agreement = await Agreement.findById(id);
@@ -117,12 +128,13 @@ export async function DELETE(request) {
     return NextResponse.json(
       { message: err.message },
       {
-        status: err.message.includes("Unauthorized") ||
+        status:
+          err.message.includes("Unauthorized") ||
           err.message.includes("Invalid token") ||
           err.message.includes("Admin access required")
-          ? 403
-          : 500
-      }
+            ? 403
+            : 500,
+      },
     );
   }
 }

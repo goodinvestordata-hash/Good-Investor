@@ -49,12 +49,12 @@ export default function PageIntroLoader() {
               transition={{ delay: 0.15, duration: 0.9, ease: "easeInOut" }}
             >
               <motion.span
-                className="text-lg font-semibold tracking-wide uppercase"
+                className="text-lg font-bold tracking-wide uppercase"
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25, duration: 0.8, ease: "easeInOut" }}
               >
-                Trademilaan
+                GOOD INVESTOR
               </motion.span>
             </motion.div>
           </motion.div>

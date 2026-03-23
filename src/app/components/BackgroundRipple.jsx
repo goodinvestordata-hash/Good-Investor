@@ -33,9 +33,19 @@ export function BackgroundRipple() {
 
       {/* Arch */}
       <div className="absolute top-12 left-1/2 transform -translate-x-1/2 w-full max-w-4xl h-56">
-        <svg viewBox="0 0 1000 400" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+        <svg
+          viewBox="0 0 1000 400"
+          className="w-full h-full"
+          preserveAspectRatio="xMidYMid meet"
+        >
           <defs>
-            <linearGradient id="archGradient" x1="0%" y1="50%" x2="100%" y2="50%">
+            <linearGradient
+              id="archGradient"
+              x1="0%"
+              y1="50%"
+              x2="100%"
+              y2="50%"
+            >
               <stop offset="0%" stopColor="#6b7280" stopOpacity="0.15" />
               <stop offset="50%" stopColor="#7c3aed" stopOpacity="0.7" />
               <stop offset="100%" stopColor="#6b7280" stopOpacity="0.15" />
@@ -53,7 +63,7 @@ export function BackgroundRipple() {
       {/* Content */}
       <div className="mt-32 md:mt-48 lg:mt-60 w-full relative z-10 px-4">
         <p className="text-center text-xs md:text-lg font-bold tracking-wider">
-          TRADEMILAAN
+          GOOD INVESTOR
         </p>
 
         {/* Animated Heading */}
@@ -103,7 +113,12 @@ export function BackgroundRipple() {
         className="text-center w-full mt-16 md:mt-24 lg:mt-32 flex flex-col items-center cursor-pointer z-10"
       >
         <p className="text-sm md:text-base">Scroll Down</p>
-        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24"
+          viewBox="0 -960 960 960"
+          width="24"
+        >
           <path d="M480-200 240-440l56-56 184 183 184-183 56 56-240 240Zm0-240L240-680l56-56 184 183 184-183 56 56-240 240Z" />
         </svg>
       </motion.div>

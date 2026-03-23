@@ -5,8 +5,9 @@ import { motion } from "framer-motion";
 const services = [
   {
     label: "Equity",
-    title: "Trademilaan Equity Pro",
-    description: "AI-driven equity strategies with disciplined risk and consistent alpha hunting.",
+    title: "Good Investor Equity Pro",
+    description:
+      "AI-driven equity strategies with disciplined risk and consistent alpha hunting.",
     image: "/equity.jpeg",
     gradient: ["#5b3bdc", "#7b5af0"],
     accent: "#d8c9ff",
@@ -18,8 +19,9 @@ const services = [
   },
   {
     label: "options",
-    title: "Trademilaan Index Options Pro",
-    description: "Precision option structures to navigate volatility with conviction.",
+    title: "Good Investor Index Options Pro",
+    description:
+      "Precision option structures to navigate volatility with conviction.",
     image: "/options.jpg",
     gradient: ["#c53b6f", "#d65f9b"],
     accent: "#ffd8ec",
@@ -31,8 +33,9 @@ const services = [
   },
   {
     label: "Commodities",
-    title: "Trademilaan Commodities Pro",
-    description: "Macro + data-backed insights for metals and energy momentum swings.",
+    title: "Good Investor Commodities Pro",
+    description:
+      "Macro + data-backed insights for metals and energy momentum swings.",
     image: "/commodities.webp",
     gradient: ["#e0621d", "#f08c3a"],
     accent: "#ffe1c4",
@@ -129,11 +132,11 @@ export default function Cards() {
 
               <ul className="space-y-2 text-sm md:text-base text-white/85">
                 {service.points.map((point, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-center gap-2"
-                  >
-                    <span className="h-2 w-2 rounded-full" style={{ backgroundColor: service.accent }} />
+                  <li key={idx} className="flex items-center gap-2">
+                    <span
+                      className="h-2 w-2 rounded-full"
+                      style={{ backgroundColor: service.accent }}
+                    />
                     <span>{point}</span>
                   </li>
                 ))}
@@ -145,8 +148,15 @@ export default function Cards() {
                   className="mt-2 flex w-fit items-center justify-center gap-3 self-start rounded-full bg-white/15 px-5 py-3 text-sm font-semibold leading-none backdrop-blur transition-all duration-300 hover:bg-white hover:text-black group"
                 >
                   Learn More
-                  <svg className="transition-transform duration-300 group-hover:translate-x-1" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
-                    <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/>
+                  <svg
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="20px"
+                    viewBox="0 -960 960 960"
+                    width="20px"
+                    fill="currentColor"
+                  >
+                    <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
                   </svg>
                 </Link>
               </div>

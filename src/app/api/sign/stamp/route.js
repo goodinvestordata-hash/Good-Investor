@@ -7,7 +7,7 @@ import cloudinary from "cloudinary";
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 // Fetch any URL as buffer
@@ -23,7 +23,7 @@ function parseDataUrl(dataUrl) {
   if (!match) throw new Error("Invalid data URL format");
   return {
     mime: match[1],
-    buffer: Buffer.from(match[2], "base64")
+    buffer: Buffer.from(match[2], "base64"),
   };
 }
 
@@ -34,7 +34,7 @@ export async function POST(req) {
     if (!pdfUrl || !signatureUrl) {
       return NextResponse.json(
         { error: "pdfUrl and signatureUrl are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -52,9 +52,10 @@ export async function POST(req) {
       sigMime = parsed.mime;
     } else {
       sigBuffer = await fetchBuffer(signatureUrl);
-      sigMime = signatureUrl.includes(".jpg") || signatureUrl.includes(".jpeg")
-        ? "image/jpeg"
-        : "image/png";
+      sigMime =
+        signatureUrl.includes(".jpg") || signatureUrl.includes(".jpeg")
+          ? "image/jpeg"
+          : "image/png";
     }
 
     console.log("Signature MIME:", sigMime);
@@ -95,24 +96,24 @@ export async function POST(req) {
     const upload = await new Promise((resolve, reject) => {
       const stream = cloudinary.v2.uploader.upload_stream(
         {
-          folder: "trademilaan/signed-agreements",
-          resource_type: "raw",       // supports PDF
+          folder: "Good Investor/signed-agreements",
+          resource_type: "raw", // supports PDF
           format: "pdf",
           use_filename: true,
           unique_filename: false,
-          filename_override: filename
+          filename_override: filename,
         },
         (error, result) => {
           if (error) return reject(error);
           resolve(result);
-        }
+        },
       );
       stream.end(stampedBuffer);
     });
 
     console.log("Cloudinary Upload:", {
       public_id: upload.public_id,
-      secure_url: upload.secure_url
+      secure_url: upload.secure_url,
     });
 
     const finalPdfUrl = upload.secure_url + "#toolbar=1&navpanes=0&scrollbar=1";
@@ -123,11 +124,10 @@ export async function POST(req) {
         success: true,
         signedPdfUrl: finalPdfUrl,
         filename,
-        publicId: upload.public_id
+        publicId: upload.public_id,
       },
-      { status: 200 }
+      { status: 200 },
     );
-
   } catch (err) {
     console.error("STAMP ERROR:", err);
 
@@ -135,9 +135,9 @@ export async function POST(req) {
       {
         error: "Failed to stamp signature",
         detail: err.message,
-        at: new Date().toISOString()
+        at: new Date().toISOString(),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

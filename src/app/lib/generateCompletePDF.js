@@ -15,7 +15,7 @@ export async function generateCompleteAgreementPDF(agreementData) {
     let raNumber = "INH000024967";
 
     const bseEnlistment = agreementData.bseEnlistment || "6938";
-    const raWebsite = "TRADEMILAAN";
+    const raWebsite = "Good Investor";
 
     // Create a new PDF document
     const pdfDoc = await PDFDocument.create();
@@ -500,7 +500,7 @@ export async function generateCompleteAgreementPDF(agreementData) {
     );
     drawWrappedText(`(c) Registration Date: Jan 07, 2025  `, 11, 0, false, 2);
     drawWrappedText(
-      `(d) Trade Name or Website: TradeMilaan (Note: Official ${raName} Website) `,
+      `(d) Trade Name or Website: Good Investor (Note: Official ${raName} Website) `,
       11,
       0,
       false,
@@ -856,7 +856,7 @@ export async function generateCompleteAgreementPDF(agreementData) {
     addSpace(8);
     drawSectionHeading("21. Additional Information");
     drawWrappedText(
-      "(a) Full terms, disclaimers, disclosures, investor charters, MITC, refund policies, and regulatory disclosures are available on the official website: TradeMilaan ",
+      "(a) Full terms, disclaimers, disclosures, investor charters, MITC, refund policies, and regulatory disclosures are available on the official website: Good Investor ",
     );
     addSpace(8);
     drawSectionHeading("Most Important Terms and Conditions (MITC)");
@@ -1024,7 +1024,7 @@ export async function generateCompleteAgreementPDF(agreementData) {
       "Learning Video Gallery: https://cybercrime.gov.in/Webform/video-category.aspx ",
     );
     drawWrappedText(
-      "For Investor charter, MITC, risk, disclosures, and disclaimers, refund policy, t&c, Fraud Awareness, and other, please visit our website: TradeMilaan and read everything to avoid any future conflict of interest. ",
+      "For Investor charter, MITC, risk, disclosures, and disclaimers, refund policy, t&c, Fraud Awareness, and other, please visit our website: Good Investor and read everything to avoid any future conflict of interest. ",
     );
 
     // SIGNATURE SECTION - Two Column Table (Client left, RA right)
