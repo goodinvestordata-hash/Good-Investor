@@ -1,20 +1,29 @@
 import React, { useState, useEffect } from "react";
 
 export default function PaymentForm({ onPaymentComplete, onBack }) {
-  const FIXED_AMOUNT = 4399;
+  // ✅ Plans
+  const PLANS = [
+    { id: "monthly", name: "Monthly", price: 4500 },
+    { id: "quarterly", name: "Quarterly", price: 9999 },
+    { id: "halfYearly", name: "Half Yearly", price: 17999 },
+    { id: "yearly", name: "Yearly", price: 29999 },
+  ];
+
+  const [selectedPlan, setSelectedPlan] = useState("monthly");
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  // ...existing code...
   const [verifyData, setVerifyData] = useState(null);
 
+  const selectedAmount = PLANS.find((p) => p.id === selectedPlan)?.price || 0;
+
+  // ✅ Load Razorpay SDK
   useEffect(() => {
     if (!window.Razorpay) {
       const script = document.createElement("script");
       script.src = "https://checkout.razorpay.com/v1/checkout.js";
       script.async = true;
-      script.onload = () => {};
       document.body.appendChild(script);
     }
   }, []);
@@ -23,26 +32,23 @@ export default function PaymentForm({ onPaymentComplete, onBack }) {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // ✅ Payment Handler
   const handlePayment = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
     setSuccess(false);
+
     try {
       const res = await fetch(`/api/payment/order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, amount: FIXED_AMOUNT }),
+        body: JSON.stringify({ ...form, amount: selectedAmount }),
       });
-      let data;
-      const contentType = res.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        data = await res.json();
-      } else {
-        const text = await res.text();
-        throw new Error("Server error: " + text.substring(0, 100));
-      }
-      if (!data.order) throw new Error(data.error || "Order creation failed");
+
+      const data = await res.json();
+      if (!data.order) throw new Error(data.error || "Order failed");
+
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: data.order.amount,
@@ -54,63 +60,55 @@ export default function PaymentForm({ onPaymentComplete, onBack }) {
           email: form.email,
           contact: form.phone,
         },
+
         handler: async function (response) {
-          // Send user details along with payment verification
           try {
             const verifyRes = await fetch("/api/payment/verify", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 ...response,
-                name: form.name,
-                email: form.email,
-                phone: form.phone,
-                amount: FIXED_AMOUNT,
+                ...form,
+                amount: selectedAmount,
               }),
             });
-            let vData;
-            const verifyContentType = verifyRes.headers.get("content-type");
-            if (
-              verifyContentType &&
-              verifyContentType.includes("application/json")
-            ) {
-              vData = await verifyRes.json();
-            } else {
-              const text = await verifyRes.text();
-              throw new Error("Server error: " + text.substring(0, 100));
-            }
+
+            const vData = await verifyRes.json();
+
             if (vData.success) {
               setSuccess(true);
               setVerifyData({ ...response, ...vData });
-              if (onPaymentComplete)
+
+              if (onPaymentComplete) {
                 onPaymentComplete({
                   ...vData,
                   expiry: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
                 });
+              }
             } else {
-              setVerifyData(null);
-              setError(vData.error || "Payment verification failed");
+              setError(vData.error || "Verification failed");
             }
           } catch (err) {
             setError(err.message);
           }
         },
       };
-      if (typeof window !== "undefined" && window.Razorpay) {
-        const rzp = new window.Razorpay(options);
-        rzp.on("payment.failed", function (response) {
-          setError(response.error.description || "Payment failed");
-        });
-        rzp.open();
-      } else {
-        setError("Razorpay SDK not loaded");
-      }
+
+      const rzp = new window.Razorpay(options);
+
+      rzp.on("payment.failed", function (response) {
+        setError(response.error.description || "Payment failed");
+      });
+
+      rzp.open();
     } catch (err) {
       setError(err.message);
     }
+
     setLoading(false);
   };
 
+  // ✅ Success / Failure Screen
   if (success || error) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
@@ -119,35 +117,39 @@ export default function PaymentForm({ onPaymentComplete, onBack }) {
             <h2 className="text-2xl font-bold text-green-600 mb-4">
               Payment Successful!
             </h2>
-            <p className="text-lg">Thank you for your payment.</p>
+            <p>Thank you for your payment.</p>
+
             <button
-              className={`mt-4 px-6 py-2 rounded-lg font-semibold transition ${verifyData ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}
               disabled={!verifyData}
+              className={`mt-4 px-6 py-2 rounded-lg ${
+                verifyData
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-300 text-gray-500"
+              }`}
               onClick={async () => {
-                if (verifyData) {
-                  const params = new URLSearchParams({
-                    payment_id: verifyData.razorpay_payment_id,
-                    name: form.name,
-                    email: form.email,
-                    phone: form.phone,
-                    amount: FIXED_AMOUNT.toString(),
-                  });
-                  const response = await fetch(
-                    `/api/payment/invoice?${params.toString()}`,
-                  );
-                  const blob = await response.blob();
-                  const url = window.URL.createObjectURL(blob);
-                  const link = document.createElement("a");
-                  link.href = url;
-                  link.download = `invoice-${verifyData.razorpay_payment_id}.pdf`;
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-                  window.URL.revokeObjectURL(url);
-                }
+                const params = new URLSearchParams({
+                  payment_id: verifyData.razorpay_payment_id,
+                  ...form,
+                  amount: selectedAmount.toString(),
+                  service:
+                    PLANS.find((p) => p.id === selectedPlan)?.name || "Service",
+                  qty: "1",
+                });
+
+                const res = await fetch(
+                  `/api/payment/invoice?${params.toString()}`,
+                );
+
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = `invoice-${verifyData.razorpay_payment_id}.pdf`;
+                link.click();
               }}
             >
-              {verifyData ? "Download Invoice" : "Generating invoice..."}
+              Download Invoice
             </button>
           </>
         ) : (
@@ -155,83 +157,135 @@ export default function PaymentForm({ onPaymentComplete, onBack }) {
             <h2 className="text-2xl font-bold text-red-600 mb-4">
               Payment Failed
             </h2>
-            <p className="text-lg">
-              {error || "Payment was not successful. Please try again."}
-            </p>
+            <p>{error}</p>
           </>
         )}
-        <button
-          onClick={onBack}
-          className="mt-6 px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
-        >
+
+        <button onClick={onBack} className="mt-6 px-6 py-2 border rounded">
           Back
         </button>
       </div>
     );
   }
 
+  // ✅ Main Form
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+    <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-indigo-100 via-white to-indigo-50 px-4">
       <form
-        className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md"
         onSubmit={handlePayment}
+        className="bg-white/80 backdrop-blur-lg p-10 rounded-2xl shadow-2xl w-full max-w-3xl border border-gray-200"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Payment Form</h2>
-        <div className="mb-4">
-          <label className="block mb-1 font-medium">Name</label>
-          <input
-            type="text"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 border rounded"
-          />
+        <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
+          Secure Payment
+        </h2>
+
+        {/* Form Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Name */}
+          <div>
+            <label className="block mb-1 text-sm font-medium text-gray-600">
+              Name
+            </label>
+            <input
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              required
+              placeholder="Enter your name"
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none transition"
+            />
+          </div>
+
+          {/* Email */}
+          <div>
+            <label className="block mb-1 text-sm font-medium text-gray-600">
+              Email
+            </label>
+            <input
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={handleChange}
+              required
+              placeholder="Enter your email"
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none transition"
+            />
+          </div>
+
+          {/* Phone */}
+          <div className="md:col-span-2">
+            <label className="block mb-1 text-sm font-medium text-gray-600">
+              Phone
+            </label>
+            <input
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              required
+              placeholder="Enter your phone number"
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none transition"
+            />
+          </div>
         </div>
-        <div className="mb-4">
-          <label className="block mb-1 font-medium">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 border rounded"
-          />
+
+        {/* 🔥 Plan Selector */}
+        <div className="mt-8">
+          <label className="block mb-3 text-sm font-medium text-gray-700">
+            Choose Your Plan
+          </label>
+
+          <div className="flex gap-4 overflow-x-auto pb-2">
+            {PLANS.map((plan) => (
+              <div
+                key={plan.id}
+                onClick={() => setSelectedPlan(plan.id)}
+                className={`min-w-40 cursor-pointer rounded-xl p-5 text-center transition-all duration-300 border
+              ${
+                selectedPlan === plan.id
+                  ? "bg-linear-to-r from-indigo-500 to-purple-500 text-white shadow-lg scale-105"
+                  : "bg-white hover:shadow-md border-gray-200"
+              }`}
+              >
+                <p className="font-semibold">{plan.name}</p>
+                <p className="text-lg font-bold mt-1">₹{plan.price}</p>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="mb-4">
-          <label className="block mb-1 font-medium">Phone</label>
+
+        {/* Amount */}
+        <div className="mt-6">
+          <label className="block mb-1 text-sm font-medium text-gray-600">
+            Amount (INR)
+          </label>
           <input
-            type="tel"
-            name="phone"
-            value={form.phone}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <div className="mb-6">
-          <label className="block mb-1 font-medium">Amount (INR)</label>
-          <input
-            type="number"
-            value={FIXED_AMOUNT}
+            value={selectedAmount}
             disabled
-            className="w-full px-3 py-2 border rounded bg-gray-100 text-gray-700"
+            className="w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-700 font-semibold"
           />
         </div>
-        {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
-        <div className="flex gap-4 justify-end">
+
+        {/* Error */}
+        {error && (
+          <div className="mt-4 text-red-500 text-center font-medium">
+            {error}
+          </div>
+        )}
+
+        {/* Buttons */}
+        <div className="mt-8 flex gap-4">
           <button
             type="button"
             onClick={onBack}
-            className="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
+            className="w-1/3 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
           >
             Back
           </button>
+
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 text-white py-2 rounded font-semibold hover:bg-indigo-700 transition"
+            className="w-2/3 py-2 rounded-lg text-white font-semibold bg-linear-to-r from-indigo-600 to-purple-600 hover:opacity-90 transition shadow-md"
           >
             {loading ? "Processing..." : "Continue with Payment"}
           </button>

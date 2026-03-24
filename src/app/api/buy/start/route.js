@@ -76,8 +76,47 @@ export async function POST(req) {
     await transporter.sendMail({
       from: process.env.MAIL_FROM || process.env.MAIL_USER,
       to: user.email,
-      subject: "trademilaan – Email Verification OTP",
-      html: `<p>Your OTP is <b>${otp}</b>. Valid for 5 minutes.</p>`,
+      subject: "Your OTP for Secure Verification – TRADEMILAAN",
+      html: `
+  <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+    <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
+      
+      <h2 style="color: #333;">Your OTP for Secure Verification – TRADEMILAAN</h2>
+      
+      <p>Dear Customer,</p>
+      
+      <p>Your One-Time Password (OTP) for verification is:</p>
+      
+      <h1 style="letter-spacing: 3px; color: #2c3e50; text-align: center;">
+        ${otp}
+      </h1>
+      
+      <p style="text-align: center; color: #555;">
+        This OTP is valid for <b>5 minutes</b>.
+      </p>
+
+      <hr style="margin: 20px 0;" />
+
+      <p style="font-weight: bold;">🔒 Security Note:</p>
+      <ul style="color: #555;">
+        <li>Do NOT share this OTP with anyone.</li>
+        <li>We will never ask for your OTP via phone, email, or message.</li>
+        <li>If you did not initiate this request, please contact our support team immediately.</li>
+      </ul>
+
+      <p style="margin-top: 20px;">
+        For assistance, reach us at:
+        <br />
+        <b>spkumar.researchanalyst@gmail.com</b> / 
+        <b>+91-7702262206</b>
+      </p>
+
+      <p style="margin-top: 20px;">Regards,</p>
+      <p><b>TradeMilaan Team</b></p>
+
+    </div>
+  </div>
+  `,
     });
 
     return NextResponse.json({ message: "OTP sent!" });

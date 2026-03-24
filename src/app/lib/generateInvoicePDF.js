@@ -25,6 +25,7 @@ export async function generateInvoicePDF(invoiceData) {
     gst = "Rs. 399",
     subtotal = "Rs. 4,399",
     total = "Rs. 12,000",
+    qty = "1",
     startDate = formatDate(today),
     endDate = formatDate(oneMonthLater),
   } = invoiceData;
@@ -224,7 +225,7 @@ export async function generateInvoicePDF(invoiceData) {
 
   page.drawText(service, { x: margin + 8, y: y + 6, size: 11, font });
   page.drawText(price, { x: 260, y: y + 6, size: 11, font });
-  page.drawText("4399", { x: 370, y: y + 6, size: 11, font });
+  page.drawText(qty || "1", { x: 370, y: y + 6, size: 11, font });
   page.drawText(total, { x: 460, y: y + 6, size: 11, font });
 
   /* ---------- PAYMENT DETAILS ---------- */
