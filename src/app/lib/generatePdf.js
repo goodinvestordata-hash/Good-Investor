@@ -138,7 +138,7 @@ export async function generateSignedAgreementPDF(agreementData) {
       doc.moveDown(0.5);
 
       doc.fontSize(8).font("Helvetica");
-      doc.text("Name: Eeda Damodara Rao", { align: "left", indent: 50 });
+      doc.text("Name: Sasikumar Peyyala", { align: "left", indent: 50 });
       doc.moveDown(0.3);
       doc.text("Sign of Service Provider: _____________________", {
         align: "left",

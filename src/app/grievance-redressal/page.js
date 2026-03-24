@@ -1,9 +1,9 @@
 import GrievanceRedressal from "../components/GrievanceRedressal";
 
 export const metadata = {
-  title: "Grievance Redressal - Good Investor",
+  title: "Grievance Redressal - trademilaan",
   description:
-    "Submit and track grievances, complaints, and feedback for Good Investor services.",
+    "Submit and track grievances, complaints, and feedback for trademilaan services.",
 };
 
 export default function Page() {

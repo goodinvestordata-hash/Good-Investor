@@ -1,14 +1,14 @@
-# Good Investor - AI-Powered Market Insights Platform
+# trademilaan - AI-Powered Market Insights Platform
 
-![Good Investor Logo](./public/Good Investor.png)
+![trademilaan Logo](./public/trademilaan.png)
 
-Good Investor is a cutting-edge platform that empowers traders and investors with **AI-driven market insights** and personalized trading strategies. Built with Next.js 16, powered by SEBI-registered research analysis, this platform combines modern web technologies with advanced financial market intelligence.
+trademilaan is a cutting-edge platform that empowers traders and investors with **AI-driven market insights** and personalized trading strategies. Built with Next.js 16, powered by SEBI-registered research analysis, this platform combines modern web technologies with advanced financial market intelligence.
 
 ---
 
-## 🎯 About Good Investor
+## 🎯 About trademilaan
 
-Good Investor is built by **Eeda Damodara Rao**, a SEBI-registered research analyst with 9+ years of experience in financial markets. The platform leverages AI and machine learning to provide:
+trademilaan is built by **Sasikumar Peyyala**, a SEBI-registered research analyst with 9+ years of experience in financial markets. The platform leverages AI and machine learning to provide:
 
 - **Real-time market analysis** for equity, options, and commodities
 - **Personalized trading strategies** tailored to individual investor profiles
@@ -58,8 +58,8 @@ Good Investor is built by **Eeda Damodara Rao**, a SEBI-registered research anal
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/Good Investor.git
-   cd Good Investor_nextjs
+   git clone https://github.com/yourusername/trademilaan.git
+   cd trademilaan_nextjs
    ```
 
 2. **Install dependencies**
@@ -82,7 +82,7 @@ Good Investor is built by **Eeda Damodara Rao**, a SEBI-registered research anal
 ## 📁 Project Structure
 
 ```
-Good Investor_nextjs/
+trademilaan_nextjs/
 ├── src/
 │   └── app/
 │       ├── api/                    # API routes (auth, user management)
@@ -124,7 +124,7 @@ Good Investor_nextjs/
 │       └── layout.js                # Root layout
 ├── public/                          # Static assets
 │   ├── fonts/                       # DM Sans font files
-│   ├── Good Investor.png              # Logo
+│   ├── trademilaan.png              # Logo
 │   ├── banner.jpg                   # Hero images
 │   └── service*.jpg                 # Service showcase images
 ├── package.json
@@ -284,7 +284,7 @@ We welcome contributions! Here's how to get started:
 1. **Fork the repository**
 
    ```bash
-   git clone https://github.com/yourusername/Good Investor.git
+   git clone https://github.com/yourusername/trademilaan.git
    ```
 
 2. **Create a feature branch**
@@ -314,7 +314,7 @@ We welcome contributions! Here's how to get started:
 
 ## 📋 Compliance & Regulatory
 
-**Important:** Good Investor operates under SEBI (Securities and Exchange Board of India) regulations as a registered research analyst. All investment advice and market insights comply with:
+**Important:** trademilaan operates under SEBI (Securities and Exchange Board of India) regulations as a registered research analyst. All investment advice and market insights comply with:
 
 - ✅ SEBI Research Analyst Regulations
 - ✅ Fair Practices Code
@@ -351,16 +351,16 @@ netstat -ano | findstr :3000    # Windows
 
 ## 📄 License
 
-This project is proprietary and owned by **Good Investor**. Unauthorized copying, distribution, or use is prohibited without explicit permission.
+This project is proprietary and owned by **trademilaan**. Unauthorized copying, distribution, or use is prohibited without explicit permission.
 
 ---
 
 ## 📞 Contact & Support
 
-- **Email** - damu.researchanalyst@gmail.com
+- **Email** - spkumar.researchanalyst@gmail.com
 - **Phone** - 077022 62206
 - **Address** - 124, 2940 Kummaripalem Center, Near DSM High School, Vidyadharapuram, Vijayawada, ANDHRA PRADESH, 520012
-- **Website** - [www.Good Investor.com](https://www.Good Investor.com)
+- **Website** - [www.trademilaan.com](https://www.trademilaan.com)
 
 ---
 
@@ -370,10 +370,10 @@ This project is proprietary and owned by **Good Investor**. Unauthorized copying
 - **Vercel** - For deployment and infrastructure
 - **Tailwind Labs** - For the utility-first CSS framework
 - **MongoDB** - For flexible cloud database
-- **All Contributors** - Making Good Investor better every day
+- **All Contributors** - Making trademilaan better every day
 
 ---
 
-**Built with ❤️ by Eeda Damodara Rao & Team**
+**Built with ❤️ by Sasikumar Peyyala & Team**
 
 _Last Updated: December 30, 2025_

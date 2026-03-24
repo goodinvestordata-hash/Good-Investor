@@ -5,7 +5,7 @@ import ScrollAuthGate from "./components/ScrollAuthGate";
 import { RevealBento } from "./components/Blocks";
 
 export const metadata = {
-  title: "Good Investor - AI-Powered Market Insights",
+  title: "trademilaan - AI-Powered Market Insights",
   description:
     "Empowering traders with AI-driven market insights. SEBI-registered research analyst providing expert trading strategies for equity, options, and commodities.",
 };

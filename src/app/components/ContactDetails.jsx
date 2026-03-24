@@ -30,7 +30,7 @@ export default function ContactDetails() {
                 Phone
               </h3>
               <a
-                href="tel:+917702262206"
+                href="tel:7702262206"
                 className="text-lg text-neutral-900 hover:text-purple-600 transition-colors"
               >
                 +91 77022 62206
@@ -60,10 +60,10 @@ export default function ContactDetails() {
                 Email
               </h3>
               <a
-                href="mailto:damu.researchanalyst@gmail.com"
+                href="mailto:spkumar.researchanalyst@gmail.com"
                 className="text-lg text-neutral-900 hover:text-purple-600 transition-colors break-all"
               >
-                damu.researchanalyst@gmail.com
+                spkumar.researchanalyst@gmail.com
               </a>
             </div>
           </div>
@@ -96,8 +96,8 @@ export default function ContactDetails() {
                 Address
               </h3>
               <p className="text-sm text-neutral-900">
-                T2601, MY HOME TRIDASA,TELLAPUR SANGA REDDY, HYDERABAD,
-                TELANGANA, 502032
+                1 24,29 4 Kummaripalem Centerr, Near D S M, High School,
+                Vidyadharapuram, Vijayawada, VIJAYAWADA, ANDHRA PRADESH, 520012
               </p>
             </div>
           </div>
@@ -115,7 +115,7 @@ export default function ContactDetails() {
             allowFullScreen=""
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            title="Trademilan Location"
+            title="trademilaan Location"
             className="w-full h-full"
           ></iframe>
         </div>

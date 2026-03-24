@@ -10,12 +10,12 @@ export async function generateCompleteAgreementPDF(agreementData) {
       agreementData.signedDate || new Date().toLocaleDateString("en-IN");
     const signatureData = agreementData.signatureData || "";
 
-    const raName = "Eeda Damodara Rao"; // agreementData.raName || "RA NAME";
+    const raName = "Sasikumar Peyyala"; // agreementData.raName || "RA NAME";
 
-    let raNumber = "INH000024967";
+    let raNumber = "INH000019327";
 
-    const bseEnlistment = agreementData.bseEnlistment || "6938";
-    const raWebsite = "Good Investor";
+    const bseEnlistment = agreementData.bseEnlistment || "6469";
+    const raWebsite = "trademilaan";
 
     // Create a new PDF document
     const pdfDoc = await PDFDocument.create();
@@ -500,7 +500,7 @@ export async function generateCompleteAgreementPDF(agreementData) {
     );
     drawWrappedText(`(c) Registration Date: Jan 07, 2025  `, 11, 0, false, 2);
     drawWrappedText(
-      `(d) Trade Name or Website: Good Investor (Note: Official ${raName} Website) `,
+      `(d) Trade Name or Website: trademilaan (Note: Official ${raName} Website) `,
       11,
       0,
       false,
@@ -684,7 +684,13 @@ export async function generateCompleteAgreementPDF(agreementData) {
       2,
     );
     drawWrappedText(`Name: ${raName} `, 11, 0, false, 2);
-    drawWrappedText(`Email: damu.researchanalyst@gmail.com `, 11, 0, false, 2);
+    drawWrappedText(
+      `Email: spkumar.researchanalyst@gmail.com `,
+      11,
+      0,
+      false,
+      2,
+    );
     drawWrappedText(`Phone: +91 77022 62206 `, 11, 0, false, 2);
     drawWrappedText(
       `Complaints will be addressed within 7 business days or as per SEBI timelines. Unresolved complaints can be escalated to SEBI through:`,
@@ -846,11 +852,11 @@ export async function generateCompleteAgreementPDF(agreementData) {
     drawSectionHeading("20. Money Laundering Reporting Officer (MLRO)");
     drawWrappedText(`Name: ${raName}`);
     drawWrappedText("Phone: +91 77022 62206");
-    drawWrappedText("Mail: damu.researchanalyst@gmail.com");
+    drawWrappedText("Mail: spkumar.researchanalyst@gmail.com");
     addSpace(8);
     drawSectionHeading("21. Additional Information");
     drawWrappedText(
-      "(a) Full terms, disclaimers, disclosures, investor charters, MITC, refund policies, and regulatory disclosures are available on the official website: Good Investor ",
+      "(a) Full terms, disclaimers, disclosures, investor charters, MITC, refund policies, and regulatory disclosures are available on the official website: trademilaan ",
     );
     addSpace(8);
     drawSectionHeading("Most Important Terms and Conditions (MITC)");
@@ -1018,7 +1024,7 @@ export async function generateCompleteAgreementPDF(agreementData) {
       "Learning Video Gallery: https://cybercrime.gov.in/Webform/video-category.aspx ",
     );
     drawWrappedText(
-      "For Investor charter, MITC, risk, disclosures, and disclaimers, refund policy, t&c, Fraud Awareness, and other, please visit our website: Good Investor and read everything to avoid any future conflict of interest. ",
+      "For Investor charter, MITC, risk, disclosures, and disclaimers, refund policy, t&c, Fraud Awareness, and other, please visit our website: trademilaan and read everything to avoid any future conflict of interest. ",
     );
 
     // SIGNATURE SECTION - Two Column Table (Client left, RA right)

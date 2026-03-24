@@ -24,7 +24,7 @@ export default function TermsCondition() {
         <section>
           <h2 className="text-2xl font-bold mb-4">1. Introduction</h2>
           <p>
-            <b>Research Analyst (RA):</b> Eeda Damodara Rao, registered with
+            <b>Research Analyst (RA):</b> Sasikumar Peyyala, registered with
             SEBI under Registration No. <b>INH000019327</b>, having registered
             address at 1-2/4-29/4, Near DSM High School, Kummaripalem Center,
             Vidhyadharapuram, Vijayawada, Krishna District - 520012.
@@ -146,8 +146,8 @@ export default function TermsCondition() {
             discretion.
           </p>
           <p className="mt-2">
-            For grievances, contact: <b>damu.researchanalyst@gmail.com</b>. If
-            unresolved, you may approach SEBI via SCORES.
+            For grievances, contact: <b>spkumar.researchanalyst@gmail.com</b>.
+            If unresolved, you may approach SEBI via SCORES.
           </p>
         </section>
 

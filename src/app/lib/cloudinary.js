@@ -11,7 +11,7 @@ cloudinary.config({
 export async function uploadToCloudinary(
   fileBuffer,
   filename,
-  folder = "Good Investor/documents",
+  folder = "trademilaan/documents",
 ) {
   return new Promise((resolve, reject) => {
     const baseName = filename.replace(/\.[^/.]+$/, ""); // remove extension

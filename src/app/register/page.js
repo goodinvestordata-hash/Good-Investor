@@ -1,9 +1,9 @@
 import AuthForm from "../components/AuthForm";
 
 export const metadata = {
-  title: "Register - Good Investor",
+  title: "Register - trademilaan",
   description:
-    "Create your Good Investor account to access premium AI-powered trading insights and services.",
+    "Create your trademilaan account to access premium AI-powered trading insights and services.",
 };
 
 export default function RegisterPage() {

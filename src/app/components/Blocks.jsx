@@ -68,7 +68,7 @@ const HeaderBlock = () => (
       📊
     </div>
     <h1 className="mb-12 text-4xl font-semibold leading-tight text-neutral-900">
-      Good Investor.{" "}
+      trademilaan.{" "}
       <span className="text-slate-500 font-normal">
         AI-Powered Market Insights for Smarter Trading.
       </span>
@@ -157,7 +157,7 @@ const AboutBlock = () => (
     <p>
       Our mission is empowering traders.{" "}
       <span className="text-slate-500">
-        Eeda Damodara Rao leverages advanced AI and machine learning to simplify
+        Sasikumar Peyyala leverages advanced AI and machine learning to simplify
         complex market data into actionable insights. With nine years of
         financial expertise, we develop research-driven models that help traders
         and investors make smarter, faster, and more confident decisions in

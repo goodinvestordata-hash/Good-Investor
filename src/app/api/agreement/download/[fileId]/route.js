@@ -71,7 +71,7 @@ export async function GET(req, { params }) {
       );
       // Send PDF to user and admin
       const userEmail = agreement.clientEmail; // Ensure this field exists in your model
-      const adminEmail = "damu.researchanalyst@gmail.com";
+      const adminEmail = "spkumar.researchanalyst@gmail.com";
       const clientName = agreement.clientName || "User";
       // Send PDF to user and admin, await both and log results
       const mailResults = [];

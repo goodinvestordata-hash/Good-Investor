@@ -1,9 +1,9 @@
 import DisclaimerGate from "../components/DisclaimerGate";
 
 export const metadata = {
-  title: "Disclaimer - Good Investor",
+  title: "Disclaimer - trademilaan",
   description:
-    "Important disclaimer and risk disclosure for trading services provided by Good Investor.",
+    "Important disclaimer and risk disclosure for trading services provided by trademilaan.",
 };
 
 export default function Page() {

@@ -1,9 +1,9 @@
 import ServiceAgreement from "@/components/ServiceAgreement";
 
 export const metadata = {
-  title: "Service Agreement - Good Investor",
+  title: "Service Agreement - trademilaan",
   description:
-    "Service Agreement for Good Investor's research and advisory services",
+    "Service Agreement for trademilaan's research and advisory services",
 };
 
 export default function ServiceAgreementPage() {

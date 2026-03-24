@@ -59,7 +59,7 @@ const Footer = () => {
               About Us
             </h3>
             <p className="text-neutral-300 leading-relaxed text-sm">
-              Eeda Damodara Rao is a SEBI-registered research analyst with a
+              Sasikumar Peyyala is a SEBI-registered research analyst with a
               deep passion for AI and machine learning-driven trading
               strategies. With over nine years of experience in financial
               markets.
@@ -149,11 +149,11 @@ const Footer = () => {
                 >
                   <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                 </svg>
-                9704648777
+                7702262206
               </a>
 
               <a
-                href="mailto:damu.researchanalyst@gmail.com"
+                href="mailto:spkumar.researchanalyst@gmail.com"
                 className="flex items-center gap-3 text-neutral-300 hover:text-lime-400 transition-colors duration-300 group break-all"
               >
                 <svg
@@ -164,7 +164,7 @@ const Footer = () => {
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                 </svg>
-                damu.researchanalyst@gmail.com
+                spkumar.researchanalyst@gmail.com
               </a>
 
               <div className="flex items-start gap-3 text-neutral-300 group">
@@ -180,8 +180,9 @@ const Footer = () => {
                   />
                 </svg>
                 <span className="leading-relaxed">
-                  T2601, MY HOME TRIDASA,TELLAPUR SANGA REDDY, HYDERABAD,
-                  TELANGANA, 502032
+                  1 24,29 4 Kummaripalem Centerr, Near D S M, High School,
+                  Vidyadharapuram, Vijayawada, VIJAYAWADA, ANDHRA PRADESH,
+                  520012
                 </span>
               </div>
             </div>
@@ -192,11 +193,11 @@ const Footer = () => {
         <div className="border-t border-white/10 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-neutral-400">
             <p className="text-center md:text-left">
-              Good Investor Copyright©{currentYear}. All Right Reserved.
+              trademilaan Copyright©{currentYear}. All Right Reserved.
             </p>
             <p className="text-center md:text-right">
               Design & Developed by{" "}
-              <span className="text-lime-400 font-semibold">Good Investor</span>
+              <span className="text-lime-400 font-semibold">trademilaan</span>
             </p>
           </div>
         </div>

@@ -3,7 +3,7 @@ import IndexOptionsPro from "../components/IndexOptionsPro";
 import EquityPro from "../components/EquityPro";
 
 export const metadata = {
-  title: "Services - Good Investor",
+  title: "Services - trademilaan",
   description:
     "Explore our AI-powered trading services including Index Options Pro and Equity Pro for informed trading decisions.",
 };

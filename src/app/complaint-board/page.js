@@ -1,7 +1,7 @@
 import ComplaintBoard from "../components/ComplaintBoard";
 
 export const metadata = {
-  title: "Complaint Board - Good Investor",
+  title: "Complaint Board - trademilaan",
   description: "View and submit complaints through our complaint board system.",
 };
 

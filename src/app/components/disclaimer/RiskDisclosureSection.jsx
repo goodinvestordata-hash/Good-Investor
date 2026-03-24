@@ -3,7 +3,7 @@ export default function RiskDisclosureSection() {
     <div className="max-w-7xl mx-auto py-12 px-4 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
       <div>
         <h2 className="text-2xl font-bold mb-4">
-          RISK Disclosures “Eeda Damodara Rao: INH000019327
+          RISK Disclosures “Sasikumar Peyyala: INH000019327
         </h2>
 
         <p className="text-gray-600 mb-3">

@@ -9,9 +9,9 @@ import DosSection from "@/app/components/investor/DosSection";
 import DontsSection from "@/app/components/investor/DontsSection";
 
 export const metadata = {
-  title: "Investor Charter - Good Investor",
+  title: "Investor Charter - trademilaan",
   description:
-    "Investor charter, rights, and responsibilities for Good Investor clients.",
+    "Investor charter, rights, and responsibilities for trademilaan clients.",
 };
 
 export default function InvestorCharterPage() {

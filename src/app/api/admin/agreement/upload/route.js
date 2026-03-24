@@ -26,7 +26,7 @@ export async function POST(req) {
     const upload = await uploadToCloudinary(
       buffer,
       safeName,
-      "Good Investor/agreements",
+      "trademilaan/agreements",
     );
 
     if (!upload || !upload.secureUrl || !upload.publicId) {

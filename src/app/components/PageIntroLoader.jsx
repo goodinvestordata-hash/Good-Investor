@@ -54,7 +54,7 @@ export default function PageIntroLoader() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25, duration: 0.8, ease: "easeInOut" }}
               >
-                GOOD INVESTOR
+                trademilaan
               </motion.span>
             </motion.div>
           </motion.div>

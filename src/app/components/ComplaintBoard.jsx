@@ -21,7 +21,7 @@ export default function ComplaintBoard() {
       {/* ===== Content ===== */}
       <div className="max-w-5xl mx-auto px-6 py-14 space-y-8 text-gray-800 leading-relaxed">
         <p>
-          At <b>Good Investor</b>, we are committed to providing transparent and
+          At <b>trademilaan</b>, we are committed to providing transparent and
           professional research services. If you have any concerns, issues, or
           complaints regarding our services, you may raise them through this
           Complaint Board.
@@ -48,15 +48,15 @@ export default function ComplaintBoard() {
         <section>
           <h2 className="text-2xl font-bold mb-3">Grievance Officer Details</h2>
           <p>
-            <b>Name:</b> Eeda Damodara Rao
+            <b>Name:</b> Sasikumar Peyyala
           </p>
           <p>
             <b>Email:</b>{" "}
             <a
-              href="mailto:damu.researchanalyst@gmail.com"
+              href="mailto:spkumar.researchanalyst@gmail.com"
               className="text-blue-600 underline"
             >
-              damu.researchanalyst@gmail.com
+              spkumar.researchanalyst@gmail.com
             </a>
           </p>
           <p>
@@ -97,9 +97,9 @@ export default function ComplaintBoard() {
         <section>
           <h2 className="text-2xl font-bold mb-3">Our Commitment</h2>
           <p>
-            Good Investor is committed to fair practices and investor
-            protection. All complaints are handled with confidentiality and in
-            compliance with SEBI regulations.
+            trademilaan is committed to fair practices and investor protection.
+            All complaints are handled with confidentiality and in compliance
+            with SEBI regulations.
           </p>
         </section>
       </div>

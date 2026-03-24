@@ -5,43 +5,43 @@ import { motion } from "framer-motion";
 const conflicts = [
   {
     category: "Financial Interest",
-    text: "Eeda Damodara Rao: INH000019327 or its research analysts or his/her relative or associate don't have any direct or indirect financial interest in the subject company",
+    text: "Sasikumar Peyyala: INH000019327 or its research analysts or his/her relative or associate don't have any direct or indirect financial interest in the subject company",
   },
   {
     category: "Material Conflicts",
-    text: "Eeda Damodara Rao: INH000019327 or its research analysts, or his/her relative or associate don't have any other material conflict of interest at the time of publication of the research report.",
+    text: "Sasikumar Peyyala: INH000019327 or its research analysts, or his/her relative or associate don't have any other material conflict of interest at the time of publication of the research report.",
   },
   {
     category: "Securities Ownership",
-    text: "Eeda Damodara Rao: INH000019327 or its research analysts, or his/her relative or associates don't have actual ownership of 1% or more securities of the subject company",
+    text: "Sasikumar Peyyala: INH000019327 or its research analysts, or his/her relative or associates don't have actual ownership of 1% or more securities of the subject company",
   },
   {
     category: "Compensation",
-    text: "Eeda Damodara Rao: INH000019327 or its associates have received any compensation from the subject company in the past twelve months",
+    text: "Sasikumar Peyyala: INH000019327 or its associates have received any compensation from the subject company in the past twelve months",
   },
   {
     category: "Public Offerings",
-    text: "Eeda Damodara Rao: INH000019327 or its associates have managed or co-managed public offering of securities for the subject in the past twelve months",
+    text: "Sasikumar Peyyala: INH000019327 or its associates have managed or co-managed public offering of securities for the subject in the past twelve months",
   },
   {
     category: "Investment Banking",
-    text: "Eeda Damodara Rao: INH000019327 or its associates have received any compensation for investment banking or merchant banking or brokerage services from the subject company in the past twelve months",
+    text: "Sasikumar Peyyala: INH000019327 or its associates have received any compensation for investment banking or merchant banking or brokerage services from the subject company in the past twelve months",
   },
   {
     category: "Other Services",
-    text: "Eeda Damodara Rao: INH000019327 or its associates have received any compensation for products or services other than investment banking or merchant banking or brokerage services from the subject company in the past twelve months",
+    text: "Sasikumar Peyyala: INH000019327 or its associates have received any compensation for products or services other than investment banking or merchant banking or brokerage services from the subject company in the past twelve months",
   },
   {
     category: "Additional Benefits",
-    text: "Eeda Damodara Rao: INH000019327 or its associates have received any compensation or other benefits from the subject company or third party in connection with the research report The research analyst has not served as an officer, director, and employee of the subject company",
+    text: "Sasikumar Peyyala: INH000019327 or its associates have received any compensation or other benefits from the subject company or third party in connection with the research report The research analyst has not served as an officer, director, and employee of the subject company",
   },
   {
     category: "Market-Making",
-    text: "Eeda Damodara Rao: INH000019327 or its research analyst has been engaged in the market-making activity for the subject company",
+    text: "Sasikumar Peyyala: INH000019327 or its research analyst has been engaged in the market-making activity for the subject company",
   },
   {
     category: "Past Compensation",
-    text: "Eeda Damodara Rao: INH000019327 or its associates have received any compensation from the subject company in the past twelve months",
+    text: "Sasikumar Peyyala: INH000019327 or its associates have received any compensation from the subject company in the past twelve months",
   },
 ];
 

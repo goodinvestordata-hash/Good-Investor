@@ -76,7 +76,7 @@ export async function POST(req) {
     await transporter.sendMail({
       from: process.env.MAIL_FROM || process.env.MAIL_USER,
       to: user.email,
-      subject: "Good Investor – Email Verification OTP",
+      subject: "trademilaan – Email Verification OTP",
       html: `<p>Your OTP is <b>${otp}</b>. Valid for 5 minutes.</p>`,
     });
 

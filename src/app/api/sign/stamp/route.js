@@ -96,7 +96,7 @@ export async function POST(req) {
     const upload = await new Promise((resolve, reject) => {
       const stream = cloudinary.v2.uploader.upload_stream(
         {
-          folder: "Good Investor/signed-agreements",
+          folder: "trademilaan/signed-agreements",
           resource_type: "raw", // supports PDF
           format: "pdf",
           use_filename: true,

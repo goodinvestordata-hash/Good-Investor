@@ -109,7 +109,7 @@ next-env.d.ts
 #     const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
 
 #     // Upload PDF to Cloudinary as image/pdf
-#     const cloudinaryResult = await uploadToCloudinary(buffer, safeName, "Good Investor/agreements");
+#     const cloudinaryResult = await uploadToCloudinary(buffer, safeName, "trademilaan/agreements");
 
 #     // Determine version number
 #     const last = await Agreement.findOne().sort({ version: -1 });
