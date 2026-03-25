@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export default function PaymentForm({ onPaymentComplete, onBack }) {
+export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
   // ✅ Plans
   const PLANS = [
     { id: "monthly", name: "Monthly", price: 4500 },

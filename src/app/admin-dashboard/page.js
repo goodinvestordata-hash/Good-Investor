@@ -11,6 +11,8 @@ const COLLECTIONS = [
   { key: "signedAgreements", label: "Signed Agreements" },
   { key: "documents", label: "Documents" },
   { key: "riskprofiles", label: "Risk Profiles" },
+  { key: "plans", label: "Plans", isExternal: true, path: "/admin-plans" },
+  { key: "subscriptions", label: "Subscriptions", isExternal: true, path: "/admin-subscriptions" },
 ];
 
 export default function AdminDashboardPage() {
@@ -81,7 +83,13 @@ export default function AdminDashboardPage() {
             {COLLECTIONS.map((col) => (
               <button
                 key={col.key}
-                onClick={() => setActiveTab(col.key)}
+                onClick={() => {
+                  if (col.isExternal && col.path) {
+                    router.push(col.path);
+                  } else {
+                    setActiveTab(col.key);
+                  }
+                }}
                 className={`text-left p-2 rounded ${
                   activeTab === col.key
                     ? "bg-black text-white"

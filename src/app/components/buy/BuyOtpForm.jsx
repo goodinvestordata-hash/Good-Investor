@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-export default function BuyOtpForm({ onSuccess }) {
+export default function BuyOtpForm({ onSuccess, planData }) {
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

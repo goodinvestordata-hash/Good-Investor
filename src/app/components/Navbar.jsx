@@ -8,6 +8,7 @@ import { useAuth } from "../context/AuthContext";
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const pathname = usePathname();
   const { user } = useAuth();
 
@@ -94,13 +95,57 @@ export function Navbar() {
 
         <div className="flex items-center gap-2 sm:gap-3">
           {user && (
-            <Link
-              href="/profile"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-neutral-900 text-white text-sm font-semibold shadow hover:bg-neutral-800 transition"
-              aria-label="Profile"
-            >
-              {profileInitial}
-            </Link>
+            <div className="relative">
+              <button
+                onClick={() => setProfileOpen(!profileOpen)}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-neutral-900 text-white text-sm font-semibold shadow hover:bg-neutral-800 transition"
+                aria-label="Profile menu"
+              >
+                {profileInitial}
+              </button>
+
+              {/* Dropdown Menu */}
+              {profileOpen && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-30"
+                    onClick={() => setProfileOpen(false)}
+                  />
+                  <div className="absolute top-12 right-0 z-40 min-w-48 bg-white rounded-lg shadow-lg border border-neutral-200 overflow-hidden">
+                    <div className="px-4 py-3 border-b border-neutral-100 bg-neutral-50">
+                      <p className="text-xs text-neutral-600">Logged in as</p>
+                      <p className="font-semibold text-neutral-900 truncate">
+                        {user?.email || user?.username}
+                      </p>
+                    </div>
+                    <Link
+                      href="/profile"
+                      onClick={() => setProfileOpen(false)}
+                      className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 transition"
+                    >
+                      Profile
+                    </Link>
+                    <Link
+                      href="/my-subscriptions"
+                      onClick={() => setProfileOpen(false)}
+                      className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 transition"
+                    >
+                      My Subscriptions
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setProfileOpen(false);
+                        // Logout functionality
+                        fetch("/api/auth/logout", { method: "POST" });
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           )}
 
           {/* CTA */}
@@ -124,16 +169,25 @@ export function Navbar() {
             <div className="mx-auto w-full max-w-screen-sm overflow-hidden rounded-2xl border bg-white shadow-xl">
               <div className="flex flex-col p-4 gap-1">
                 {user && (
-                  <Link
-                    href="/profile"
-                    onClick={closeMobile}
-                    className="flex items-center justify-between rounded-xl bg-neutral-900 px-4 py-3 text-sm font-semibold text-white"
-                  >
-                    <span>Profile</span>
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-white">
-                      {profileInitial}
-                    </span>
-                  </Link>
+                  <>
+                    <Link
+                      href="/profile"
+                      onClick={closeMobile}
+                      className="flex items-center justify-between rounded-xl bg-neutral-900 px-4 py-3 text-sm font-semibold text-white"
+                    >
+                      <span>Profile</span>
+                      <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-white">
+                        {profileInitial}
+                      </span>
+                    </Link>
+                    <Link
+                      href="/my-subscriptions"
+                      onClick={closeMobile}
+                      className="py-3 text-base font-medium text-neutral-700 hover:text-neutral-900"
+                    >
+                      My Subscriptions
+                    </Link>
+                  </>
                 )}
 
                 {navLinks.map((link) => (
