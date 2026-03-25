@@ -13,6 +13,7 @@ const COLLECTIONS = [
   { key: "riskprofiles", label: "Risk Profiles" },
   { key: "plans", label: "Plans", isExternal: true, path: "/admin-plans" },
   { key: "subscriptions", label: "Subscriptions", isExternal: true, path: "/admin-subscriptions" },
+  { key: "paymentAudit", label: "Payment Audit", isExternal: true, path: "/admin-payment-audit" },
 ];
 
 export default function AdminDashboardPage() {
