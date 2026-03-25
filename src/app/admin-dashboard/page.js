@@ -11,6 +11,7 @@ const COLLECTIONS = [
   { key: "signedAgreements", label: "Signed Agreements" },
   { key: "documents", label: "Documents" },
   { key: "riskprofiles", label: "Risk Profiles" },
+  { key: "analytics", label: "Analytics", isExternal: true, path: "/admin-analytics" },
   { key: "plans", label: "Plans", isExternal: true, path: "/admin-plans" },
   { key: "subscriptions", label: "Subscriptions", isExternal: true, path: "/admin-subscriptions" },
   { key: "paymentAudit", label: "Payment Audit", isExternal: true, path: "/admin-payment-audit" },

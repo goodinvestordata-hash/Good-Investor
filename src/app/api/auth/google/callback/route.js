@@ -58,8 +58,13 @@ export async function GET(req) {
 
   if (!user.role) {
     user.role = "user";
-    await user.save();
   }
+  
+  // Update login tracking
+  user.lastLoginAt = new Date();
+  user.authProvider = "google";
+  user.emailVerified = true;
+  await user.save();
 
   const jwt = signToken(user);
 

@@ -133,10 +133,12 @@ export function Navbar() {
                       My Subscriptions
                     </Link>
                     <button
-                      onClick={() => {
+                      onClick={async () => {
                         setProfileOpen(false);
                         // Logout functionality
-                        fetch("/api/auth/logout", { method: "POST" });
+                        await fetch("/api/auth/logout", { method: "POST" });
+                        // Refresh page to clear auth state
+                        window.location.href = "/login";
                       }}
                       className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"
                     >

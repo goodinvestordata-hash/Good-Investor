@@ -24,6 +24,12 @@ export async function POST(req) {
   if (!ok)
     return NextResponse.json({ message: "Invalid credentials" }, { status: 401 });
 
+  // Update login tracking
+  user.lastLoginAt = new Date();
+  user.authProvider = "email";
+  user.emailVerified = true;
+  await user.save();
+
   const token = signToken(user);
 
   const res = NextResponse.json({ user });
