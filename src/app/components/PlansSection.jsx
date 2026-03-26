@@ -69,38 +69,40 @@ export default function PlansSection() {
   }
 
   return (
-    <div className="w-full py-16 sm:py-20">
+    <div className="w-full py-16 sm:py-24 bg-linear-to-b from-white via-[#f6f9ff] to-white">
       {/* Section Header */}
-      <div className="text-center mb-12 sm:mb-16">
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-neutral-900 mb-4">
-          Choose Your Plan
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12 sm:mb-16">
+        <h2 className="text-4xl sm:text-5xl lg:text-4xl font-black text-neutral-900 mb-6">
+          Choose Your <span className="bg-linear-to-r from-[#9BE749] to-[#6d5bff] bg-clip-text text-transparent">Perfect Plan</span>
         </h2>
-        <p className="text-neutral-600 text-lg max-w-2xl mx-auto">
-          Select the perfect subscription plan tailored to your trading needs. Unlock premium insights and strategies.
+        <p className="text-neutral-700 text-md max-w-3xl mx-auto font-medium">
+          Select the perfect subscription plan tailored to your trading needs. Unlock premium insights, real-time analytics, and expert strategies.
         </p>
       </div>
 
       {/* Plans Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16 sm:mb-20">
         {plans.map((plan) => (
           <PlanCard key={plan._id} plan={plan} />
         ))}
       </div>
 
       {/* Info Section */}
-      <div className="mt-16 sm:mt-20 bg-gradient-to-r from-lime-50 to-neutral-50 border border-lime-200 rounded-2xl p-8 sm:p-12 text-center">
-        <h3 className="text-2xl font-bold text-neutral-900 mb-4">
-          Need Help Choosing?
-        </h3>
-        <p className="text-neutral-700 mb-6 max-w-2xl mx-auto">
-          Our trading experts can help you select the plan that best matches your investment profile and goals.
-        </p>
-        <a
-          href="/contact"
-          className="inline-block px-6 py-3 bg-lime-500 hover:bg-lime-600 text-white font-semibold rounded-lg transition-colors"
-        >
-          Contact Our Team
-        </a>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-linear-to-r from-[#9BE749]/10 via-white to-[#6d5bff]/10 border border-[#9BE749]/30 rounded-2xl p-8 sm:p-12 text-center">
+          <h3 className="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">
+            Need Help Choosing?
+          </h3>
+          <p className="text-neutral-700 mb-8 max-w-2xl mx-auto text-lg">
+            Our trading experts can help you select the plan that best matches your investment profile and goals.
+          </p>
+          <a
+            href="/contact"
+            className="inline-block px-8 py-3.5 bg-linear-to-r from-[#9BE749] to-[#6d5bff] text-white font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform cursor-pointer"
+          >
+            Contact Our Team
+          </a>
+        </div>
       </div>
     </div>
   );

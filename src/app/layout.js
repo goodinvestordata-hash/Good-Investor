@@ -4,8 +4,6 @@ import "./globals.css";
 import { Navbar } from "./components/Navbar";
 import Footer from "./components/Footer";
 
-import { CursorTrailer } from "./components/CursorTrailer";
-
 import { AuthProvider } from "./context/AuthContext";
 import AppFrame from "./components/AppFrame";
 
@@ -34,7 +32,6 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <CursorTrailer />
         <AuthProvider>
           <AppFrame>{children}</AppFrame>
         </AuthProvider>

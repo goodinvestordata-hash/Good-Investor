@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Heart, ChevronRight } from "lucide-react";
+import { Heart, ChevronRight, Check } from "lucide-react";
 import { useAuth } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
 import BuyNowModal from "@/app/components/buy/BuyNowModal";
@@ -11,6 +11,7 @@ export default function PlanCard({ plan }) {
   const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const isPopular = plan.type?.toLowerCase() === "popular" || plan.type?.toLowerCase() === "pro";
 
   const handleBuyNow = () => {
     if (!user) {
@@ -25,28 +26,49 @@ export default function PlanCard({ plan }) {
   return (
     <>
       <div
-        className="group relative h-full overflow-hidden rounded-2xl border border-neutral-200 bg-gradient-to-br from-white to-neutral-50 shadow-lg transition-all duration-300 hover:shadow-2xl hover:border-lime-300"
+        className={`group relative h-full overflow-hidden rounded-2xl transition-all duration-300 flex flex-col ${
+          isPopular
+            ? "ring-2 ring-[#9BE749] shadow-[0_20px_60px_rgba(155,231,73,0.2)] hover:shadow-[0_30px_80px_rgba(155,231,73,0.3)]"
+            : "border border-neutral-200 shadow-lg hover:shadow-2xl hover:border-neutral-300"
+        }`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Background gradient effect on hover */}
-        <div
-          className={`absolute inset-0 bg-gradient-to-r from-lime-50/0 to-lime-100/20 transition-opacity duration-300 ${
-            isHovered ? "opacity-100" : "opacity-0"
-          }`}
-        />
+        {/* Background */}
+        <div className={`absolute inset-0 ${
+          isPopular
+            ? "bg-linear-to-br from-white via-[#f6f9ff] to-white"
+            : "bg-linear-to-br from-white to-neutral-50"
+        }`} />
+
+        {/* Popular badge */}
+        {isPopular && (
+          <div className="absolute top-6 right-6 z-10">
+            <div className="inline-block px-3 py-1.5 text-xs font-bold uppercase tracking-wider bg-linear-to-r from-[#9BE749] to-[#6d5bff] text-white rounded-full shadow-lg">
+              ⭐ Most Popular
+            </div>
+          </div>
+        )}
 
         <div className="relative h-full p-6 sm:p-8 flex flex-col">
-          {/* Badge */}
-          <div className="flex items-center justify-between mb-4">
-            <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-lime-100 text-lime-700 rounded-full">
+          {/* Header with badge and heart */}
+          <div className="flex items-center justify-between mb-6">
+            <span className={`inline-block px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full ${
+              isPopular
+                ? "bg-[#9BE749]/10 text-[#9BE749]"
+                : "bg-neutral-100 text-neutral-700"
+            }`}>
               {plan.type}
             </span>
-            {isHovered && (
-              <button className="p-2 rounded-full bg-neutral-100 hover:bg-neutral-200 transition-colors">
-                <Heart size={16} className="text-neutral-600" />
-              </button>
-            )}
+            <button className={`p-2 rounded-full transition-all duration-300 ${
+              isHovered
+                ? "bg-[#9BE749]/10 hover:bg-[#9BE749]/20"
+                : "bg-neutral-100 hover:bg-neutral-200"
+            }`}>
+              <Heart size={18} className={`transition-colors ${
+                isHovered ? "text-[#9BE749] fill-[#9BE749]" : "text-neutral-600"
+              }`} />
+            </button>
           </div>
 
           {/* Plan name */}
@@ -56,72 +78,73 @@ export default function PlanCard({ plan }) {
 
           {/* Description */}
           {plan.description && (
-            <p className="text-sm text-neutral-600 mb-4 line-clamp-2">
+            <p className="text-sm text-neutral-600 mb-6 line-clamp-2">
               {plan.description}
             </p>
           )}
 
-        {/* Price section */}
-        <div className="mb-6">
-          <div className="flex items-baseline gap-2">
-            <span className="text-4xl sm:text-5xl font-bold text-neutral-900">
-              ₹{plan.price.toLocaleString("en-IN")}
-            </span>
-            <span className="text-sm text-neutral-600">
-              for {plan.duration === 30 ? "1 month" : plan.duration === 365 ? "1 year" : `${plan.duration} days`}
-            </span>
+          {/* Price section with enhanced styling */}
+          <div className={`mb-8 pb-8 border-b ${
+            isPopular ? "border-[#9BE749]/20" : "border-neutral-200"
+          }`}>
+            <div className="flex items-baseline gap-2 mb-2">
+              <span className="text-5xl sm:text-6xl font-black text-neutral-900">
+                ₹{plan.price.toLocaleString("en-IN")}
+              </span>
+              <span className="text-sm font-medium text-neutral-600">
+                /{plan.duration === 30 ? "month" : plan.duration === 365 ? "year" : `${plan.duration}d`}
+              </span>
+            </div>
+            <p className="text-xs text-neutral-500 font-medium">
+              {plan.duration === 30 ? "1 Month Access" : plan.duration === 365 ? "1 Year Access" : `${plan.duration} Days Access`}
+            </p>
           </div>
-        </div>
 
-        {/* Features list */}
-        <div className="flex-grow mb-6">
-          <p className="text-xs uppercase font-semibold text-neutral-500 mb-3">
-            Includes:
+          {/* Features list */}
+          <div className="grow mb-8">
+            <p className="text-xs uppercase font-bold text-neutral-700 mb-4 tracking-wide">
+              ✨ What You Get
+            </p>
+            <ul className="space-y-3">
+              {plan.features.slice(0, 5).map((feature, idx) => (
+                <li key={idx} className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-[#9BE749] shrink-0 mt-0.5" />
+                  <span className="text-sm text-neutral-700 font-medium">{feature}</span>
+                </li>
+              ))}
+              {plan.features.length > 5 && (
+                <li className="flex items-start gap-3 pt-2 border-t border-neutral-200">
+                  <span className="text-xs font-bold text-[#9BE749]">
+                    +{plan.features.length - 5} more
+                  </span>
+                </li>
+              )}
+            </ul>
+          </div>
+
+          {/* CTA Button */}
+          <button
+            onClick={handleBuyNow}
+            className="w-full px-6 py-2 sm:py-3 font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn transform shadow-lg hover:shadow-xl bg-[#9BE749] text-black hover:bg-[#7dd938]  cursor-pointer"
+          >
+            Get Started
+            <ChevronRight size={18} className="transition-transform group-hover/btn:translate-x-1" />
+          </button>
+
+          {/* Footer note */}
+          <p className="text-xs text-neutral-500 text-center mt-4 font-medium">
+            Cancel anytime • No hidden charges
           </p>
-          <ul className="space-y-2">
-            {plan.features.slice(0, 5).map((feature, idx) => (
-              <li
-                key={idx}
-                className="flex items-start gap-3 text-sm text-neutral-700"
-              >
-                <div className="mt-1.5 h-1.5 w-1.5 rounded-full bg-lime-500 flex-shrink-0" />
-                <span>{feature}</span>
-              </li>
-            ))}
-            {plan.features.length > 5 && (
-              <li className="text-sm text-neutral-600 italic pt-1">
-                +{plan.features.length - 5} more features
-              </li>
-            )}
-          </ul>
         </div>
-
-        {/* CTA Button */}
-        <button
-          onClick={handleBuyNow}
-          className="w-full px-6 py-3 sm:py-4 bg-gradient-to-r from-lime-500 to-lime-600 text-white font-semibold rounded-xl hover:from-lime-600 hover:to-lime-700 transition-all duration-300 flex items-center justify-center gap-2 group/btn shadow-lg hover:shadow-xl transform hover:scale-105"
-        >
-          Buy Now
-          <ChevronRight
-            size={18}
-            className="transition-transform group-hover/btn:translate-x-1"
-          />
-        </button>
-
-        {/* Duration info */}
-        <p className="text-xs text-neutral-500 text-center mt-3">
-          Valid for {plan.duration} days
-        </p>
       </div>
-    </div>
 
-    {/* Modal with same flow as existing services */}
-    {showModal && (
-      <BuyNowModal
-        onClose={() => setShowModal(false)}
-        planData={{ planId: plan._id, planName: plan.name, price: plan.price }}
-      />
-    )}
-  </>
+      {/* Modal with same flow as existing services */}
+      {showModal && (
+        <BuyNowModal
+          onClose={() => setShowModal(false)}
+          planData={{ planId: plan._id, planName: plan.name, price: plan.price }}
+        />
+      )}
+    </>
   );
 }
