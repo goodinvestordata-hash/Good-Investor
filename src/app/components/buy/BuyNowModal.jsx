@@ -1,12 +1,14 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import BuyDetailsForm from "./BuyDetailsForm";
 import BuyOtpForm from "./BuyOtpForm";
 import AgreementModal from "./AgreementModal";
 
-export default function BuyNowModal({ onClose }) {
+export default function BuyNowModal({ onClose, planData }) {
   const [step, setStep] = useState(1);
   const [agreed, setAgreed] = useState(false);
+  const router = useRouter();
 
   return (
     <>
@@ -1051,7 +1053,7 @@ export default function BuyNowModal({ onClose }) {
               ×
             </button>
             <div className="p-8 max-h-[80vh] overflow-y-auto">
-              <BuyDetailsForm onSuccess={() => setStep(3)} />
+              <BuyDetailsForm onSuccess={() => setStep(3)} planData={planData} />
             </div>
           </div>
         </div>
@@ -1068,14 +1070,14 @@ export default function BuyNowModal({ onClose }) {
               ×
             </button>
             <div className="p-8 max-h-[80vh] overflow-y-auto">
-              <BuyOtpForm onSuccess={() => setStep(4)} />
+              <BuyOtpForm onSuccess={() => setStep(4)} planData={planData} />
             </div>
           </div>
         </div>
       )}
 
       {/* STEP 4: AGREEMENT & E-SIGN */}
-      {step === 4 && <AgreementModal onClose={onClose} />}
+      {step === 4 && <AgreementModal onClose={onClose} planData={planData} />}
     </>
   );
 }

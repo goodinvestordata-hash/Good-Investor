@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-export default function BuyDetailsForm({ onSuccess }) {
+export default function BuyDetailsForm({ onSuccess, planData }) {
   const [form, setForm] = useState({
     fullName: "",
     dob: "",

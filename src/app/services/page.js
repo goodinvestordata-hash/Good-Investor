@@ -1,6 +1,7 @@
 import ServicesHero from "../components/ServicesHero";
 import IndexOptionsPro from "../components/IndexOptionsPro";
 import EquityPro from "../components/EquityPro";
+import PlansSection from "../components/PlansSection";
 
 export const metadata = {
   title: "Services - trademilaan",
@@ -12,6 +13,7 @@ export default function ServicesPage() {
   return (
     <div className="bg-white">
       <ServicesHero />
+      <PlansSection />
       <IndexOptionsPro />
       <EquityPro />
     </div>

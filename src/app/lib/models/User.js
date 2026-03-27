@@ -38,6 +38,15 @@ const UserSchema = new mongoose.Schema(
     pdfAccepted: { type: Boolean, default: false },
     pdfAcceptedAt: { type: Date, default: null },
 
+    // Analytics & Login Tracking
+    authProvider: {
+      type: String,
+      enum: ["email", "google"],
+      default: "email",
+    },
+    emailVerified: { type: Boolean, default: false },
+    lastLoginAt: { type: Date, default: null },
+
     // Payment proofs
     paymentProofs: [
       {

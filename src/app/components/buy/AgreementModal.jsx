@@ -6,7 +6,7 @@ import ESignModal from "@/app/components/ESignModal";
 import PaymentForm from "@/app/components/buy/PaymentForm";
 import ServiceAgreement from "@/components/ServiceAgreement";
 
-export default function AgreementModal({ onClose, onSuccess }) {
+export default function AgreementModal({ onClose, onSuccess, planData }) {
   const { user } = useAuth();
   const [checked, setChecked] = useState(false);
   const [showSign, setShowSign] = useState(false);
@@ -168,6 +168,7 @@ export default function AgreementModal({ onClose, onSuccess }) {
               <PaymentForm
                 onPaymentComplete={handlePaymentComplete}
                 onBack={() => setShowPayment(false)}
+                planData={planData}
               />
             ) : paymentResult ? (
               <div className="flex flex-col items-center justify-center h-screen">

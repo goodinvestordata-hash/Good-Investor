@@ -3,6 +3,7 @@ import connectDB from "@/app/lib/db";
 
 import { generateInvoicePDF } from "@/app/lib/generateInvoicePDF";
 import Payment from "@/app/lib/models/Payment";
+import Coupon from "@/app/lib/models/Coupon";
 
 export async function POST(request) {
   await connectDB();
@@ -15,6 +16,7 @@ export async function POST(request) {
     email,
     phone,
     amount,
+    couponCode,
   } = body;
   const crypto = (await import("crypto")).default || (await import("crypto"));
   const sign = razorpay_order_id + "|" + razorpay_payment_id;
@@ -43,8 +45,18 @@ export async function POST(request) {
       amount,
       paidAt,
       expiresAt,
+      ...(couponCode && { couponCode }),
     });
     await payment.save();
+
+    // ✅ Mark coupon as used (increment usedCount)
+    if (couponCode) {
+      await Coupon.findOneAndUpdate(
+        { code: couponCode.toUpperCase() },
+        { $inc: { usedCount: 1 } },
+        { new: true }
+      );
+    }
 
     // Generate invoice PDF (in memory, not saved to disk)
     const invoiceData = {
@@ -65,6 +77,7 @@ export async function POST(request) {
       email,
       phone,
       amount,
+      ...(couponCode && { couponCode }),
     });
   } catch (err) {
     return NextResponse.json(
