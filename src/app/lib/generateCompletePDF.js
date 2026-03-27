@@ -1107,15 +1107,28 @@ export async function generateCompleteAgreementPDF(agreementData) {
     if (signatureData && typeof signatureData === "string") {
       try {
         let imageBuffer = null;
+        console.log("[PDF] signatureData type:", typeof signatureData);
         if (signatureData.startsWith("data:image")) {
           const matches = signatureData.match(/base64,(.+)/);
           if (matches && matches[1]) {
             imageBuffer = Buffer.from(matches[1], "base64");
+            console.log(
+              "[PDF] Extracted base64 from data URL, buffer length:",
+              imageBuffer.length,
+            );
+          } else {
+            console.error("[PDF] No base64 match in data URL signatureData");
           }
         } else {
           imageBuffer = Buffer.from(signatureData, "base64");
+          console.log(
+            "[PDF] Used raw base64, buffer length:",
+            imageBuffer.length,
+          );
         }
-        if (imageBuffer && imageBuffer.length > 0) {
+        if (!imageBuffer || imageBuffer.length === 0) {
+          console.error("[PDF] signature imageBuffer is empty or invalid");
+        } else {
           const signatureImage = await pdfDoc.embedPng(imageBuffer);
           // Maintain aspect ratio, max width 120, max height clientSigH
           let pngDims = signatureImage.scale(1);
@@ -1135,8 +1148,16 @@ export async function generateCompleteAgreementPDF(agreementData) {
             height: drawH,
           });
           hasClientSignature = true;
+          console.log(
+            "[PDF] Client signature image drawn at",
+            drawX,
+            drawY,
+            drawW,
+            drawH,
+          );
         }
       } catch (imgErr) {
+        console.error("[PDF] Error embedding client signature:", imgErr);
         // Draw placeholder line
         currentPage.drawLine({
           start: {
@@ -1189,7 +1210,8 @@ export async function generateCompleteAgreementPDF(agreementData) {
         let drawW = jpgDims.width * scale;
         let drawH = jpgDims.height * scale;
         let drawX = tableLeft + colWidth + (colWidth - drawW) / 2;
-        let drawY = sigAreaTop + (sigAreaHeight - drawH) / 2 + 8;
+        // Move signature further down by increasing offset (was +8, now +28)
+        let drawY = sigAreaTop + (sigAreaHeight - drawH) / 2;
         currentPage.drawImage(raSigImage, {
           x: drawX,
           y: drawY,
