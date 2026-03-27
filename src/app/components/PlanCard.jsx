@@ -127,7 +127,7 @@ export default function PlanCard({ plan }) {
             onClick={handleBuyNow}
             className="w-full px-6 py-2 sm:py-3 font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn transform shadow-lg hover:shadow-xl bg-[#9BE749] text-black hover:bg-[#7dd938]  cursor-pointer"
           >
-            Get Started
+            Buy Now
             <ChevronRight size={18} className="transition-transform group-hover/btn:translate-x-1" />
           </button>
 

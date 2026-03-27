@@ -12,6 +12,7 @@ import AnalyticsSection from "../components/admin/AnalyticsSection";
 import PlansSection from "../components/admin/PlansSection";
 import SubscriptionsSection from "../components/admin/SubscriptionsSection";
 import PaymentAuditSection from "../components/admin/PaymentAuditSection";
+import CouponSection from "../components/admin/CouponSection";
 
 const COLLECTIONS = [
   { key: "users", label: "Users", icon: "👥" },
@@ -22,6 +23,7 @@ const COLLECTIONS = [
   { key: "riskprofiles", label: "Risk Profiles", icon: "📊" },
   { key: "analytics", label: "Analytics", icon: "📈" },
   { key: "plans", label: "Plans", icon: "🎯" },
+  { key: "coupons", label: "Coupons", icon: "🎟️" },
   { key: "subscriptions", label: "Subscriptions", icon: "🔄" },
   { key: "paymentAudit", label: "Payment Audit", icon: "🔍" },
 ];
@@ -170,6 +172,8 @@ export default function AdminDashboardPage() {
           {activeTab === "analytics" && <AnalyticsSection />}
 
           {activeTab === "plans" && <PlansSection />}
+
+          {activeTab === "coupons" && <CouponSection />}
 
           {activeTab === "subscriptions" && <SubscriptionsSection />}
 

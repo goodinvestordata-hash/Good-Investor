@@ -8,6 +8,7 @@ const PaymentSchema = new mongoose.Schema({
   email: { type: String, required: true },
   phone: { type: String, required: true },
   amount: { type: Number, required: true },
+  couponCode: { type: String, default: null },
   paidAt: { type: Date, required: true },
   expiresAt: { type: Date, required: true },
   createdAt: { type: Date, default: Date.now },
