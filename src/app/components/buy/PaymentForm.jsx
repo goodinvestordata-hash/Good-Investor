@@ -297,68 +297,6 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
           </div>
         </div>
 
-        {/* 🔥 Plan Selector */}
-        <div className="mt-8">
-          <label className="block mb-3 text-sm font-medium text-gray-700">
-            Choose Your Plan
-          </label>
-
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            {PLANS.map((plan) => (
-              <div
-                key={plan.id}
-                onClick={() => setSelectedPlan(plan.id)}
-                className={`min-w-40 cursor-pointer rounded-xl p-5 text-center transition-all duration-300 border
-              ${
-                selectedPlan === plan.id
-                  ? "bg-linear-to-r from-indigo-500 to-purple-500 text-white shadow-lg scale-105"
-                  : "bg-white hover:shadow-md border-gray-200"
-              }`}
-              >
-                <p className="font-semibold">{plan.name}</p>
-                <p className="text-lg font-bold mt-1">₹{plan.price}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Amount */}
-        <div className="mt-6">
-          <label className="block mb-1 text-sm font-medium text-gray-600">
-            Amount (INR)
-          </label>
-          {appliedCoupon ? (
-            <div className="space-y-2">
-              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                <span className="text-gray-700">Base Price:</span>
-                <span className="font-semibold">₹{selectedAmount}</span>
-              </div>
-              <div className="flex justify-between items-center p-3 bg-lime-50 rounded-lg border border-lime-200">
-                <span className="text-lime-700 font-semibold">
-                  Discount ({appliedCoupon.code}):
-                </span>
-                <span className="font-bold text-lime-700">
-                  -₹{discountAmount.toFixed(0)}
-                </span>
-              </div>
-              <div className="flex justify-between items-center p-3 bg-gradient-to-r from-lime-100 to-lime-50 rounded-lg border-2 border-lime-400">
-                <span className="text-lg font-bold text-lime-900">
-                  Final Amount:
-                </span>
-                <span className="text-2xl font-bold text-lime-600">
-                  ₹{finalAmount}
-                </span>
-              </div>
-            </div>
-          ) : (
-            <input
-              value={selectedAmount}
-              disabled
-              className="w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-700 font-semibold"
-            />
-          )}
-        </div>
-
         {/* Coupon Section */}
         <div className="mt-8">
           <label className="block mb-3 text-sm font-medium text-gray-700">

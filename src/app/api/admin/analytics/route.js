@@ -93,11 +93,14 @@ export async function GET(req) {
       User.aggregate([
         {
           $group: {
-            _id: "$authProvider",
+            _id: {
+              $ifNull: ["$authProvider", "unknown"]
+            },
             count: { $sum: 1 }
           }
         },
-        { $match: { count: { $gt: 0 } } }
+        { $match: { count: { $gt: 0 } } },
+        { $sort: { count: -1 } }
       ]),
 
       // 4. RECENT LOGINS

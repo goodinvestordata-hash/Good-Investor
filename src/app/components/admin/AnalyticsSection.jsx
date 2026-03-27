@@ -251,7 +251,9 @@ export default function AnalyticsSection() {
                     key={idx}
                     className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200 rounded-lg hover:border-emerald-300 hover:from-emerald-50 hover:to-gray-100 transition"
                   >
-                    <span className="text-gray-700 font-medium capitalize text-sm">{method.method}</span>
+                    <span className="text-gray-700 font-medium capitalize text-sm">
+                      {method.method === "unknown" ? "Legacy/Other" : method.method}
+                    </span>
                     <span className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-purple-600 bg-clip-text text-transparent">{method.count}</span>
                   </div>
                 ))}
@@ -284,7 +286,15 @@ export default function AnalyticsSection() {
                           </span>
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-500">
-                          {new Date(login.timestamp).toLocaleDateString("en-IN")}
+                          {login.logged_in_at
+                            ? new Date(login.logged_in_at).toLocaleString("en-IN", {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })
+                            : "N/A"}
                         </td>
                       </tr>
                     ))}
