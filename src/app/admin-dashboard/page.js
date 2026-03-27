@@ -97,13 +97,12 @@ export default function AdminDashboardPage() {
               <button
                 key={col.key}
                 onClick={() => setActiveTab(col.key)}
-                className={`text-left p-3 rounded-lg font-medium transition flex items-center gap-2 ${
+                className={`text-left p-3 rounded-lg font-medium transition flex items-center gap-2 cursor-pointer ${
                   activeTab === col.key
-                    ? "bg-black text-white"
+                    ? "bg-[#9BE749] text-black"
                     : "bg-neutral-100 hover:bg-neutral-200 text-neutral-900"
                 }`}
               >
-                <span>{col.icon}</span>
                 {col.label}
               </button>
             ))}

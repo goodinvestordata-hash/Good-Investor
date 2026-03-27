@@ -52,7 +52,7 @@ export default function AnalyticsSection() {
         <p className="text-red-700">{error}</p>
         <button
           onClick={fetchAnalytics}
-          className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+          className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 cursor-pointer"
         >
           Retry
         </button>
@@ -67,143 +67,138 @@ export default function AnalyticsSection() {
   return (
     <div className="space-y-8">
       {/* Tabs */}
-      <div className="flex gap-4 bg-white rounded-lg p-2 w-fit border">
+      <div className="flex justify-between items-center gap-4 bg-white rounded-lg p-2 w-full border">
+        <div className="flex gap-4 bg-white rounded-lg p-1">
+          <button
+            onClick={() => setAnalyticsTab("payments")}
+            className={`px-6 py-2 rounded-lg font-medium transition cursor-pointer ${
+              analyticsTab === "payments"
+                ? "bg-gradient-to-r from-emerald-500 to-purple-600 text-white"
+                : "bg-transparent text-gray-600 hover:bg-gray-100"
+            }`}
+          >
+            Payments
+          </button>
+          <button
+            onClick={() => setAnalyticsTab("signups")}
+            className={`px-6 py-2 rounded-lg font-medium transition cursor-pointer ${
+              analyticsTab === "signups"
+                ? "bg-gradient-to-r from-emerald-500 to-purple-600 text-white"
+                : "bg-transparent text-gray-600 hover:bg-gray-100"
+            }`}
+          >
+            Signups
+          </button>
+        </div>
+        {/* Refresh Button */}
         <button
-          onClick={() => setAnalyticsTab("payments")}
-          className={`px-6 py-2 rounded-lg font-medium transition ${
-            analyticsTab === "payments"
-              ? "bg-gray-900 text-white"
-              : "bg-transparent text-gray-600 hover:bg-gray-100"
-          }`}
+          onClick={fetchAnalytics}
+          className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-800 transition cursor-pointer"
         >
-          Payments
-        </button>
-        <button
-          onClick={() => setAnalyticsTab("signups")}
-          className={`px-6 py-2 rounded-lg font-medium transition ${
-            analyticsTab === "signups"
-              ? "bg-gray-900 text-white"
-              : "bg-transparent text-gray-600 hover:bg-gray-100"
-          }`}
-        >
-          Signups
+          Refresh
         </button>
       </div>
 
-      {/* Refresh Button */}
-      <button
-        onClick={fetchAnalytics}
-        className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition"
-      >
-        <span>🔄</span> Refresh
-      </button>
 
       {/* PAYMENTS TAB */}
       {analyticsTab === "payments" && (
-        <div className="space-y-8">
-          {/* Payment Overview Cards */}
+        <div className="space-y-6">
+          {/* Key Metrics Section */}
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Payment Overview</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Payments Overview</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Total Revenue */}
-              <div className="bg-gradient-to-br from-teal-50 to-cyan-50 border border-teal-200 rounded-lg p-6">
-                <p className="text-gray-600 font-medium mb-2">Total Revenue</p>
-                <p className="text-4xl font-bold text-gray-900">
+              <div className="bg-gradient-to-br from-emerald-50/60 to-emerald-100/20 border border-emerald-200 rounded-lg p-5 hover:shadow-md transition">
+                <p className="text-emerald-700 font-medium text-sm mb-2">Total Revenue</p>
+                <p className="text-3xl font-bold text-gray-900">
                   ₹{(summary.total_revenue / 100).toLocaleString("en-IN")}
                 </p>
-                <p className="text-sm text-teal-600 mt-2">All time</p>
+                <p className="text-xs text-emerald-600 mt-2">All time</p>
               </div>
 
               {/* This Month Revenue */}
-              <div className="bg-white border border-gray-200 rounded-lg p-6">
-                <p className="text-gray-600 font-medium mb-2">This Month Revenue</p>
-                <p className="text-4xl font-bold text-gray-900">
+              <div className="bg-gradient-to-br from-blue-50/60 to-blue-100/20 border border-blue-200 rounded-lg p-5 hover:shadow-md transition">
+                <p className="text-blue-700 font-medium text-sm mb-2">This Month Revenue</p>
+                <p className="text-3xl font-bold text-gray-900">
                   ₹{(summary.this_month_revenue / 100).toLocaleString("en-IN")}
                 </p>
-                <p className="text-sm text-gray-500 mt-2">Current month</p>
+                <p className="text-xs text-blue-600 mt-2">Current month</p>
               </div>
 
               {/* Active Subscriptions */}
-              <div className="bg-white border border-gray-200 rounded-lg p-6">
-                <p className="text-gray-600 font-medium mb-2">Active Subscriptions</p>
-                <p className="text-4xl font-bold text-gray-900">{summary.active_subscriptions}</p>
-                <p className="text-sm text-gray-500 mt-2">Not yet expired</p>
+              <div className="bg-gradient-to-br from-purple-50/60 to-purple-100/20 border border-purple-200 rounded-lg p-5 hover:shadow-md transition">
+                <p className="text-purple-700 font-medium text-sm mb-2">Active Subscriptions</p>
+                <p className="text-3xl font-bold text-gray-900">{summary.active_subscriptions}</p>
+                <p className="text-xs text-purple-600 mt-2">Active plans</p>
+              </div>
+
+              {/* Total Transactions */}
+              <div className="bg-gradient-to-br from-orange-50/60 to-orange-100/20 border border-orange-200 rounded-lg p-5 hover:shadow-md transition">
+                <p className="text-orange-700 font-medium text-sm mb-2">Total Transactions</p>
+                <p className="text-3xl font-bold text-gray-900">{summary.total_payments}</p>
+                <p className="text-xs text-orange-600 mt-2">Payment count</p>
               </div>
             </div>
           </div>
 
-          {/* Second Row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Paid Users */}
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <p className="text-gray-600 font-medium mb-2">Paid Users</p>
-              <p className="text-4xl font-bold text-gray-900">{summary.paid_users_count}</p>
-              <p className="text-sm text-gray-500 mt-2">Unique customers</p>
-            </div>
-
-            {/* Renewals */}
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <p className="text-gray-600 font-medium mb-2">Renewals</p>
-              <p className="text-4xl font-bold text-gray-900">{summary.renewals}</p>
-              <p className="text-sm text-gray-500 mt-2">Repeat purchases</p>
-            </div>
-
-            {/* Total Payments */}
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <p className="text-gray-600 font-medium mb-2">Total Transactions</p>
-              <p className="text-4xl font-bold text-gray-900">{summary.total_payments}</p>
-              <p className="text-sm text-gray-500 mt-2">Payment count</p>
-            </div>
-          </div>
-
-          {/* Billing Events */}
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Billing Events</h3>
-            <p className="text-gray-600 text-sm mb-4">Subscription activity</p>
+          {/* User & Renewal Metrics */}
+          <div>
+            <h3 className="text-lg font-bold text-gray-900 mb-4">User Metrics</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <div className="text-green-600 font-bold mb-2">✓ Renewals</div>
-                <p className="text-2xl font-bold text-gray-900">{summary.renewals}</p>
+              {/* Paid Users */}
+              <div className="bg-white border border-gray-200 rounded-lg p-5 hover:shadow-md transition">
+                <p className="text-gray-600 font-medium text-sm mb-2">Paid Users</p>
+                <p className="text-3xl font-bold text-gray-900">{summary.paid_users_count}</p>
+                <p className="text-xs text-gray-500 mt-2">Unique customers</p>
               </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <div className="text-blue-600 font-bold mb-2">↗ Upgrades</div>
-                <p className="text-2xl font-bold text-gray-900">0</p>
+
+              {/* Renewals */}
+              <div className="bg-white border border-gray-200 rounded-lg p-5 hover:shadow-md transition">
+                <p className="text-gray-600 font-medium text-sm mb-2">Renewals</p>
+                <p className="text-3xl font-bold text-emerald-600">{summary.renewals}</p>
+                <p className="text-xs text-gray-500 mt-2">Repeat purchases</p>
               </div>
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                <div className="text-red-600 font-bold mb-2">↘ Downgrades</div>
-                <p className="text-2xl font-bold text-gray-900">0</p>
+
+              {/* Billing Events Summary */}
+              <div className="bg-white border border-gray-200 rounded-lg p-5 hover:shadow-md transition">
+                <p className="text-gray-600 font-medium text-sm mb-2">Billing Status</p>
+                <div className="flex gap-2 items-baseline">
+                  <p className="text-2xl font-bold text-green-600">{summary.renewals}</p>
+                  <span className="text-xs text-gray-500">renewals</span>
+                </div>
+                <p className="text-xs text-gray-500 mt-2">Subscription activity</p>
               </div>
             </div>
           </div>
 
-          {/* Monthly Revenue Details */}
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Monthly Revenue Details</h3>
-            <p className="text-gray-600 text-sm mb-4">Complete revenue and transaction history</p>
-
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="bg-gray-50 border-b border-gray-200">
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Month</th>
-                    <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">Revenue</th>
-                    <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">Transactions</th>
-                    <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">Unique Users</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.monthly_revenue_details?.map((month, idx) => (
-                    <tr key={idx} className="border-b border-gray-100 hover:bg-gray-50">
-                      <td className="px-6 py-3 text-sm text-gray-900 font-medium">{month.month}</td>
-                      <td className="px-6 py-3 text-right text-sm text-gray-900">
-                        ₹{(month.revenue / 100).toLocaleString("en-IN")}
-                      </td>
-                      <td className="px-6 py-3 text-right text-sm text-gray-900">{month.transactions}</td>
-                      <td className="px-6 py-3 text-right text-sm text-gray-900">{month.unique_users}</td>
+          {/* Revenue Details Table */}
+          <div>
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Monthly Revenue History</h3>
+            <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Month</th>
+                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">Revenue</th>
+                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">Transactions</th>
+                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">Unique Users</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {data.monthly_revenue_details?.map((month, idx) => (
+                      <tr key={idx} className="border-b border-gray-100 hover:bg-gray-50 transition">
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">{month.month}</td>
+                        <td className="px-6 py-4 text-right text-sm font-semibold text-emerald-600">
+                          ₹{(month.revenue / 100).toLocaleString("en-IN")}
+                        </td>
+                        <td className="px-6 py-4 text-right text-sm text-gray-900">{month.transactions}</td>
+                        <td className="px-6 py-4 text-right text-sm text-gray-900">{month.unique_users}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -211,90 +206,91 @@ export default function AnalyticsSection() {
 
       {/* SIGNUPS TAB */}
       {analyticsTab === "signups" && (
-        <div className="space-y-8">
-          {/* Signup Overview Cards */}
+        <div className="space-y-6">
+          {/* Key Signup Metrics */}
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Signup Overview</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Signups Overview</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Total Users */}
-              <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-lg p-6">
-                <p className="text-gray-600 font-medium mb-2">Total Users</p>
-                <p className="text-4xl font-bold text-gray-900">{summary.total_users}</p>
-                <p className="text-sm text-green-600 mt-2">+{summary.new_signups_today} today</p>
+              <div className="bg-gradient-to-br from-emerald-50/60 to-emerald-100/30 border border-emerald-200 rounded-lg p-5 hover:shadow-md transition">
+                <p className="text-emerald-700 font-medium text-sm mb-2">Total Users</p>
+                <p className="text-3xl font-bold text-gray-900">{summary.total_users}</p>
+                <p className="text-xs text-emerald-600 mt-2">+{summary.new_signups_today} today</p>
               </div>
 
               {/* New Signups Today */}
-              <div className="bg-white border border-gray-200 rounded-lg p-6">
-                <p className="text-gray-600 font-medium mb-2">New Signups Today</p>
-                <p className="text-4xl font-bold text-gray-900">{summary.new_signups_today}</p>
-                <p className="text-sm text-gray-500 mt-2">24 hours</p>
+              <div className="bg-gradient-to-br from-blue-50/60 to-blue-100/30 border border-blue-200 rounded-lg p-5 hover:shadow-md transition">
+                <p className="text-blue-700 font-medium text-sm mb-2">New Signups</p>
+                <p className="text-3xl font-bold text-gray-900">{summary.new_signups_today}</p>
+                <p className="text-xs text-blue-600 mt-2">Last 24 hours</p>
               </div>
 
               {/* Logged In Today */}
-              <div className="bg-white border border-gray-200 rounded-lg p-6">
-                <p className="text-gray-600 font-medium mb-2">Logged In Today</p>
-                <p className="text-4xl font-bold text-gray-900">{summary.total_logged_in_today}</p>
-                <p className="text-sm text-gray-500 mt-2">Active now</p>
+              <div className="bg-gradient-to-br from-green-50/60 to-green-100/30 border border-green-200 rounded-lg p-5 hover:shadow-md transition">
+                <p className="text-green-700 font-medium text-sm mb-2">Logged In</p>
+                <p className="text-3xl font-bold text-gray-900">{summary.total_logged_in_today}</p>
+                <p className="text-xs text-green-600 mt-2">Active today</p>
               </div>
 
               {/* Active Last 30 Days */}
-              <div className="bg-white border border-gray-200 rounded-lg p-6">
-                <p className="text-gray-600 font-medium mb-2">Active Last 30 Days</p>
-                <p className="text-4xl font-bold text-gray-900">{summary.active_last_30_days}</p>
-                <p className="text-sm text-gray-500 mt-2">Monthly active</p>
+              <div className="bg-gradient-to-br from-purple-50/60 to-purple-100/30 border border-purple-200 rounded-lg p-5 hover:shadow-md transition">
+                <p className="text-purple-700 font-medium text-sm mb-2">Monthly Active</p>
+                <p className="text-3xl font-bold text-gray-900">{summary.active_last_30_days}</p>
+                <p className="text-xs text-purple-600 mt-2">Last 30 days</p>
               </div>
             </div>
           </div>
 
           {/* Login Methods */}
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Login Methods</h3>
-            <p className="text-gray-600 text-sm mb-4">Authentication breakdown</p>
-            <div className="space-y-3">
-              {data.login_method_breakdown?.map((method, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
-                >
-                  <span className="text-gray-700 font-medium capitalize">{method.method}</span>
-                  <span className="text-2xl font-bold text-teal-600">{method.count}</span>
-                </div>
-              ))}
+          <div>
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Authentication Methods</h3>
+            <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {data.login_method_breakdown?.map((method, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200 rounded-lg hover:border-emerald-300 hover:from-emerald-50 hover:to-gray-100 transition"
+                  >
+                    <span className="text-gray-700 font-medium capitalize text-sm">{method.method}</span>
+                    <span className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-purple-600 bg-clip-text text-transparent">{method.count}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Recent Login Activity */}
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Recent Login Activity</h3>
-            <p className="text-gray-600 text-sm mb-4">Recent user login events</p>
-
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="bg-gray-50 border-b border-gray-200">
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Method</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Logged In At</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.recent_logins?.map((login, idx) => (
-                    <tr key={idx} className="border-b border-gray-100 hover:bg-gray-50">
-                      <td className="px-6 py-3 text-sm text-gray-900">{login.email}</td>
-                      <td className="px-6 py-3 text-sm text-gray-600">{login.name}</td>
-                      <td className="px-6 py-3 text-sm">
-                        <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium capitalize">
-                          {login.method}
-                        </span>
-                      </td>
-                      <td className="px-6 py-3 text-sm text-gray-500">
-                        {new Date(login.timestamp).toLocaleDateString("en-IN")}
-                      </td>
+          <div>
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Recent Activity</h3>
+            <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
+                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
+                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Method</th>
+                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Logged In At</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {data.recent_logins?.map((login, idx) => (
+                      <tr key={idx} className="border-b border-gray-100 hover:bg-gray-50 transition">
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">{login.email}</td>
+                        <td className="px-6 py-4 text-sm text-gray-600">{login.name}</td>
+                        <td className="px-6 py-4 text-sm">
+                          <span className="inline-block px-3 py-1 bg-gradient-to-r from-emerald-100 to-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-xs font-medium capitalize">
+                            {login.method}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-500">
+                          {new Date(login.timestamp).toLocaleDateString("en-IN")}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>

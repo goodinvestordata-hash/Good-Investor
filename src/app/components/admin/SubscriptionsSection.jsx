@@ -103,7 +103,7 @@ export default function SubscriptionsSection() {
           <button
             key={tab.value}
             onClick={() => setFilter(tab.value)}
-            className={`px-4 py-2 font-semibold transition border-b-2 ${
+            className={`px-4 py-2 font-semibold transition border-b-2 cursor-pointer ${
               filter === tab.value
                 ? "border-lime-500 text-lime-600"
                 : "border-transparent text-neutral-600 hover:text-neutral-900"

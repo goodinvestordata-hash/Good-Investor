@@ -127,16 +127,13 @@ export default function PlanList() {
     <div className="w-full">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-neutral-900">Plans</h1>
-          <p className="text-neutral-600 mt-1">Manage subscription plans</p>
-        </div>
+        
         <button
           onClick={() => {
             setEditingPlan(null);
             setShowForm(true);
           }}
-          className="px-4 py-2 bg-gradient-to-r from-lime-500 to-lime-600 text-white font-semibold rounded-lg hover:from-lime-600 hover:to-lime-700 transition-colors flex items-center gap-2"
+          className="px-4 py-2 bg-gradient-to-r from-lime-500 to-lime-600 text-white font-semibold rounded-lg hover:from-lime-600 hover:to-lime-700 transition-colors flex items-center gap-2 cursor-pointer"
         >
           <Plus size={18} /> Create Plan
         </button>
@@ -165,7 +162,7 @@ export default function PlanList() {
               setEditingPlan(null);
               setShowForm(true);
             }}
-            className="px-4 py-2 bg-lime-500 hover:bg-lime-600 text-white font-semibold rounded-lg transition-colors inline-flex items-center gap-2"
+            className="px-4 py-2 bg-lime-500 hover:bg-lime-600 text-white font-semibold rounded-lg transition-colors inline-flex items-center gap-2 cursor-pointer"
           >
             <Plus size={18} /> Create First Plan
           </button>
@@ -254,7 +251,7 @@ export default function PlanList() {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleEditPlan(plan)}
-                        className="p-2 hover:bg-blue-100 rounded-lg transition-colors"
+                        className="p-2 hover:bg-blue-100 rounded-lg transition-colors cursor-pointer"
                         title="Edit plan"
                       >
                         <Edit2 size={16} className="text-blue-600" />
@@ -262,7 +259,7 @@ export default function PlanList() {
                       <button
                         onClick={() => handleDeletePlan(plan._id)}
                         disabled={deleting === plan._id}
-                        className="p-2 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50"
+                        className="p-2 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
                         title="Delete plan"
                       >
                         {deleting === plan._id ? (
