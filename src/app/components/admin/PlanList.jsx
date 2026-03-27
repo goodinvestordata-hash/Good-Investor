@@ -8,9 +8,11 @@ export default function PlanList() {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingPlan, setEditingPlan] = useState(null);
   const [deleting, setDeleting] = useState(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(null); // {planId, planName}
 
   // Fetch plans on mount
   useEffect(() => {
@@ -37,31 +39,42 @@ export default function PlanList() {
     }
   };
 
-  const handleDeletePlan = async (planId) => {
-    if (!confirm("Are you sure you want to delete this plan?")) {
-      return;
-    }
+  const handleDeletePlan = async (planId, planName) => {
+    setDeleteConfirm({ planId, planName });
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteConfirm) return;
 
     try {
-      setDeleting(planId);
-      const response = await fetch(`/api/plans/${planId}`, {
+      setDeleting(deleteConfirm.planId);
+      setError("");
+      setSuccess("");
+
+      const response = await fetch(`/api/plans/${deleteConfirm.planId}`, {
         method: "DELETE",
       });
 
       const result = await response.json();
 
       if (result.success) {
-        setPlans((prev) => prev.filter((p) => p._id !== planId));
-        setError("");
+        setPlans((prev) => prev.filter((p) => p._id !== deleteConfirm.planId));
+        setSuccess(`Plan "${deleteConfirm.planName}" deleted successfully!`);
+        setDeleteConfirm(null);
+        setTimeout(() => setSuccess(""), 3000);
       } else {
         setError(result.message || "Failed to delete plan");
       }
     } catch (err) {
       console.error("Error deleting plan:", err);
-      setError("Error deleting plan");
+      setError("Error deleting plan. Please try again.");
     } finally {
       setDeleting(null);
     }
+  };
+
+  const cancelDelete = () => {
+    setDeleteConfirm(null);
   };
 
   const handleToggleStatus = async (plan) => {
@@ -138,6 +151,19 @@ export default function PlanList() {
           <Plus size={18} /> Create Plan
         </button>
       </div>
+
+      {/* Success Message */}
+      {success && (
+        <div className="mb-4 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg flex items-center justify-between">
+          <span>{success}</span>
+          <button
+            onClick={() => setSuccess("")}
+            className="text-green-700 hover:text-green-900"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       {/* Error Message */}
       {error && (
@@ -257,7 +283,7 @@ export default function PlanList() {
                         <Edit2 size={16} className="text-blue-600" />
                       </button>
                       <button
-                        onClick={() => handleDeletePlan(plan._id)}
+                        onClick={() => handleDeletePlan(plan._id, plan.name)}
                         disabled={deleting === plan._id}
                         className="p-2 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
                         title="Delete plan"
@@ -274,6 +300,46 @@ export default function PlanList() {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-sm w-full p-6 animate-in fade-in zoom-in duration-200">
+            {/* Header */}
+            <div className="mb-4">
+              <h3 className="text-lg font-bold text-gray-900">
+                Delete Plan?
+              </h3>
+              <p className="text-sm text-gray-600 mt-1">
+                Are you sure you want to delete <span className="font-semibold">"{deleteConfirm.planName}"</span>? This action cannot be undone.
+              </p>
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={cancelDelete}
+                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                disabled={deleting}
+                className="px-4 py-2 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                {deleting ? (
+                  <>
+                    <Loader size={16} className="animate-spin" /> Deleting...
+                  </>
+                ) : (
+                  <>Delete Plan</>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -11,7 +11,7 @@ import { validatePlanInput, sanitizePlan } from "@/app/lib/validation/planValida
  */
 export async function GET(req, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     // Validate MongoDB ID
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -79,7 +79,7 @@ export async function GET(req, { params }) {
  */
 export async function PUT(req, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     // Check authentication and authorization
     const { isValid, user, error: authError } = verifyAuth(req);
@@ -191,7 +191,7 @@ export async function PUT(req, { params }) {
  */
 export async function DELETE(req, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     // Check authentication and authorization
     const { isValid, user, error: authError } = verifyAuth(req);

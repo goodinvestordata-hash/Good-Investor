@@ -14,7 +14,7 @@ export default function UsersSection({ data }) {
       {data.map((u) => (
         <div key={u._id} className="border rounded-xl p-4 bg-white hover:shadow-md transition">
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-full bg-linear-to-br from-lime-400 to-emerald-500 flex items-center justify-center text-white font-bold">
+            <div className="w-10 h-10 rounded-full bg-white border-2 border-green-500 flex items-center justify-center text-green-600 font-bold">
               {(u.fullName || u.username || "U")[0].toUpperCase()}
             </div>
             <div>

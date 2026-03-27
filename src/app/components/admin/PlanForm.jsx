@@ -8,11 +8,11 @@ export default function PlanForm({ plan = null, onSubmit, onCancel }) {
     name: "",
     type: "monthly",
     description: "",
-    price: 0,
+    price: "",
     duration: 30,
     features: [],
     isActive: true,
-    displayOrder: 0,
+    displayOrder: "",
   });
 
   const [featureInput, setFeatureInput] = useState("");
@@ -33,7 +33,7 @@ export default function PlanForm({ plan = null, onSubmit, onCancel }) {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : name === "price" || name === "duration" || name === "displayOrder" ? Number(value) : value,
+      [name]: type === "checkbox" ? checked : name === "price" ? (value === "" ? "" : Number(value)) : name === "displayOrder" ? (value === "" ? "" : Number(value)) : name === "duration" ? Number(value) : value,
     }));
     // Clear error for this field
     if (errors[name]) {
@@ -67,12 +67,19 @@ export default function PlanForm({ plan = null, onSubmit, onCancel }) {
     setErrors({});
 
     try {
+      // Ensure price and displayOrder are numbers for submission
+      const submitData = {
+        ...formData,
+        price: formData.price === "" ? 0 : Number(formData.price),
+        displayOrder: formData.displayOrder === "" ? 0 : Number(formData.displayOrder),
+      };
+
       const response = await fetch(
         plan ? `/api/plans/${plan._id}` : "/api/plans",
         {
           method: plan ? "PUT" : "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(submitData),
         }
       );
 
@@ -204,7 +211,7 @@ export default function PlanForm({ plan = null, onSubmit, onCancel }) {
               onChange={handleInputChange}
               placeholder="0"
               min="0"
-              step="100"
+              step="0.01"
               className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:border-lime-400 focus:ring-2 focus:ring-lime-200"
               required
             />
