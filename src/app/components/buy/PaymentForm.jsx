@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "@/app/context/AuthContext";
 
 export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
-  // ✅ Plans
-  const PLANS = [
-    { id: "monthly", name: "Monthly", price: 4500 },
-    { id: "quarterly", name: "Quarterly", price: 9999 },
-    { id: "halfYearly", name: "Half Yearly", price: 17999 },
-    { id: "yearly", name: "Yearly", price: 29999 },
-  ];
-
-  const [selectedPlan, setSelectedPlan] = useState("monthly");
+  const { user } = useAuth();
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -20,7 +13,26 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponError, setCouponError] = useState("");
 
-  const selectedAmount = PLANS.find((p) => p.id === selectedPlan)?.price || 0;
+  const selectedPlanName = planData?.planName || "Selected Plan";
+  const selectedAmount =
+    Number(String(planData?.price ?? "").replace(/[^\d.]/g, "")) || 0;
+
+  // ✅ Auto-fill form with user data
+  useEffect(() => {
+    if (user) {
+      const preferredName =
+        user.fullName ||
+        user.name ||
+        user.username ||
+        (user.email ? String(user.email).split("@")[0] : "");
+
+      setForm((prevForm) => ({
+        ...prevForm,
+        name: preferredName,
+        email: user.email || "",
+      }));
+    }
+  }, [user]);
 
   // ✅ Load Razorpay SDK
   useEffect(() => {
@@ -99,6 +111,17 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
   // ✅ Payment Handler
   const handlePayment = async (e) => {
     e.preventDefault();
+
+    if (!planData?.planId || !selectedAmount) {
+      setError("Selected plan is invalid. Please choose a plan again.");
+      return;
+    }
+
+    if (!window.Razorpay) {
+      setError("Payment gateway is still loading. Please try again in a moment.");
+      return;
+    }
+
     setLoading(true);
     setError("");
     setSuccess(false);
@@ -108,20 +131,27 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...form,
-          amount: finalAmount,
+          planId: planData.planId,
           ...(appliedCoupon && { couponCode: appliedCoupon.code }),
         }),
       });
 
       const data = await res.json();
-      if (!data.order) throw new Error(data.error || "Order failed");
+      if (!res.ok || !data.order) {
+        throw new Error(data.error || "Order creation failed");
+      }
+
+      const serverPricing = data.pricing || {
+        finalAmount,
+        planName: selectedPlanName,
+      };
 
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        key: data.keyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: data.order.amount,
         currency: data.order.currency,
-        name: form.name,
+        name: selectedPlanName,
+        description: `Subscription - ${selectedPlanName}`,
         order_id: data.order.id,
         prefill: {
           name: form.name,
@@ -137,7 +167,9 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
               body: JSON.stringify({
                 ...response,
                 ...form,
-                amount: finalAmount,
+                amount: serverPricing.finalAmount,
+                planId: planData.planId,
+                planName: serverPricing.planName || selectedPlanName,
                 ...(appliedCoupon && { couponCode: appliedCoupon.code }),
               }),
             });
@@ -158,7 +190,7 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
               setError(vData.error || "Verification failed");
             }
           } catch (err) {
-            setError(err.message);
+            setError(err?.message || "Payment verification failed");
           }
         },
       };
@@ -166,12 +198,12 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
       const rzp = new window.Razorpay(options);
 
       rzp.on("payment.failed", function (response) {
-        setError(response.error.description || "Payment failed");
+        setError(response?.error?.description || "Payment failed");
       });
 
       rzp.open();
     } catch (err) {
-      setError(err.message);
+      setError(err?.message || "Payment initialization failed");
     }
 
     setLoading(false);
@@ -199,9 +231,8 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
                 const params = new URLSearchParams({
                   payment_id: verifyData.razorpay_payment_id,
                   ...form,
-                  amount: finalAmount.toString(),
-                  service:
-                    PLANS.find((p) => p.id === selectedPlan)?.name || "Service",
+                  amount: String(verifyData?.amount || Math.round(finalAmount)),
+                  service: selectedPlanName,
                   qty: "1",
                 });
 
@@ -247,6 +278,27 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
         <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
           Secure Payment
         </h2>
+
+        <div className="mb-6 rounded-xl border border-indigo-100 bg-indigo-50 p-4">
+          <div className="flex items-center justify-between text-sm text-gray-700">
+            <span className="font-medium">Plan</span>
+            <span className="font-semibold">{selectedPlanName}</span>
+          </div>
+          <div className="mt-2 flex items-center justify-between text-sm text-gray-700">
+            <span className="font-medium">Amount</span>
+            <span className="font-semibold">Rs. {selectedAmount}</span>
+          </div>
+          {discountAmount > 0 && (
+            <div className="mt-2 flex items-center justify-between text-sm text-green-700">
+              <span className="font-medium">Coupon Discount</span>
+              <span className="font-semibold">- Rs. {Math.round(discountAmount)}</span>
+            </div>
+          )}
+          <div className="mt-2 flex items-center justify-between text-base text-gray-900">
+            <span className="font-semibold">Payable</span>
+            <span className="font-bold">Rs. {Math.round(finalAmount)}</span>
+          </div>
+        </div>
 
         {/* Form Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -366,7 +418,7 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !planData?.planId || !selectedAmount}
             className="w-2/3 py-2 rounded-lg text-white font-semibold bg-linear-to-r from-indigo-600 to-purple-600 hover:opacity-90 transition shadow-md"
           >
             {loading ? "Processing..." : "Continue with Payment"}
