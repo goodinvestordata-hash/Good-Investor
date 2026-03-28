@@ -174,41 +174,56 @@ export default function AgreementModal({ onClose, onSuccess, planData }) {
               <div className="flex flex-col items-center justify-center h-screen">
                 {paymentResult.success ? (
                   <>
-                    <h2 className="text-2xl font-bold text-green-600 mb-4">
-                      Payment Successful!
-                    </h2>
-                    <p className="text-lg">Thank you for your payment.</p>
-                    {paymentResult.razorpay_payment_id ? (
-                      <button
-                        className="mt-4 px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
-                        onClick={async () => {
-                          const params = new URLSearchParams({
-                            payment_id: paymentResult.razorpay_payment_id,
-                            name: paymentResult.name,
-                            email: paymentResult.email,
-                            phone: paymentResult.phone,
-                            amount: paymentResult.amount?.toString() || "4399",
-                          });
-                          const response = await fetch(
-                            `/api/payment/invoice?${params.toString()}`,
-                          );
-                          const blob = await response.blob();
-                          const url = window.URL.createObjectURL(blob);
-                          const link = document.createElement("a");
-                          link.href = url;
-                          link.download = `invoice-${paymentResult.razorpay_payment_id}.pdf`;
-                          document.body.appendChild(link);
-                          link.click();
-                          document.body.removeChild(link);
-                          window.URL.revokeObjectURL(url);
-                        }}
-                      >
-                        Download Invoice
-                      </button>
+                    {/* Show loader while invoice is being generated */}
+                    {!paymentResult.razorpay_payment_id ? (
+                      <div className="flex flex-col items-center gap-6">
+                        {/* Spinner */}
+                        <div className="relative w-16 h-16">
+                          <div className="absolute inset-0 rounded-full border-4 border-gray-200"></div>
+                          <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-green-600 border-r-green-600 animate-spin"></div>
+                        </div>
+                        
+                        <div className="text-center">
+                          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                            Processing Your Payment
+                          </h2>
+                          <p className="text-gray-600 mb-1">Generating and sending invoice...</p>
+                          <p className="text-sm text-gray-500">This may take a few seconds</p>
+                        </div>
+                      </div>
                     ) : (
-                      <p className="mt-4 text-gray-500">
-                        Generating invoice...
-                      </p>
+                      <>
+                        <h2 className="text-2xl font-bold text-green-600 mb-4">
+                          Payment Successful!
+                        </h2>
+                        <p className="text-lg">Thank you for your payment.</p>
+                        <button
+                          className="mt-4 px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+                          onClick={async () => {
+                            const params = new URLSearchParams({
+                              payment_id: paymentResult.razorpay_payment_id,
+                              name: paymentResult.name,
+                              email: paymentResult.email,
+                              phone: paymentResult.phone,
+                              amount: paymentResult.amount?.toString() || "4399",
+                            });
+                            const response = await fetch(
+                              `/api/payment/invoice?${params.toString()}`,
+                            );
+                            const blob = await response.blob();
+                            const url = window.URL.createObjectURL(blob);
+                            const link = document.createElement("a");
+                            link.href = url;
+                            link.download = `invoice-${paymentResult.razorpay_payment_id}.pdf`;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            window.URL.revokeObjectURL(url);
+                          }}
+                        >
+                          Download Invoice
+                        </button>
+                      </>
                     )}
                   </>
                 ) : (

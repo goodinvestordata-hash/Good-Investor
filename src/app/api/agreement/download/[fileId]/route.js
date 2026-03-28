@@ -73,11 +73,12 @@ export async function GET(req, { params }) {
       const userEmail = agreement.clientEmail; // Ensure this field exists in your model
       const adminEmail = "spkumar.researchanalyst@gmail.com";
       const clientName = agreement.clientName || "User";
+      const clientPan = agreement.clientPan || "";
       // Send PDF to user and admin, await both and log results
       const mailResults = [];
       if (userEmail) {
         try {
-          await sendAgreementPDFMail({ to: userEmail, pdfBuffer, clientName });
+          await sendAgreementPDFMail({ to: userEmail, pdfBuffer, clientName, clientPan });
           mailResults.push(`User mail sent to ${userEmail}`);
         } catch (err) {
           mailResults.push(`User mail FAILED to ${userEmail}: ${err.message}`);
@@ -86,7 +87,7 @@ export async function GET(req, { params }) {
         mailResults.push("No user email found, not sending to user");
       }
       try {
-        await sendAgreementPDFMail({ to: adminEmail, pdfBuffer, clientName });
+        await sendAgreementPDFMail({ to: adminEmail, pdfBuffer, clientName, clientPan });
         mailResults.push(`Admin mail sent to ${adminEmail}`);
       } catch (err) {
         mailResults.push(`Admin mail FAILED to ${adminEmail}: ${err.message}`);

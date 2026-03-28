@@ -38,6 +38,22 @@ const UserSchema = new mongoose.Schema(
     pdfAccepted: { type: Boolean, default: false },
     pdfAcceptedAt: { type: Date, default: null },
 
+    // Risk Profile Assessment
+    riskProfile: {
+      years: String,
+      job: String,
+      savings: String,
+      support: String,
+      annual: String,
+      objective: String,
+      understanding: String,
+      strategy: String,
+      volatility: String,
+      riskiest: String,
+      reaction: String,
+      taker: String,
+    },
+
     // Analytics & Login Tracking
     authProvider: {
       type: String,

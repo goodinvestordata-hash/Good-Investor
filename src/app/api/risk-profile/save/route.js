@@ -3,7 +3,7 @@ import connectDB from "@/app/lib/db";
 import User from "@/app/lib/models/User";
 import { verifyToken } from "@/app/lib/jwt";
 
-export async function GET(req) {
+export async function POST(req) {
   try {
     const token = req.cookies.get("token")?.value;
     if (!token) {
@@ -21,12 +21,26 @@ export async function GET(req) {
       );
     }
 
+    const { riskProfile } = await req.json();
+
+    if (!riskProfile) {
+      return NextResponse.json(
+        { message: "Risk profile data is required" },
+        { status: 400 }
+      );
+    }
+
     await connectDB();
 
-    const user = await User.findById(decoded.id).select("riskProfile");
+    // Debug log
+    console.log("Saving risk profile for user:", decoded.id);
+    console.log("Risk profile data:", riskProfile);
 
-    console.log("Retrieved risk profile for user:", decoded.id);
-    console.log("Risk profile data:", user?.riskProfile);
+    const user = await User.findByIdAndUpdate(
+      decoded.id,
+      { riskProfile },
+      { new: true }
+    ).select("-password");
 
     if (!user) {
       return NextResponse.json(
@@ -35,13 +49,16 @@ export async function GET(req) {
       );
     }
 
+    console.log("Risk profile saved successfully for user:", user._id);
+
     return NextResponse.json({
-      riskProfile: user.riskProfile || null,
+      message: "Risk profile saved successfully",
+      user,
     });
   } catch (error) {
-    console.error("Error fetching risk profile:", error);
+    console.error("Error saving risk profile:", error);
     return NextResponse.json(
-      { message: "Internal server error" },
+      { message: "Internal server error", error: error.message },
       { status: 500 }
     );
   }
