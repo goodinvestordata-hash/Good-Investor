@@ -20,6 +20,7 @@ export async function generateInvoicePDF(invoiceData) {
     email = "client@email.com",
     mobile = "xxxxxxxxxx",
     state = "State",
+    pan = "PAN0000000X",
     service = "KMR LargeMidCap Services",
     price = "Rs. 4,000",
     gst = "Rs. 399",
@@ -28,6 +29,7 @@ export async function generateInvoicePDF(invoiceData) {
     qty = "1",
     startDate = formatDate(today),
     endDate = formatDate(oneMonthLater),
+    planName = "Plan Name",
   } = invoiceData;
 
   const pdfDoc = await PDFDocument.create();
@@ -166,18 +168,30 @@ export async function generateInvoicePDF(invoiceData) {
   y -= lineGap;
   page.drawText(`State : ${state}`, { x: margin, y, size: 11, font });
 
+  y -= lineGap;
+  page.drawText(`PAN : ${pan}`, { x: margin, y, size: 11, font });
+
   page.drawText(`SERVICE START DATE : ${startDate}`, {
     x: 340,
-    y: y + lineGap * 3,
+    y: y + lineGap * 4,
     size: 11,
     font: bold,
   });
 
   page.drawText(`SERVICE END DATE : ${endDate}`, {
     x: 340,
+    y: y + lineGap * 3,
+    size: 11,
+    font: bold,
+  });
+
+  // Add GST number below service end date
+  page.drawText(`GST No: 37CNSPP5410Q2Z2`, {
+    x: 340,
     y: y + lineGap * 2,
     size: 11,
     font: bold,
+    color: rgb(0.1, 0.1, 0.1),
   });
 
   /* ---------- SERVICE TABLE ---------- */
@@ -223,7 +237,13 @@ export async function generateInvoicePDF(invoiceData) {
 
   y -= 22;
 
-  page.drawText(service, { x: margin + 8, y: y + 6, size: 11, font });
+  // Use planName as the service/product name if provided
+  page.drawText(planName || service, {
+    x: margin + 8,
+    y: y + 6,
+    size: 11,
+    font,
+  });
   page.drawText(price, { x: 260, y: y + 6, size: 11, font });
   page.drawText(qty || "1", { x: 370, y: y + 6, size: 11, font });
   page.drawText(total, { x: 460, y: y + 6, size: 11, font });
@@ -350,7 +370,7 @@ export async function generateInvoicePDF(invoiceData) {
   });
 
   page.drawText(
-    "14-2-4 Jagannatham Center, Near D S H High School, Vijayawada",
+    "1 24,29 4 Kummaripalem Centerr, Near D S M, High School, Vidyadharapuram, Vijayawada, VIJAYAWADA,ANDHRA PRADESH, 520012",
     {
       x: 440,
       y: contactY - 12,
