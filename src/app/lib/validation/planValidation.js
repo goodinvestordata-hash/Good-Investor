@@ -16,7 +16,7 @@ export const validatePlanInput = (data) => {
   }
 
   // Type validation
-  const validTypes = ["monthly", "yearly", "premium", "pro", "starter"];
+  const validTypes = ["weekly", "monthly", "quarterly", "halfYearly", "yearly"];
   if (!data.type || !validTypes.includes(data.type)) {
     errors.type = `Plan type must be one of: ${validTypes.join(", ")}`;
   }
