@@ -185,25 +185,6 @@ export default function AgreementModal({
               <div className="flex flex-col items-center justify-center h-screen">
                 {paymentResult.success ? (
                   <>
-
-                    // {/* Show loader while invoice is being generated */}
-                    // {!paymentResult.razorpay_payment_id ? (
-                    //   <div className="flex flex-col items-center gap-6">
-                    //     {/* Spinner */}
-                    //     <div className="relative w-16 h-16">
-                    //       <div className="absolute inset-0 rounded-full border-4 border-gray-200"></div>
-                    //       <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-green-600 border-r-green-600 animate-spin"></div>
-                    //     </div>
-                        
-                    //     <div className="text-center">
-                    //       <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                    //         Processing Your Payment
-                    //       </h2>
-                    //       <p className="text-gray-600 mb-1">Generating and sending invoice...</p>
-                    //       <p className="text-sm text-gray-500">This may take a few seconds</p>
-                    //     </div>
-                    //   </div>
-
                     <h2 className="text-2xl font-bold text-green-600 mb-4">
                       Payment Successful!
                     </h2>
