@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/app/context/AuthContext";
 
-export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
+export default function PaymentForm({
+  onPaymentComplete,
+  onBack,
+  planData,
+  userDetails,
+}) {
   const { user } = useAuth();
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [loading, setLoading] = useState(false);
@@ -16,6 +21,8 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
   const selectedPlanName = planData?.planName || "Selected Plan";
   const selectedAmount =
     Number(String(planData?.price ?? "").replace(/[^\d.]/g, "")) || 0;
+
+  const kycFullName = userDetails?.fullName?.trim() || "";
 
   // ✅ Auto-fill form with user data
   useEffect(() => {
@@ -33,6 +40,13 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
       }));
     }
   }, [user]);
+
+  // Prefer KYC name from Buy Details step when present (matches invoice / verify)
+  useEffect(() => {
+    if (kycFullName) {
+      setForm((prev) => ({ ...prev, name: kycFullName }));
+    }
+  }, [kycFullName]);
 
   // ✅ Load Razorpay SDK
   useEffect(() => {
@@ -65,7 +79,7 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
 
       if (result.success) {
         const coupon = result.data.find(
-          (c) => c.code === couponCode.toUpperCase() && c.isActive
+          (c) => c.code === couponCode.toUpperCase() && c.isActive,
         );
 
         if (!coupon) {
@@ -118,7 +132,9 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
     }
 
     if (!window.Razorpay) {
-      setError("Payment gateway is still loading. Please try again in a moment.");
+      setError(
+        "Payment gateway is still loading. Please try again in a moment.",
+      );
       return;
     }
 
@@ -154,22 +170,26 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
         description: `Subscription - ${selectedPlanName}`,
         order_id: data.order.id,
         prefill: {
-          name: form.name,
+          name: kycFullName || form.name,
           email: form.email,
           contact: form.phone,
         },
 
         handler: async function (response) {
           try {
+            const billingName = kycFullName || form.name;
             const verifyRes = await fetch("/api/payment/verify", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 ...response,
                 ...form,
+                name: billingName,
                 amount: serverPricing.finalAmount,
                 planId: planData.planId,
                 planName: serverPricing.planName || selectedPlanName,
+                state: userDetails?.state,
+                panNumber: userDetails?.panNumber,
                 ...(appliedCoupon && { couponCode: appliedCoupon.code }),
               }),
             });
@@ -251,11 +271,17 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
                   : "bg-gray-300 text-gray-500"
               }`}
               onClick={async () => {
+                const invoiceName = kycFullName || form.name;
                 const params = new URLSearchParams({
                   payment_id: verifyData.razorpay_payment_id,
-                  ...form,
+                  name: invoiceName,
+                  email: form.email,
+                  phone: form.phone,
                   amount: String(verifyData?.amount || Math.round(finalAmount)),
                   service: selectedPlanName,
+                  planName: selectedPlanName,
+                  state: userDetails?.state ?? "",
+                  pan: userDetails?.panNumber ?? "",
                   qty: "1",
                 });
 
@@ -314,7 +340,9 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
           {discountAmount > 0 && (
             <div className="mt-2 flex items-center justify-between text-sm text-green-700">
               <span className="font-medium">Coupon Discount</span>
-              <span className="font-semibold">- Rs. {Math.round(discountAmount)}</span>
+              <span className="font-semibold">
+                - Rs. {Math.round(discountAmount)}
+              </span>
             </div>
           )}
           <div className="mt-2 flex items-center justify-between text-base text-gray-900">
@@ -382,7 +410,10 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
               <div>
                 <p className="font-semibold text-green-900">✓ Coupon Applied</p>
                 <p className="text-sm text-green-700 mt-1">
-                  Code: <span className="font-mono font-bold">{appliedCoupon.code}</span>
+                  Code:{" "}
+                  <span className="font-mono font-bold">
+                    {appliedCoupon.code}
+                  </span>
                 </p>
               </div>
               <button
@@ -418,7 +449,9 @@ export default function PaymentForm({ onPaymentComplete, onBack, planData }) {
             </div>
           )}
           {couponError && (
-            <p className="mt-2 text-sm text-red-600 font-medium">{couponError}</p>
+            <p className="mt-2 text-sm text-red-600 font-medium">
+              {couponError}
+            </p>
           )}
         </div>
 

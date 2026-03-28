@@ -8,6 +8,7 @@ import AgreementModal from "./AgreementModal";
 export default function BuyNowModal({ onClose, planData }) {
   const [step, setStep] = useState(1);
   const [agreed, setAgreed] = useState(false);
+  const [userDetails, setUserDetails] = useState(null); // Store user details from BuyDetailsForm
   const router = useRouter();
 
   return (
@@ -1045,7 +1046,7 @@ export default function BuyNowModal({ onClose, planData }) {
       {/* STEP 2: DETAILS */}
       {step === 2 && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl border border-slate-200 relative overflow-hidden">
+          <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl shadow-2xl border border-slate-200 relative overflow-hidden">
             <button
               onClick={onClose}
               className="absolute top-4 right-4 text-2xl text-slate-500 hover:text-slate-700"
@@ -1053,7 +1054,14 @@ export default function BuyNowModal({ onClose, planData }) {
               ×
             </button>
             <div className="p-8 max-h-[80vh] overflow-y-auto">
-              <BuyDetailsForm onSuccess={() => setStep(3)} planData={planData} />
+              <BuyDetailsForm
+                onSuccess={(formData) => {
+                  // Attach planName to userDetails for downstream use
+                  setUserDetails({ ...formData, planName: planData?.planName });
+                  setStep(3);
+                }}
+                planData={planData}
+              />
             </div>
           </div>
         </div>
@@ -1070,14 +1078,24 @@ export default function BuyNowModal({ onClose, planData }) {
               ×
             </button>
             <div className="p-8 max-h-[80vh] overflow-y-auto">
-              <BuyOtpForm onSuccess={() => setStep(4)} planData={planData} />
+              <BuyOtpForm
+                onSuccess={() => setStep(4)}
+                planData={planData}
+                userDetails={userDetails}
+              />
             </div>
           </div>
         </div>
       )}
 
       {/* STEP 4: AGREEMENT & E-SIGN */}
-      {step === 4 && <AgreementModal onClose={onClose} planData={planData} />}
+      {step === 4 && (
+        <AgreementModal
+          onClose={onClose}
+          planData={planData}
+          userDetails={userDetails}
+        />
+      )}
     </>
   );
 }
