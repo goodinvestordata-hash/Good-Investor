@@ -17,7 +17,101 @@ export async function POST(request) {
     phone,
     amount,
     couponCode,
+    planId,
+    planName,
   } = body;
+
+  if (
+    !razorpay_order_id ||
+    !razorpay_payment_id ||
+    !razorpay_signature ||
+    !name ||
+    !email ||
+    !phone
+  ) {
+    return NextResponse.json(
+      { error: "Missing required payment fields" },
+      { status: 400 },
+    );
+  }
+
+  const safeAmount = Number(amount);
+  if (!Number.isFinite(safeAmount) || safeAmount <= 0) {
+    return NextResponse.json(
+      { error: "Invalid payment amount" },
+      { status: 400 },
+    );
+  }
+
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  if (!keyId || !keySecret) {
+    return NextResponse.json(
+      { error: "Payment gateway is not configured" },
+      { status: 500 },
+    );
+  }
+
+  const Razorpay =
+    (await import("razorpay")).default || (await import("razorpay"));
+  const razorpay = new Razorpay({
+    key_id: keyId,
+    key_secret: keySecret,
+  });
+
+  let razorpayOrder;
+  try {
+    razorpayOrder = await razorpay.orders.fetch(razorpay_order_id);
+  } catch (err) {
+    return NextResponse.json(
+      { error: "Unable to validate payment order" },
+      { status: 400 },
+    );
+  }
+
+  const incomingAmountPaise = Math.round(safeAmount * 100);
+  if (Number(razorpayOrder?.amount) !== incomingAmountPaise) {
+    return NextResponse.json(
+      { error: "Payment amount mismatch detected" },
+      { status: 400 },
+    );
+  }
+
+  const orderNoteFinalAmount = Number(razorpayOrder?.notes?.finalAmount || 0);
+  if (orderNoteFinalAmount > 0 && orderNoteFinalAmount !== Math.round(safeAmount)) {
+    return NextResponse.json(
+      { error: "Payment metadata mismatch detected" },
+      { status: 400 },
+    );
+  }
+
+  const orderCouponCode = (razorpayOrder?.notes?.couponCode || "").trim().toUpperCase();
+  const payloadCouponCode = (couponCode || "").trim().toUpperCase();
+  if (orderCouponCode !== payloadCouponCode) {
+    return NextResponse.json(
+      { error: "Coupon mismatch detected" },
+      { status: 400 },
+    );
+  }
+
+  const orderPlanId = String(razorpayOrder?.notes?.planId || "").trim();
+  const payloadPlanId = String(planId || "").trim();
+  if (!orderPlanId || !payloadPlanId || orderPlanId !== payloadPlanId) {
+    return NextResponse.json(
+      { error: "Plan ID mismatch detected" },
+      { status: 400 },
+    );
+  }
+
+  const orderPlanName = String(razorpayOrder?.notes?.planName || "").trim();
+  const payloadPlanName = String(planName || "").trim();
+  if (!orderPlanName || !payloadPlanName || orderPlanName !== payloadPlanName) {
+    return NextResponse.json(
+      { error: "Plan name mismatch detected" },
+      { status: 400 },
+    );
+  }
+
   const crypto = (await import("crypto")).default || (await import("crypto"));
   const sign = razorpay_order_id + "|" + razorpay_payment_id;
   const expectedSignature = crypto
@@ -39,10 +133,12 @@ export async function POST(request) {
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
+      planId: orderPlanId,
+      planName: orderPlanName,
       name,
       email,
       phone,
-      amount,
+      amount: safeAmount,
       paidAt,
       expiresAt,
       ...(couponCode && { couponCode }),
@@ -63,20 +159,22 @@ export async function POST(request) {
       clientName: name,
       email,
       mobile: phone,
-      price: `Rs. ${amount - 399}`,
-      gst: "Rs. 399",
-      subtotal: `Rs. ${amount}`,
-      total: `Rs. ${amount}`,
+      price: `Rs. ${Math.round(safeAmount / 1.18)}`,
+      gst: `Rs. ${safeAmount - Math.round(safeAmount / 1.18)}`,
+      subtotal: `Rs. ${Math.round(safeAmount / 1.18)}`,
+      total: `Rs. ${safeAmount}`,
     };
     await generateInvoicePDF(invoiceData);
 
     return NextResponse.json({
       success: true,
       razorpay_payment_id,
+      planId: orderPlanId,
+      planName: orderPlanName,
       name,
       email,
       phone,
-      amount,
+      amount: safeAmount,
       ...(couponCode && { couponCode }),
     });
   } catch (err) {
