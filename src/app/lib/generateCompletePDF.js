@@ -2,17 +2,34 @@ import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import fs from "fs";
 import path from "path";
 
+function formatSignedDateDisplay(input) {
+  if (input === undefined || input === null || input === "") {
+    const d = new Date();
+    return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+  }
+  const d = input instanceof Date ? input : new Date(input);
+  if (Number.isNaN(d.getTime())) {
+    return String(input);
+  }
+  return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+}
+
 export async function generateCompleteAgreementPDF(agreementData) {
   try {
     const clientName = agreementData.clientName || "CLIENT NAME";
-    const clientPan = agreementData.clientPan || "PAN000000000";
-    const signedDate =
-      agreementData.signedDate || new Date().toLocaleDateString("en-IN");
+    const clientPan = agreementData.clientPan || "NOT_PROVIDED";
+    /** "Signed by:" shows legal/KYC name — not text typed on the signature pad */
+    const signedByDisplayName = (clientName || "").trim() || "Signatory";
+    const signedDateDisplay = formatSignedDateDisplay(
+      agreementData.signedTimestamp ?? agreementData.signedDate,
+    );
     const signatureData = agreementData.signatureData || "";
 
     const raName = "Sasikumar Peyyala"; // agreementData.raName || "RA NAME";
 
     let raNumber = "INH000019327";
+    /** Constant RA / firm identifiers (not per-user) */
+    const raRegistrationDate = "07-January-2025";
 
     const bseEnlistment = agreementData.bseEnlistment || "6469";
     const raWebsite = "trademilaan";
@@ -1029,10 +1046,10 @@ export async function generateCompleteAgreementPDF(agreementData) {
 
     // SIGNATURE SECTION - Two Column Table (Client left, RA right)
     addSpace(20);
-    // Table dimensions
+    // Table dimensions (taller bottom area for PAN / dates below signature lines)
     const tableWidth = pageWidth - 2 * margin;
     const colWidth = tableWidth / 2;
-    const tableHeight = 120;
+    const tableHeight = 185;
     const tableTop = yPosition;
     const tableLeft = margin;
     const rowHeight = tableHeight / 2;
@@ -1239,21 +1256,68 @@ export async function generateCompleteAgreementPDF(agreementData) {
       });
     }
 
-    // --- NAMES ---
-    // Client name (left)
-    currentPage.drawText(`Name: ${clientName}`, {
+    // --- Footer below signature: user (dynamic) | RA (constants) ---
+    const footerFontSize = 9;
+    const footerLineGap = 12;
+    const footerBaseY = tableTop - tableHeight + cellPaddingY + 4;
+
+    const drawLabeledLine = (page, x, y, boldLabel, rest) => {
+      page.drawText(boldLabel, {
+        x,
+        y,
+        size: footerFontSize,
+        font: fontBold,
+        color: rgb(0, 0, 0),
+      });
+      const lw = fontBold.widthOfTextAtSize(boldLabel, footerFontSize);
+      page.drawText(rest ?? "", {
+        x: x + lw,
+        y,
+        size: footerFontSize,
+        font: font,
+        color: rgb(0, 0, 0),
+      });
+    };
+
+    // Left column: client PAN, signatory, date (dynamic)
+    let fy = footerBaseY;
+    drawLabeledLine(
+      currentPage,
+      tableLeft + cellPaddingX,
+      fy,
+      "PAN: ",
+      String(clientPan).toUpperCase(),
+    );
+    fy += footerLineGap;
+    currentPage.drawText(`Signed by: ${signedByDisplayName}`, {
       x: tableLeft + cellPaddingX,
-      y: tableTop - tableHeight + cellPaddingY,
-      size: 12,
+      y: fy,
+      size: footerFontSize,
       font: font,
+      color: rgb(0, 0, 0),
     });
-    // RA name (right)
-    currentPage.drawText(`Name: ${raName}`, {
-      x: tableLeft + colWidth + cellPaddingX,
-      y: tableTop - tableHeight + cellPaddingY,
-      size: 12,
+    fy += footerLineGap;
+    currentPage.drawText(`Date: ${signedDateDisplay}`, {
+      x: tableLeft + cellPaddingX,
+      y: fy,
+      size: footerFontSize,
       font: font,
+      color: rgb(0, 0, 0),
     });
+
+    // Right column: SEBI / registration (constant), date line for RA sign
+    let ry = footerBaseY;
+    const rightX = tableLeft + colWidth + cellPaddingX;
+    drawLabeledLine(currentPage, rightX, ry, "SEBI RA Number: ", raNumber);
+    ry += footerLineGap;
+    currentPage.drawText(`Registration Date: ${raRegistrationDate}`, {
+      x: rightX,
+      y: ry,
+      size: footerFontSize,
+      font: font,
+      color: rgb(0, 0, 0),
+    });
+    ry += footerLineGap;
 
     // Move yPosition below table for next content
     yPosition = tableTop - tableHeight - 20;

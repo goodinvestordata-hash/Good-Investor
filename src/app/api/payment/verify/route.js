@@ -20,6 +20,9 @@ export async function POST(request) {
     couponCode,
     planId,
     planName,
+    state,
+    pan,
+    panNumber,
   } = body;
 
   if (
@@ -79,14 +82,19 @@ export async function POST(request) {
   }
 
   const orderNoteFinalAmount = Number(razorpayOrder?.notes?.finalAmount || 0);
-  if (orderNoteFinalAmount > 0 && orderNoteFinalAmount !== Math.round(safeAmount)) {
+  if (
+    orderNoteFinalAmount > 0 &&
+    orderNoteFinalAmount !== Math.round(safeAmount)
+  ) {
     return NextResponse.json(
       { error: "Payment metadata mismatch detected" },
       { status: 400 },
     );
   }
 
-  const orderCouponCode = (razorpayOrder?.notes?.couponCode || "").trim().toUpperCase();
+  const orderCouponCode = (razorpayOrder?.notes?.couponCode || "")
+    .trim()
+    .toUpperCase();
   const payloadCouponCode = (couponCode || "").trim().toUpperCase();
   if (orderCouponCode !== payloadCouponCode) {
     return NextResponse.json(
@@ -151,7 +159,7 @@ export async function POST(request) {
       await Coupon.findOneAndUpdate(
         { code: couponCode.toUpperCase() },
         { $inc: { usedCount: 1 } },
-        { new: true }
+        { new: true },
       );
     }
 
@@ -160,6 +168,9 @@ export async function POST(request) {
       clientName: name,
       email,
       mobile: phone,
+      state: state || "",
+      pan: pan || panNumber || "",
+      planName: planName || "",
       price: `Rs. ${Math.round(safeAmount / 1.18)}`,
       gst: `Rs. ${safeAmount - Math.round(safeAmount / 1.18)}`,
       subtotal: `Rs. ${Math.round(safeAmount / 1.18)}`,

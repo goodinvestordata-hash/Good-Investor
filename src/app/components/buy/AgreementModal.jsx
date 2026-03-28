@@ -6,7 +6,12 @@ import ESignModal from "@/app/components/ESignModal";
 import PaymentForm from "@/app/components/buy/PaymentForm";
 import ServiceAgreement from "@/components/ServiceAgreement";
 
-export default function AgreementModal({ onClose, onSuccess, planData }) {
+export default function AgreementModal({
+  onClose,
+  onSuccess,
+  planData,
+  userDetails,
+}) {
   const { user } = useAuth();
   const [checked, setChecked] = useState(false);
   const [showSign, setShowSign] = useState(false);
@@ -86,12 +91,17 @@ export default function AgreementModal({ onClose, onSuccess, planData }) {
       // Prepare secure signing data for backend
       // Use available user fields with fallbacks
       const clientName =
+        userDetails?.fullName?.trim() ||
         user?.fullName ||
         user?.name ||
         user?.username ||
         user?.email?.split("@")[0] ||
         "Unknown";
-      const clientPan = user?.panNumber || user?.pan || "NOT_PROVIDED";
+      const clientPan =
+        userDetails?.panNumber ||
+        user?.panNumber ||
+        user?.pan ||
+        "NOT_PROVIDED";
 
       const signingPayload = {
         agreementHtml, // Now using pre-captured HTML
@@ -169,28 +179,56 @@ export default function AgreementModal({ onClose, onSuccess, planData }) {
                 onPaymentComplete={handlePaymentComplete}
                 onBack={() => setShowPayment(false)}
                 planData={planData}
+                userDetails={userDetails}
               />
             ) : paymentResult ? (
               <div className="flex flex-col items-center justify-center h-screen">
                 {paymentResult.success ? (
                   <>
-                    {/* Show loader while invoice is being generated */}
-                    {!paymentResult.razorpay_payment_id ? (
-                      <div className="flex flex-col items-center gap-6">
-                        {/* Spinner */}
-                        <div className="relative w-16 h-16">
-                          <div className="absolute inset-0 rounded-full border-4 border-gray-200"></div>
-                          <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-green-600 border-r-green-600 animate-spin"></div>
-                        </div>
-                        
-                        <div className="text-center">
-                          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                            Processing Your Payment
-                          </h2>
-                          <p className="text-gray-600 mb-1">Generating and sending invoice...</p>
-                          <p className="text-sm text-gray-500">This may take a few seconds</p>
-                        </div>
-                      </div>
+                    <h2 className="text-2xl font-bold text-green-600 mb-4">
+                      Payment Successful!
+                    </h2>
+                    <p className="text-lg">Thank you for your payment.</p>
+                    {paymentResult.razorpay_payment_id ? (
+                      <button
+                        className="mt-4 px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+                        onClick={async () => {
+                          const planLabel =
+                            paymentResult.planName ||
+                            planData?.planName ||
+                            "";
+                          const invoiceName =
+                            userDetails?.fullName?.trim() ||
+                            paymentResult.name;
+                          const params = new URLSearchParams({
+                            payment_id: paymentResult.razorpay_payment_id,
+                            name: invoiceName,
+                            email: paymentResult.email,
+                            phone: paymentResult.phone,
+                            amount: paymentResult.amount?.toString() || "4399",
+                            service: planLabel,
+                            planName: planLabel,
+                            state: userDetails?.state ?? "",
+                            pan: userDetails?.panNumber ?? "",
+                            qty: "1",
+                          });
+                          const response = await fetch(
+                            `/api/payment/invoice?${params.toString()}`,
+                          );
+                          const blob = await response.blob();
+                          const url = window.URL.createObjectURL(blob);
+                          const link = document.createElement("a");
+                          link.href = url;
+                          link.download = `invoice-${paymentResult.razorpay_payment_id}.pdf`;
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                          window.URL.revokeObjectURL(url);
+                        }}
+                      >
+                        Download Invoice
+                      </button>
+
                     ) : (
                       <>
                         <h2 className="text-2xl font-bold text-green-600 mb-4">

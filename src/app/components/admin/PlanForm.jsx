@@ -9,7 +9,7 @@ export default function PlanForm({ plan = null, onSubmit, onCancel }) {
     type: "monthly",
     description: "",
     price: "",
-    duration: 30,
+    duration: "",
     features: [],
     isActive: true,
     displayOrder: "",
@@ -27,13 +27,34 @@ export default function PlanForm({ plan = null, onSubmit, onCancel }) {
     }
   }, [plan]);
 
-  const planTypes = ["monthly", "yearly", "premium", "pro", "starter"];
+  const planTypes = [
+    { value: "weekly", label: "Weekly" },
+    { value: "monthly", label: "Monthly" },
+    { value: "quarterly", label: "Quarterly" },
+    { value: "halfYearly", label: "Half Yearly" },
+    { value: "yearly", label: "Yearly" },
+  ];
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : name === "price" ? (value === "" ? "" : Number(value)) : name === "displayOrder" ? (value === "" ? "" : Number(value)) : name === "duration" ? Number(value) : value,
+      [name]:
+        type === "checkbox"
+          ? checked
+          : name === "price"
+            ? value === ""
+              ? ""
+              : Number(value)
+            : name === "displayOrder"
+              ? value === ""
+                ? ""
+                : Number(value)
+              : name === "duration"
+                ? value === ""
+                  ? ""
+                  : Number(value)
+                : value,
     }));
     // Clear error for this field
     if (errors[name]) {
@@ -71,6 +92,7 @@ export default function PlanForm({ plan = null, onSubmit, onCancel }) {
       const submitData = {
         ...formData,
         price: formData.price === "" ? 0 : Number(formData.price),
+        duration: formData.duration === "" ? "" : Number(formData.duration),
         displayOrder: formData.displayOrder === "" ? 0 : Number(formData.displayOrder),
       };
 
@@ -168,9 +190,9 @@ export default function PlanForm({ plan = null, onSubmit, onCancel }) {
               onChange={handleInputChange}
               className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:border-lime-400 focus:ring-2 focus:ring-lime-200"
             >
-              {planTypes.map((t) => (
-                <option key={t} value={t}>
-                  {t.charAt(0).toUpperCase() + t.slice(1)}
+              {planTypes.map((type) => (
+                <option key={type.value} value={type.value}>
+                  {type.label}
                 </option>
               ))}
             </select>
@@ -229,7 +251,7 @@ export default function PlanForm({ plan = null, onSubmit, onCancel }) {
               name="duration"
               value={formData.duration}
               onChange={handleInputChange}
-              placeholder="30"
+              placeholder="Enter number of days"
               min="1"
               className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:border-lime-400 focus:ring-2 focus:ring-lime-200"
               required

@@ -10,6 +10,9 @@ export async function GET(request) {
   const phone = searchParams.get("phone");
   const amount = Number(searchParams.get("amount"));
   const service = searchParams.get("service") || "KMR LargeMidCap Services";
+  const planName = searchParams.get("planName") || service;
+  const state = searchParams.get("state") || "";
+  const pan = searchParams.get("pan") || "";
   const qty = Number(searchParams.get("qty")) || 1;
 
   if (!paymentId || !name || !email || !phone || !amount) {
@@ -25,7 +28,10 @@ export async function GET(request) {
     clientName: name,
     email,
     mobile: phone,
+    state,
+    pan,
     service,
+    planName,
     price: `Rs. ${basePrice}`,
     qty: `${qty}`,
     gst: `Rs. ${gst}`,
