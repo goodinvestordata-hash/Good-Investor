@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectDB from "@/app/lib/db";
 
 import { generateInvoicePDF } from "@/app/lib/generateInvoicePDF";
+import { sendInvoicePDFMail } from "@/app/lib/mailer";
 import Payment from "@/app/lib/models/Payment";
 import Coupon from "@/app/lib/models/Coupon";
 
@@ -164,7 +165,18 @@ export async function POST(request) {
       subtotal: `Rs. ${Math.round(safeAmount / 1.18)}`,
       total: `Rs. ${safeAmount}`,
     };
-    await generateInvoicePDF(invoiceData);
+    const invoicePDFBuffer = await generateInvoicePDF(invoiceData);
+
+    // Send invoice email to user
+    await sendInvoicePDFMail({
+      to: email,
+      pdfBuffer: invoicePDFBuffer,
+      clientName: name,
+      email,
+      phone,
+      planName: orderPlanName,
+      amount: safeAmount,
+    });
 
     return NextResponse.json({
       success: true,
@@ -178,9 +190,10 @@ export async function POST(request) {
       ...(couponCode && { couponCode }),
     });
   } catch (err) {
+    console.error("Payment verification error:", err);
     return NextResponse.json(
       {
-        error: "Failed to save payment or generate invoice",
+        error: "Failed to save payment or send invoice",
         details: err.message,
       },
       { status: 500 },
