@@ -12,10 +12,10 @@ export const metadata = {
 export default function ServicesPage() {
   return (
     <div className="bg-white">
-      <ServicesHero />
+      {/* <ServicesHero /> */}
       <PlansSection />
-      <IndexOptionsPro />
-      <EquityPro />
+      {/* <IndexOptionsPro />
+      <EquityPro /> */}
     </div>
   );
 }
