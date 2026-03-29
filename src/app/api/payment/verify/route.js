@@ -187,6 +187,7 @@ export async function POST(request) {
       phone,
       planName: orderPlanName,
       amount: safeAmount,
+      clientPan: pan || panNumber || "",
     });
 
     return NextResponse.json({
