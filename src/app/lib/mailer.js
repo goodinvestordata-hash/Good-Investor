@@ -1,5 +1,5 @@
 // Send agreement PDF as attachment
-export async function sendAgreementPDFMail({ to, pdfBuffer, clientName, clientPan }) {
+export async function sendAgreementPDFMail({ to, pdfBuffer, clientName, clientPan, userPan }) {
   const from =
     process.env.MAIL_FROM ||
     process.env.MAIL_USER ||
@@ -45,31 +45,31 @@ export async function sendAgreementPDFMail({ to, pdfBuffer, clientName, clientPa
               </p>
 
               <!-- Agreement Details Section -->
-              <p style="font-size:12px;font-weight:700;color:#111827;margin:0 0 12px 0;text-transform:uppercase;letter-spacing:0.8px;">Agreement Details</p>
+              <p style="font-size:13px;font-weight:700;color:#9BE749;margin:0 0 12px 0;text-transform:uppercase;letter-spacing:0.8px;">Agreement Details</p>
               <div style="margin:0 0 24px 0;">
                 <table width="100%" cellpadding="0" cellspacing="0">
                   <tr>
-                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:13px;color:#6b7280;font-weight:500;">Signed Date</td>
-                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:13px;color:#111827;text-align:right;">${signedDate}</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#6b7280;font-weight:500;">Signed Date</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#111827;text-align:right;">${signedDate}</td>
                   </tr>
                   <tr>
-                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:13px;color:#6b7280;font-weight:500;">Client Name</td>
-                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:13px;color:#111827;text-align:right;">${clientName || "Not Provided"}</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#6b7280;font-weight:500;">Client Name</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#111827;text-align:right;">${clientName || "Not Provided"}</td>
                   </tr>
                   <tr>
-                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:13px;color:#6b7280;font-weight:500;">PAN Number</td>
-                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:13px;color:#111827;text-align:right;">${panDisplay}</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#6b7280;font-weight:500;">PAN Number</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#111827;text-align:right;">${panDisplay}</td>
                   </tr>
                   <tr>
-                    <td style="padding:10px 0;font-size:13px;color:#6b7280;font-weight:500;">Document Type</td>
-                    <td style="padding:10px 0;font-size:13px;color:#111827;text-align:right;">Service Agreement</td>
+                    <td style="padding:10px 0;font-size:14px;color:#6b7280;font-weight:500;">Document Type</td>
+                    <td style="padding:10px 0;font-size:14px;color:#111827;text-align:right;">Service Agreement</td>
                   </tr>
                 </table>
               </div>
 
               <!-- Important Compliance Points -->
-              <p style="font-size:12px;font-weight:700;color:#111827;margin:0 0 8px 0;text-transform:uppercase;letter-spacing:0.8px;">Important Compliance Points</p>
-              <ul style="margin:0 0 20px 0;padding-left:18px;font-size:13px;color:#404040;line-height:1.8;">
+              <p style="font-size:13px;font-weight:700;color:#9BE749;margin:0 0 8px 0;text-transform:uppercase;letter-spacing:0.8px;">Important Compliance Points</p>
+              <ul style="margin:0 0 20px 0;padding-left:18px;font-size:14px;color:#404040;line-height:1.8;">
                 <li style="margin-bottom:8px;">Services will be activated only after fulfillment of all regulatory and compliance requirements.</li>
                 <li style="margin-bottom:8px;">Ensure all KYC details are accurate and match your official documents.</li>
                 <li style="margin-bottom:8px;">Any delay in KYC verification may delay service activation.</li>
@@ -79,8 +79,8 @@ export async function sendAgreementPDFMail({ to, pdfBuffer, clientName, clientPa
               </ul>
 
               <!-- Onboarding Steps -->
-              <p style="font-size:12px;font-weight:700;color:#111827;margin:0 0 8px 0;text-transform:uppercase;letter-spacing:0.8px;">Next Steps to Proceed with Onboarding</p>
-              <ol style="margin:0 0 24px 0;padding-left:18px;font-size:13px;color:#404040;line-height:1.8;">
+              <p style="font-size:13px;font-weight:700;color:#9BE749;margin:0 0 8px 0;text-transform:uppercase;letter-spacing:0.8px;">Next Steps to Proceed with Onboarding</p>
+              <ol style="margin:0 0 24px 0;padding-left:18px;font-size:14px;color:#404040;line-height:1.8;">
                 <li style="margin-bottom:8px;">Kindly review the attached agreement carefully.</li>
                 <li style="margin-bottom:8px;">Report any errors or discrepancies immediately to <a href="mailto:spkumar.researchanalyst@gmail.com" style="color:#9BE749;text-decoration:none;font-weight:600;">spkumar.researchanalyst@gmail.com</a>.</li>
                 <li style="margin-bottom:8px;">Complete your subscription payment (if applicable).</li>
@@ -214,8 +214,8 @@ export async function sendTermsAndConditionsMail(email) {
               </div>
 
               <!-- Key Points -->
-              <p style="font-size:12px;font-weight:700;color:#111827;margin:24px 0 12px 0;text-transform:uppercase;letter-spacing:0.8px;">What You Should Know</p>
-              <ul style="font-size:13px;color:#404040;padding-left:18px;margin:0 0 24px 0;line-height:1.7;">
+              <p style="font-size:13px;font-weight:700;color:#9BE749;margin:24px 0 12px 0;text-transform:uppercase;letter-spacing:0.8px;">What You Should Know</p>
+              <ul style="font-size:14px;color:#404040;padding-left:18px;margin:0 0 24px 0;line-height:1.7;">
                 <li style="margin-bottom:6px;">Research-only platform with no trade execution</li>
                 <li style="margin-bottom:6px;">Market risks apply; returns not guaranteed</li>
                 <li>AI-based research may have limitations</li>
@@ -259,7 +259,7 @@ export async function sendTermsAndConditionsMail(email) {
 }
 
 // Send invoice PDF as attachment
-export async function sendInvoicePDFMail({ to, pdfBuffer, clientName, email, phone, planName, amount }) {
+export async function sendInvoicePDFMail({ to, pdfBuffer, clientName, email, phone, planName, amount, clientPan }) {
   const from =
     process.env.MAIL_FROM ||
     process.env.MAIL_USER ||
@@ -294,53 +294,59 @@ export async function sendInvoicePDFMail({ to, pdfBuffer, clientName, email, pho
             <td style="padding:0 32px 28px 32px;">
               
               <!-- Greeting -->
-              <p style="font-size:15px;margin:0 0 2px 0;color:#111827;font-weight:600;">Dear ${clientName || "Valued Client"},</p>
-              <p style="font-size:13px;color:#6b7280;margin:0 0 24px 0;">Email: ${email}</p>
+              <p style="font-size:13px;margin:0 0 2px 0;color:#111827;font-weight:600;">Dear Sir/Madam,</p>
+              <p style="font-size:13px;color:#6b7280;margin:0 0 16px 0;">Greetings from TradeMilaan (SASIKUMAR PEYYALA).</p>
 
               <!-- Main Message -->
-              <h2 style="font-size:18px;margin:0 0 8px 0;color:#111827;font-weight:700;">Invoice Generated</h2>
-              <p style="font-size:14px;color:#404040;margin:0 0 24px 0;line-height:1.6;">
-                Thank you for your payment! Your invoice for the subscription has been successfully generated and is attached to this email for your records.
-              </p>
+              <h2 style="font-size:16px;margin:0 0 8px 0;color:#111827;font-weight:700;">Your subscription has been successfully initiated.</h2>
+              <p style="font-size:13px;color:#404040;margin:0 0 16px 0;line-height:1.6;">Please find the attached invoice for your records and taxation purposes.</p>
+
+              <!-- Important Notes -->
+              <p style="font-size:13px;font-weight:700;color:#9BE749;margin:0 0 12px 0;text-transform:uppercase;letter-spacing:0.8px;">Kindly Note the Following:</p>
+              <ul style="margin:0 0 20px 0;padding-left:18px;font-size:14px;color:#404040;line-height:1.8;list-style-type:disc;">
+                <li style="margin-bottom:8px;">Your services will be activated only after successful KYC verification through a SEBI-registered KYC Registration Agency (KRA).</li>
+                <li style="margin-bottom:8px;">Post verification, you may access research recommendations through the designated platform.</li>
+                <li style="margin-bottom:8px;">Please retain the attached invoice for your records and taxation purposes.</li>
+                <li>In case of any discrepancies in the invoice or subscription details, kindly report the same to us at the earliest.</li>
+              </ul>
 
               <!-- Invoice Details Section -->
-              <p style="font-size:12px;font-weight:700;color:#111827;margin:0 0 12px 0;text-transform:uppercase;letter-spacing:0.8px;">Invoice Details</p>
+              <p style="font-size:13px;font-weight:700;color:#9BE749;margin:0 0 12px 0;text-transform:uppercase;letter-spacing:0.8px;">Invoice Details</p>
               <div style="margin:0 0 24px 0;">
                 <table width="100%" cellpadding="0" cellspacing="0">
                   <tr>
-                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:13px;color:#6b7280;font-weight:500;">Invoice Date</td>
-                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:13px;color:#111827;text-align:right;">${invoiceDate}</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#6b7280;font-weight:500;">Invoice Date</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#111827;text-align:right;">${invoiceDate}</td>
                   </tr>
                   <tr>
-                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:13px;color:#6b7280;font-weight:500;">Client Name</td>
-                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:13px;color:#111827;text-align:right;">${clientName || "Not Provided"}</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#6b7280;font-weight:500;">Client Name</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#111827;text-align:right;">${clientName || "Not Provided"}</td>
                   </tr>
                   <tr>
-                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:13px;color:#6b7280;font-weight:500;">Service/Plan</td>
-                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:13px;color:#111827;text-align:right;">${planName || "Subscription Service"}</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#6b7280;font-weight:500;">PAN Card Number</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#111827;text-align:right;">${clientPan || "Not Provided"}</td>
                   </tr>
                   <tr>
-                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:13px;color:#6b7280;font-weight:500;">Amount Paid</td>
-                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:13px;color:#111827;text-align:right;font-weight:600;">Rs. ${amount}</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#6b7280;font-weight:500;">Service/Plan</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#111827;text-align:right;">${planName || "Subscription Service"}</td>
                   </tr>
                   <tr>
-                    <td style="padding:10px 0;font-size:13px;color:#6b7280;font-weight:500;">Contact</td>
-                    <td style="padding:10px 0;font-size:13px;color:#111827;text-align:right;">+91 ${phone}</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#6b7280;font-weight:500;">Amount Paid</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#111827;text-align:right;font-weight:600;">Rs. ${amount}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:10px 0;font-size:14px;color:#6b7280;font-weight:500;">Contact</td>
+                    <td style="padding:10px 0;font-size:14px;color:#111827;text-align:right;">+91 ${phone}</td>
                   </tr>
                 </table>
               </div>
 
-              <!-- Next Steps -->
-              <p style="font-size:12px;font-weight:700;color:#111827;margin:0 0 8px 0;text-transform:uppercase;letter-spacing:0.8px;">What to Do Next</p>
-              <ol style="margin:0 0 20px 0;padding-left:18px;font-size:13px;color:#404040;line-height:1.7;">
-                <li style="margin-bottom:6px;">Your subscription is now active</li>
-                <li style="margin-bottom:6px;">Access your account to view research recommendations</li>
-                <li>Keep this invoice for your records and tax purposes</li>
-              </ol>
+              <!-- Compliance Disclosure -->
+              <p style="font-size:13px;font-weight:700;color:#9BE749;margin:0 0 12px 0;text-transform:uppercase;letter-spacing:0.8px;">Compliance Disclosure:</p>
+              <p style="font-size:14px;color:#404040;margin:0 0 12px 0;line-height:1.6;">Mr. Sasikumar Peyyala is a SEBI Registered Research Analyst (Registration No: INH000019327). For Disclaimers and Disclosure please visit <a href="https://www.trademilaan.in" style="color:#9BE749;text-decoration:none;font-weight:600;">www.trademilaan.in</a></p>
 
-              <!-- SEBI & Contact -->
-              <p style="font-size:12px;color:#404040;margin:0 0 12px 0;line-height:1.6;">Sasikumar Peyyala is SEBI Registered Research Analyst (Registration No: INH000019327).</p>
-              <p style="font-size:12px;color:#404040;margin:0;line-height:1.6;">Questions? Email <a href="mailto:spkumar.researchanalyst@gmail.com" style="color:#9BE749;text-decoration:none;font-weight:600;">spkumar.researchanalyst@gmail.com</a></p>
+              <!-- Support Contact -->
+              <p style="font-size:14px;color:#404040;margin:0;line-height:1.6;">For any assistance, feel free to contact our support team at <a href="tel:7702262206" style="color:#9BE749;text-decoration:none;font-weight:600;">+91-7702262206</a> or <a href="mailto:spkumar.researchanalyst@gmail.com" style="color:#9BE749;text-decoration:none;font-weight:600;">spkumar.researchanalyst@gmail.com</a></p>
 
             </td>
           </tr>
@@ -365,9 +371,39 @@ export async function sendInvoicePDFMail({ to, pdfBuffer, clientName, email, pho
   const mailOptions = {
     from,
     to,
-    subject: "Your Invoice – Trademilaan Subscription",
+    subject: "Subscription Initiated - Invoice & Activation Details",
     html,
-    text: `Dear ${clientName || "Valued Client"},\n\nThank you for your payment!\n\nYour invoice for the subscription has been successfully generated.\n\nPlease find the invoice PDF attached to this email.\n\nService: ${planName}\nAmount: Rs. ${amount}\nDate: ${invoiceDate}\n\nThank you for choosing Trademilaan.\n\nRegards,\nSasikumar Peyyala\nSEBI Registered Research Analyst (INH000019327)\nspkumar.researchanalyst@gmail.com`,
+    text: `Dear Sir/Madam,
+
+Greetings from TradeMilaan (SASIKUMAR PEYYALA).
+
+Your subscription has been successfully initiated.
+
+Please find the attached invoice for your records and taxation purposes.
+
+Kindly Note the Following:
+
+1. Your services will be activated only after successful KYC verification through a SEBI-registered KYC Registration Agency (KRA).
+2. Post verification, you may access research recommendations through the designated platform.
+3. Please retain the attached invoice for your records and taxation purposes.
+4. In case of any discrepancies in the invoice or subscription details, kindly report the same to us at the earliest.
+
+Invoice Details:
+Invoice Date: ${invoiceDate}
+Client Name: ${clientName || "Not Provided"}
+Service/Plan: ${planName || "Subscription Service"}
+Amount Paid: Rs. ${amount}
+Contact: +91 ${phone}
+
+Compliance Disclosure:
+Mr. Sasikumar Peyyala is a SEBI Registered Research Analyst (Registration No: INH000019327).
+For Disclaimers and Disclosure please visit www.trademilaan.in
+
+For any assistance, feel free to contact our support team at +91-7702262206 or spkumar.researchanalyst@gmail.com
+
+Regards,
+Sasikumar Peyyala
+SEBI Registered Research Analyst (INH000019327)`,
     attachments: [
       {
         filename: "invoice.pdf",
