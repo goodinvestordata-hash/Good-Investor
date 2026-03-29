@@ -38,27 +38,72 @@ export async function generateInvoicePDF(invoiceData) {
 
   const page = pdfDoc.addPage([595, 842]);
 
+  /* Pastel palette — cohesive, print-friendly */
+  const pastel = {
+    pageTint: rgb(0.99, 0.99, 0.995),
+    topBar: rgb(0.88, 0.78, 0.82),
+    topBarText: rgb(0.32, 0.22, 0.28),
+    headingName: rgb(0.35, 0.42, 0.55),
+    invoiceWord: rgb(0.52, 0.42, 0.72),
+    sebiAccent: rgb(0.58, 0.4, 0.48),
+    divider: rgb(0.72, 0.62, 0.88),
+    tableHeader: rgb(0.62, 0.78, 0.86),
+    tableHeaderText: rgb(0.18, 0.28, 0.34),
+    tableRowTint: rgb(0.97, 0.99, 1),
+    tableRowBorder: rgb(0.82, 0.88, 0.94),
+    paymentLabel: rgb(0.62, 0.45, 0.52),
+    contactLabel: rgb(0.45, 0.55, 0.65),
+    bodyMuted: rgb(0.22, 0.24, 0.28),
+    gstMuted: rgb(0.32, 0.32, 0.38),
+    termsHeading: rgb(0.38, 0.35, 0.48),
+    totalAccent: rgb(0.48, 0.42, 0.62),
+    footerLeft: rgb(0.78, 0.93, 0.9),
+    footerRight: rgb(0.9, 0.86, 0.96),
+    footerLeftText: rgb(0.16, 0.34, 0.38),
+    footerRightText: rgb(0.26, 0.22, 0.4),
+    footerDivider: rgb(0.96, 0.95, 0.99),
+    grievanceTitle: rgb(0.42, 0.34, 0.58),
+  };
+
+  page.drawRectangle({
+    x: 0,
+    y: 0,
+    width: 595,
+    height: 842,
+    color: pastel.pageTint,
+  });
+
   let y = 810;
   const margin = 40;
   const lineGap = 14;
 
   /* ---------- TEXT WRAP FUNCTION ---------- */
 
-  function drawWrappedText(text, x, startY, size, maxWidth, lineHeight = 12) {
+  function drawWrappedText(
+    text,
+    x,
+    startY,
+    size,
+    maxWidth,
+    lineHeight = 12,
+    textColor = rgb(0, 0, 0),
+    fontToUse = font,
+  ) {
     const words = text.split(" ");
     let line = "";
     let yPos = startY;
 
     for (const word of words) {
       const testLine = line + word + " ";
-      const width = font.widthOfTextAtSize(testLine, size);
+      const width = fontToUse.widthOfTextAtSize(testLine, size);
 
       if (width > maxWidth) {
         page.drawText(line, {
           x,
           y: yPos,
           size,
-          font,
+          font: fontToUse,
+          color: textColor,
         });
 
         line = word + " ";
@@ -72,20 +117,21 @@ export async function generateInvoicePDF(invoiceData) {
       x,
       y: yPos,
       size,
-      font,
+      font: fontToUse,
+      color: textColor,
     });
 
     return yPos - lineHeight;
   }
 
-  /* ---------- TOP RED BAR ---------- */
+  /* ---------- TOP DISCLAIMER BAR ---------- */
 
   page.drawRectangle({
     x: 0,
     y: 820,
     width: 595,
     height: 22,
-    color: rgb(0.85, 0, 0),
+    color: pastel.topBar,
   });
 
   page.drawText(
@@ -95,7 +141,7 @@ export async function generateInvoicePDF(invoiceData) {
       y: 826,
       size: 9,
       font,
-      color: rgb(1, 1, 1),
+      color: pastel.topBarText,
     },
   );
 
@@ -108,7 +154,7 @@ export async function generateInvoicePDF(invoiceData) {
     y,
     size: 22,
     font: bold,
-    color: rgb(0, 0, 0.6),
+    color: pastel.headingName,
   });
 
   page.drawText("INVOICE", {
@@ -116,7 +162,7 @@ export async function generateInvoicePDF(invoiceData) {
     y: y + 6,
     size: 28,
     font: bold,
-    color: rgb(0.5, 0, 0.8),
+    color: pastel.invoiceWord,
   });
 
   y -= 20;
@@ -126,7 +172,7 @@ export async function generateInvoicePDF(invoiceData) {
     y,
     size: 11,
     font: bold,
-    color: rgb(0.7, 0.1, 0.1),
+    color: pastel.sebiAccent,
   });
 
   page.drawText("Trade Name or Website: www.trademilaan.in", {
@@ -134,9 +180,10 @@ export async function generateInvoicePDF(invoiceData) {
     y,
     size: 10,
     font,
+    color: pastel.bodyMuted,
   });
 
-  /* ---------- PURPLE LINE ---------- */
+  /* ---------- ACCENT LINE ---------- */
 
   y -= 10;
 
@@ -145,7 +192,7 @@ export async function generateInvoicePDF(invoiceData) {
     y,
     width: 520,
     height: 3,
-    color: rgb(0.5, 0, 0.8),
+    color: pastel.divider,
   });
 
   /* ---------- CLIENT DETAILS ---------- */
@@ -157,25 +204,51 @@ export async function generateInvoicePDF(invoiceData) {
     y,
     size: 11,
     font,
+    color: pastel.bodyMuted,
   });
 
   y -= lineGap;
-  page.drawText(`Email : ${email}`, { x: margin, y, size: 11, font });
+  page.drawText(`Email : ${email}`, {
+    x: margin,
+    y,
+    size: 11,
+    font,
+    color: pastel.bodyMuted,
+  });
 
   y -= lineGap;
-  page.drawText(`Mobile : +91 ${mobile}`, { x: margin, y, size: 11, font });
+  page.drawText(`Mobile : +91 ${mobile}`, {
+    x: margin,
+    y,
+    size: 11,
+    font,
+    color: pastel.bodyMuted,
+  });
 
   y -= lineGap;
-  page.drawText(`State : ${state}`, { x: margin, y, size: 11, font });
+  page.drawText(`State : ${state}`, {
+    x: margin,
+    y,
+    size: 11,
+    font,
+    color: pastel.bodyMuted,
+  });
 
   y -= lineGap;
-  page.drawText(`PAN : ${pan}`, { x: margin, y, size: 11, font });
+  page.drawText(`PAN : ${pan}`, {
+    x: margin,
+    y,
+    size: 11,
+    font,
+    color: pastel.bodyMuted,
+  });
 
   page.drawText(`SERVICE START DATE : ${startDate}`, {
     x: 340,
     y: y + lineGap * 4,
     size: 11,
     font: bold,
+    color: pastel.bodyMuted,
   });
 
   page.drawText(`SERVICE END DATE : ${endDate}`, {
@@ -183,15 +256,15 @@ export async function generateInvoicePDF(invoiceData) {
     y: y + lineGap * 3,
     size: 11,
     font: bold,
+    color: pastel.bodyMuted,
   });
 
-  // Add GST number below service end date
   page.drawText(`GST No: 37CNSPP5410Q2Z2`, {
     x: 340,
     y: y + lineGap * 2,
     size: 11,
     font: bold,
-    color: rgb(0.1, 0.1, 0.1),
+    color: pastel.gstMuted,
   });
 
   /* ---------- SERVICE TABLE ---------- */
@@ -203,7 +276,7 @@ export async function generateInvoicePDF(invoiceData) {
     y,
     width: 515,
     height: 22,
-    color: rgb(0, 0.6, 0.8),
+    color: pastel.tableHeader,
   });
 
   page.drawText("PRODUCT/SERVICE", {
@@ -211,42 +284,70 @@ export async function generateInvoicePDF(invoiceData) {
     y: y + 6,
     size: 11,
     font: bold,
-    color: rgb(1, 1, 1),
+    color: pastel.tableHeaderText,
   });
   page.drawText("PRICE", {
     x: 260,
     y: y + 6,
     size: 11,
     font: bold,
-    color: rgb(1, 1, 1),
+    color: pastel.tableHeaderText,
   });
   page.drawText("QTY", {
     x: 370,
     y: y + 6,
     size: 11,
     font: bold,
-    color: rgb(1, 1, 1),
+    color: pastel.tableHeaderText,
   });
   page.drawText("TOTAL", {
     x: 460,
     y: y + 6,
     size: 11,
     font: bold,
-    color: rgb(1, 1, 1),
+    color: pastel.tableHeaderText,
   });
 
   y -= 22;
 
-  // Use planName as the service/product name if provided
+  page.drawRectangle({
+    x: margin,
+    y,
+    width: 515,
+    height: 22,
+    color: pastel.tableRowTint,
+    borderColor: pastel.tableRowBorder,
+    borderWidth: 0.5,
+  });
+
   page.drawText(planName || service, {
     x: margin + 8,
     y: y + 6,
     size: 11,
     font,
+    color: pastel.bodyMuted,
   });
-  page.drawText(price, { x: 260, y: y + 6, size: 11, font });
-  page.drawText(qty || "1", { x: 370, y: y + 6, size: 11, font });
-  page.drawText(total, { x: 460, y: y + 6, size: 11, font });
+  page.drawText(price, {
+    x: 260,
+    y: y + 6,
+    size: 11,
+    font,
+    color: pastel.bodyMuted,
+  });
+  page.drawText(qty || "1", {
+    x: 370,
+    y: y + 6,
+    size: 11,
+    font,
+    color: pastel.bodyMuted,
+  });
+  page.drawText(total, {
+    x: 460,
+    y: y + 6,
+    size: 11,
+    font,
+    color: pastel.bodyMuted,
+  });
 
   /* ---------- PAYMENT DETAILS ---------- */
 
@@ -257,7 +358,7 @@ export async function generateInvoicePDF(invoiceData) {
     y,
     size: 10,
     font: bold,
-    color: rgb(0.7, 0.1, 0.1),
+    color: pastel.paymentLabel,
   });
 
   y -= 12;
@@ -269,24 +370,55 @@ export async function generateInvoicePDF(invoiceData) {
     8,
     520,
     10,
+    pastel.bodyMuted,
   );
 
   /* ---------- TOTALS ---------- */
 
   y -= 10;
 
-  page.drawText("SUBTOTAL", { x: 370, y, size: 11, font: bold });
-  page.drawText(subtotal, { x: 470, y, size: 11, font });
+  page.drawText("SUBTOTAL", {
+    x: 370,
+    y,
+    size: 11,
+    font: bold,
+    color: pastel.bodyMuted,
+  });
+  page.drawText(subtotal, {
+    x: 470,
+    y,
+    size: 11,
+    font,
+    color: pastel.bodyMuted,
+  });
 
   y -= 14;
 
-  page.drawText("GST@18%", { x: 370, y, size: 11, font: bold });
-  page.drawText(gst, { x: 470, y, size: 11, font });
+  page.drawText("GST@18%", {
+    x: 370,
+    y,
+    size: 11,
+    font: bold,
+    color: pastel.bodyMuted,
+  });
+  page.drawText(gst, { x: 470, y, size: 11, font, color: pastel.bodyMuted });
 
   y -= 14;
 
-  page.drawText("TOTAL", { x: 370, y, size: 11, font: bold });
-  page.drawText(total, { x: 470, y, size: 11, font: bold });
+  page.drawText("TOTAL", {
+    x: 370,
+    y,
+    size: 11,
+    font: bold,
+    color: pastel.totalAccent,
+  });
+  page.drawText(total, {
+    x: 470,
+    y,
+    size: 11,
+    font: bold,
+    color: pastel.totalAccent,
+  });
 
   /* ---------- TERMS ---------- */
 
@@ -299,6 +431,7 @@ export async function generateInvoicePDF(invoiceData) {
       y,
       size: 11,
       font: bold,
+      color: pastel.termsHeading,
     },
   );
 
@@ -322,7 +455,7 @@ export async function generateInvoicePDF(invoiceData) {
   ];
 
   for (const t of terms) {
-    y = drawWrappedText(t, margin, y, 8, 520, 14);
+    y = drawWrappedText(t, margin, y, 8, 520, 14, pastel.bodyMuted);
 
     y -= 4;
   }
@@ -336,7 +469,7 @@ export async function generateInvoicePDF(invoiceData) {
     y: contactY,
     size: 10,
     font: bold,
-    color: rgb(0, 0.55, 0.75),
+    color: pastel.contactLabel,
   });
 
   page.drawText("+91 77022 62206", {
@@ -344,6 +477,7 @@ export async function generateInvoicePDF(invoiceData) {
     y: contactY,
     size: 10,
     font,
+    color: pastel.bodyMuted,
   });
 
   page.drawText("Email.", {
@@ -351,7 +485,7 @@ export async function generateInvoicePDF(invoiceData) {
     y: contactY,
     size: 10,
     font: bold,
-    color: rgb(0, 0.55, 0.75),
+    color: pastel.contactLabel,
   });
 
   page.drawText("spkumar.researchanalyst@gmail.com", {
@@ -359,6 +493,7 @@ export async function generateInvoicePDF(invoiceData) {
     y: contactY,
     size: 10,
     font,
+    color: pastel.bodyMuted,
   });
 
   page.drawText("Address.", {
@@ -366,75 +501,39 @@ export async function generateInvoicePDF(invoiceData) {
     y: contactY,
     size: 10,
     font: bold,
-    color: rgb(0, 0.55, 0.75),
+    color: pastel.contactLabel,
   });
 
-  page.drawText(
+  drawWrappedText(
     "1 24,29 4 Kummaripalem Centerr, Near D S M, High School, Vidyadharapuram, Vijayawada, VIJAYAWADA,ANDHRA PRADESH, 520012",
-    {
-      x: 440,
-      y: contactY - 12,
-      size: 8,
-      font,
-      maxWidth: 140,
-      lineHeight: 10,
-    },
+    440,
+    contactY - 12,
+    8,
+    140,
+    10,
+    pastel.bodyMuted,
   );
   y -= 32;
 
-  /* ---------- FOOTER BOXES ---------- */
+  /* ---------- FOOTER BOXES (pastel mint + pastel lilac) ---------- */
   const boxY = 0;
   const boxHeight = 70;
 
-  // Draw boxes first
   page.drawRectangle({
     x: 0,
     y: boxY,
     width: 300,
     height: boxHeight,
-    color: rgb(0, 0.6, 0.6),
+    color: pastel.footerLeft,
   });
   page.drawRectangle({
     x: 300,
     y: boxY,
     width: 295,
     height: boxHeight,
-    color: rgb(0.15, 0.15, 0.15),
+    color: pastel.footerRight,
   });
 
-  // Draw the title centered in the boxes, after boxes
-  const grievanceTitleY = boxY + boxHeight / 2 + 10;
-  page.drawText("GRIEVANCE REDRESSAL / ESCALATION MATRIX", {
-    x: 110,
-    y: grievanceTitleY,
-    size: 16,
-    font: bold,
-    color: rgb(0.85, 0, 0),
-  });
-
-  /* ---------- FOOTER BOXES ---------- */
-
-  /* LEFT BLUE BOX */
-
-  page.drawRectangle({
-    x: 0,
-    y: boxY,
-    width: 300,
-    height: boxHeight,
-    color: rgb(0, 0.6, 0.6),
-  });
-
-  /* RIGHT BLACK BOX */
-
-  page.drawRectangle({
-    x: 300,
-    y: boxY,
-    width: 295,
-    height: boxHeight,
-    color: rgb(0.15, 0.15, 0.15),
-  });
-
-  /* ---------- LEFT BOX TEXT ---------- */
   let blueY = boxY + boxHeight - 18;
   blueY = drawWrappedText(
     "In case you are not satisfied with our response you can lodge your grievance with SEBI SCORES, Phone and ODR.",
@@ -443,6 +542,7 @@ export async function generateInvoicePDF(invoiceData) {
     9,
     260,
     12,
+    pastel.footerLeftText,
   );
   blueY = drawWrappedText(
     "Compliance Team: spkumar.researchanalyst@gmail.com",
@@ -451,10 +551,18 @@ export async function generateInvoicePDF(invoiceData) {
     9,
     260,
     12,
+    pastel.footerLeftText,
   );
-  drawWrappedText("Phone: +91 77022 62206", 15, blueY - 5, 9, 260, 12);
+  drawWrappedText(
+    "Phone: +91 77022 62206",
+    15,
+    blueY - 5,
+    9,
+    260,
+    12,
+    pastel.footerLeftText,
+  );
 
-  /* ---------- RIGHT BOX TEXT ---------- */
   let blackY = boxY + boxHeight - 18;
   const blackBoxPadding = 12;
   const blackBoxX = 300;
@@ -463,44 +571,37 @@ export async function generateInvoicePDF(invoiceData) {
   const blackTextWidth = blackBoxWidth - 2 * blackBoxPadding;
 
   blackY = drawWrappedText(
-    "For any queries, feedback or assistance contact SEBI office on toll free Helpline:",
+    "For any queries, feedback or assistance contact SEBI office on toll free Helpline:1800 22 7575 / 1800 266 7575",
     blackTextX,
     blackY,
     9,
     blackTextWidth,
     12,
-  );
-  blackY = drawWrappedText(
-    "1800 22 7575 / 1800 266 7575",
-    blackTextX,
-    blackY - 5,
-    10,
-    blackTextWidth,
-    12,
+    pastel.footerRightText,
   );
   blackY = drawWrappedText(
     "SEBI SCORES: https://scores.sebi.gov.in/",
     blackTextX,
     blackY - 5,
-    8,
+    7,
     blackTextWidth,
     12,
+    pastel.footerRightText,
   );
   drawWrappedText(
     "SEBI ODR: https://smartodr.in/",
     blackTextX,
     blackY - 5,
-    8,
+    7,
     blackTextWidth,
     12,
+    pastel.footerRightText,
   );
-
-  /* ---------- DIAGONAL DIVIDER ---------- */
 
   page.drawSvgPath(
     `M300 ${boxY} L330 ${boxY + boxHeight} L300 ${boxY + boxHeight} L270 ${boxY} Z`,
     {
-      color: rgb(1, 1, 1),
+      color: pastel.footerDivider,
     },
   );
   /* ---------- SAVE PDF ---------- */

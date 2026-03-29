@@ -21,6 +21,19 @@ export default function AgreementModal({
   const [signingData, setSigningData] = useState(null);
   const [capturedAgreementHtml, setCapturedAgreementHtml] = useState("");
 
+  // KYC from BuyDetailsForm (Buy flow) — prefer over profile-only user fields
+  const kycClientName =
+    userDetails?.fullName?.trim() ||
+    user?.fullName ||
+    user?.name ||
+    user?.username ||
+    "Client Name";
+  const kycPan = userDetails?.panNumber || user?.panNumber || user?.pan || "";
+  const kycEmail = userDetails?.email?.trim() || user?.email || "";
+  const kycDob = userDetails?.dob || "";
+  const kycState = userDetails?.state || "";
+  const kycGender = userDetails?.gender || "";
+
   // Capture agreement HTML when user submits for signing
   const captureAgreementHtml = () => {
     try {
@@ -261,13 +274,12 @@ export default function AgreementModal({
                       ✓ Agreement Successfully Signed
                     </h2>
                     <ServiceAgreement
-                      clientName={
-                        user?.fullName ||
-                        user?.name ||
-                        user?.username ||
-                        "Client Name"
-                      }
-                      clientPan={user?.panNumber || user?.pan || "PAN000000000"}
+                      clientName={kycClientName}
+                      clientPan={kycPan}
+                      clientEmail={kycEmail}
+                      clientDob={kycDob}
+                      clientState={kycState}
+                      clientGender={kycGender}
                       signedDate={
                         signingData?.signedTimestamp
                           ? new Date(
@@ -304,13 +316,12 @@ export default function AgreementModal({
                   <>
                     {/* ======================= NORMAL AGREEMENT VIEW ======================= */}
                     <ServiceAgreement
-                      clientName={
-                        user?.fullName ||
-                        user?.name ||
-                        user?.username ||
-                        "Client Name"
-                      }
-                      clientPan={user?.panNumber || user?.pan || "PAN000000000"}
+                      clientName={kycClientName}
+                      clientPan={kycPan}
+                      clientEmail={kycEmail}
+                      clientDob={kycDob}
+                      clientState={kycState}
+                      clientGender={kycGender}
                       signedDate={new Date().toLocaleDateString("en-IN")}
                     />
                     <div className="mt-2">
