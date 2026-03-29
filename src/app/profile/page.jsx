@@ -1,13 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Protected from "../components/Protected";
 import LogoutButton from "../components/LogoutButton";
+import EditProfileModal from "../components/EditProfileModal";
 import { useAuth } from "../context/AuthContext";
 
 export default function ProfilePage() {
   const router = useRouter();
   const { user } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Navigation handlers
   const goToRiskAssessment = () => router.push("/risk-assessment");
@@ -49,10 +52,10 @@ export default function ProfilePage() {
           <div className="mt-8 grid gap-4 grid-cols-2">
             <div className="rounded-2xl border border-neutral-200 bg-neutral-50/60 p-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
-                Name
+                Full Name
               </p>
               <p className="text-base font-semibold text-neutral-900">
-                {user?.username || "Not set"}
+                {user?.fullName || user?.username || "Not set"}
               </p>
             </div>
             <div className="rounded-2xl border border-neutral-200 bg-neutral-50/60 p-4">
@@ -65,6 +68,14 @@ export default function ProfilePage() {
             </div>
             <div className="rounded-2xl border border-neutral-200 bg-neutral-50/60 p-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                Phone
+              </p>
+              <p className="text-base font-semibold text-neutral-900">
+                {user?.phone || "Not set"}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-neutral-200 bg-neutral-50/60 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
                 PAN
               </p>
               <p className="text-base font-semibold text-neutral-900">
@@ -72,6 +83,22 @@ export default function ProfilePage() {
               </p>
             </div>
             <div className="rounded-2xl border border-neutral-200 bg-neutral-50/60 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                Gender
+              </p>
+              <p className="text-base font-semibold text-neutral-900">
+                {user?.gender || "Not set"}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-neutral-200 bg-neutral-50/60 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                State
+              </p>
+              <p className="text-base font-semibold text-neutral-900">
+                {user?.state || "Not set"}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-neutral-200 bg-neutral-50/60 p-4 col-span-2">
               <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
                 Date of Birth
               </p>
@@ -81,9 +108,24 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Risk assessment has been moved to a dedicated page */}
+          {/* Edit Profile Button */}
+          <div className="mt-8">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="w-full md:w-auto px-6 py-3 rounded-lg bg-lime-500 text-white font-semibold hover:bg-lime-600 transition"
+            >
+              Edit Profile
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Edit Profile Modal */}
+      <EditProfileModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={() => setIsModalOpen(false)}
+      />
     </Protected>
   );
 }

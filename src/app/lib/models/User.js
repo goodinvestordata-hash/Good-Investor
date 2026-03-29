@@ -15,6 +15,7 @@ const UserSchema = new mongoose.Schema(
     state: { type: String },
     panNumber: { type: String },
     panVerified: { type: Boolean, default: false },
+    phone: { type: String },
 
     emailOtp: { type: String },
     emailOtpExpiry: { type: Date },
