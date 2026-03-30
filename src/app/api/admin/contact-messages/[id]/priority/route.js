@@ -44,7 +44,7 @@ export async function PATCH(req, { params }) {
     }
 
     await connectDB();
-    const { id } = params;
+    const { id } = await params;
     const { priority } = await req.json();
 
     // Validate priority
