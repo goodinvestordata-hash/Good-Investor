@@ -5,6 +5,8 @@ import { generateInvoicePDF } from "@/app/lib/generateInvoicePDF";
 import { sendInvoicePDFMail } from "@/app/lib/mailer";
 import Payment from "@/app/lib/models/Payment";
 import Coupon from "@/app/lib/models/Coupon";
+import { verifyToken } from "@/app/lib/jwt";
+import { cookies } from "next/headers";
 
 export async function POST(request) {
   await connectDB();
@@ -121,6 +123,8 @@ export async function POST(request) {
     );
   }
 
+  const orderPlanType = String(razorpayOrder?.notes?.planType || "").trim();
+
   const crypto = (await import("crypto")).default || (await import("crypto"));
   const sign = razorpay_order_id + "|" + razorpay_payment_id;
   const expectedSignature = crypto
@@ -133,7 +137,22 @@ export async function POST(request) {
 
   // Store payment in MongoDB
   try {
-    const normalizedEmail = String(email || "").trim().toLowerCase();
+    let decodedAuth = null;
+    try {
+      const cookieStore = await cookies();
+      const token = cookieStore.get("token")?.value;
+      if (token) {
+        decodedAuth = verifyToken(token);
+      }
+    } catch {
+      decodedAuth = null;
+    }
+
+    const normalizedEmail = String(
+      decodedAuth?.email || email || ""
+    )
+      .trim()
+      .toLowerCase();
     const normalizedPlanId = String(orderPlanId || "").trim();
 
     // Final guard against duplicate active subscriptions for the same plan.
@@ -167,8 +186,10 @@ export async function POST(request) {
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
+      userId: decodedAuth?.id ? String(decodedAuth.id) : null,
       planId: orderPlanId,
       planName: orderPlanName,
+      planType: orderPlanType || null,
       name,
       email: normalizedEmail,
       phone,
@@ -220,6 +241,7 @@ export async function POST(request) {
       razorpay_payment_id,
       planId: orderPlanId,
       planName: orderPlanName,
+      planType: orderPlanType || null,
       name,
       email,
       phone,

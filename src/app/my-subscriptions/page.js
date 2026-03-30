@@ -63,7 +63,20 @@ export default function MySubscriptionsPage() {
   };
 
   const activePayments = payments.filter((p) => !isExpired(p.expiresAt));
-  const currentActivePlan = activePayments[0] || null;
+  const activePlanIds = new Set(
+    activePayments
+      .map((p) => String(p?.planId || p?.resolvedPlanId || "").trim())
+      .filter(Boolean)
+  );
+
+  const currentActivePlan =
+    activePayments.find(
+      (p) =>
+        p?.planName &&
+        !["unknown", "unknown plan", "n/a"].includes(
+          String(p.planName).trim().toLowerCase()
+        )
+    ) || activePayments[0] || null;
 
   if (loading || pageLoading) {
     return (
@@ -122,7 +135,7 @@ export default function MySubscriptionsPage() {
               <div className="bg-linear-to-br from-purple-50 to-purple-100/50 rounded-lg p-6 border border-purple-200">
                 <p className="text-sm text-neutral-600 mb-1">Active Plans</p>
                 <p className="text-3xl font-bold text-purple-600">
-                  {activePayments.length}
+                  {activePlanIds.size || activePayments.length}
                 </p>
               </div>
 

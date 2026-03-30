@@ -188,6 +188,7 @@ export default function PaymentForm({
       const serverPricing = data.pricing || {
         finalAmount,
         planName: selectedPlanName,
+        planType: planData?.type || "",
       };
 
       const options = {
@@ -216,6 +217,7 @@ export default function PaymentForm({
                 amount: serverPricing.finalAmount,
                 planId: planData.planId,
                 planName: serverPricing.planName || selectedPlanName,
+                planType: serverPricing.planType || planData?.type || "",
                 state: userDetails?.state,
                 panNumber: userDetails?.panNumber,
                 ...(appliedCoupon && { couponCode: appliedCoupon.code }),

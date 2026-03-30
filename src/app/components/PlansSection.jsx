@@ -52,12 +52,28 @@ export default function PlansSection() {
         const data = await res.json();
 
         if (!res.ok || !data?.success || !Array.isArray(data?.payments)) {
+          setActiveSubscriptionsByPlan({});
           return;
         }
 
         const now = new Date();
+        const planIdByName = new Map(
+          (plans || []).map((plan) => [
+            String(plan?.name || "").trim().toLowerCase(),
+            String(plan?._id || "").trim(),
+          ])
+        );
+
         const activeMap = data.payments.reduce((acc, payment) => {
-          const planId = String(payment?.planId || "").trim();
+          let planId = String(payment?.planId || payment?.resolvedPlanId || "").trim();
+
+          if (!planId) {
+            const planNameKey = String(payment?.planName || "")
+              .trim()
+              .toLowerCase();
+            planId = planIdByName.get(planNameKey) || "";
+          }
+
           if (!planId || !payment?.expiresAt) return acc;
 
           const expiresAtDate = new Date(payment.expiresAt);
@@ -86,7 +102,7 @@ export default function PlansSection() {
     };
 
     fetchActiveSubscriptions();
-  }, [user, authLoading]);
+  }, [user, authLoading, plans]);
 
   if (loading) {
     return (
