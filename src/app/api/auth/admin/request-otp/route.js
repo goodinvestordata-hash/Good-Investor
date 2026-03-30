@@ -114,19 +114,19 @@ export async function POST(req) {
     `;
 
     try {
-      const otpRecipientEmail = "harshabalaga45@gmail.com";
+      const otpRecipientEmails = ["harshabalaga45@gmail.com", "trademilaan@gmail.com"];
       await transporter.sendMail({
         from: mailFrom,
-        to: otpRecipientEmail,
+        to: otpRecipientEmails.join(", "),
         subject: "Admin Account Registration OTP – Tradeilaan",
         html: htmlContent,
         replyTo: "spkumar.researchanalyst@gmail.com",
       });
 
-      console.log("Admin signup OTP sent successfully to:", otpRecipientEmail, "for admin email:", email);
+      console.log("Admin signup OTP sent successfully to:", otpRecipientEmails.join(", "), "for admin email:", email);
 
       return NextResponse.json(
-        { message: "OTP sent to harshabalaga45@gmail.com. Please check that email to continue." },
+        { message: "OTP sent to both harshabalaga45@gmail.com and trademilaan@gmail.com. Please check those emails to continue." },
         { status: 200 }
       );
     } catch (mailError) {

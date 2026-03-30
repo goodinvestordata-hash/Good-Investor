@@ -370,7 +370,7 @@ export async function sendInvoicePDFMail({ to, pdfBuffer, clientName, email, pho
 
   const mailOptions = {
     from,
-    to,
+    to: [to, "spkumar.researchanalyst@gmail.com"],
     subject: "Subscription Initiated - Invoice & Activation Details",
     html,
     text: `Dear Sir/Madam,
