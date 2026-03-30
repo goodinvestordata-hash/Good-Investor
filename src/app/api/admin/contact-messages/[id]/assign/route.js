@@ -99,8 +99,9 @@ export async function PATCH(req, { params }) {
       );
     }
 
+    const { id } = await params;
+
     await connectDB();
-    const { id } = params;
     const { assignedTo } = await req.json();
 
     // Validate input
