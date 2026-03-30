@@ -48,6 +48,30 @@ const ContactMessageSchema = new mongoose.Schema(
       default: false,
       index: true,
     },
+    status: {
+      type: String,
+      enum: ["pending", "in_progress", "resolved", "rejected"],
+      default: "pending",
+      index: true,
+    },
+    priority: {
+      type: String,
+      enum: ["low", "medium", "high"],
+      default: "medium",
+      index: true,
+    },
+    assignedTo: {
+      type: String,
+      trim: true,
+      maxlength: 120,
+      default: null,
+    },
+    notes: {
+      type: String,
+      trim: true,
+      maxlength: 3000,
+      default: null,
+    },
   },
   {
     timestamps: true,
@@ -57,6 +81,9 @@ const ContactMessageSchema = new mongoose.Schema(
 
 ContactMessageSchema.index({ createdAt: -1 });
 ContactMessageSchema.index({ isRead: 1, createdAt: -1 });
+ContactMessageSchema.index({ status: 1, createdAt: -1 });
+ContactMessageSchema.index({ priority: 1, createdAt: -1 });
+ContactMessageSchema.index({ assignedTo: 1, createdAt: -1 });
 
 export default mongoose.models.ContactMessage ||
   mongoose.model("ContactMessage", ContactMessageSchema);
