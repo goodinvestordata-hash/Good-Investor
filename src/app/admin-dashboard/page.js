@@ -21,11 +21,11 @@ const COLLECTIONS = [
   { key: "signedAgreements", label: "Signed Agreements", icon: "✍️" },
   { key: "documents", label: "Documents", icon: "📑" },
   { key: "riskprofiles", label: "Risk Profiles", icon: "📊" },
-  { key: "analytics", label: "Analytics", icon: "📈" },
-  { key: "plans", label: "Plans", icon: "🎯" },
+  { key: "analytics", label: "Admin Analytics", icon: "📈" },
+  { key: "plans", label: "Create Plan", icon: "🎯" },
   { key: "coupons", label: "Coupons", icon: "🎟️" },
-  { key: "subscriptions", label: "Subscriptions", icon: "🔄" },
-  { key: "paymentAudit", label: "Payment Audit", icon: "🔍" },
+  { key: "subscriptions", label: "My Subscriptions", icon: "🔄" },
+  { key: "paymentAudit", label: "Admin Audit History", icon: "🔍" },
 ];
 
 export default function AdminDashboardPage() {

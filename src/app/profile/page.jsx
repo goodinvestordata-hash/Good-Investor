@@ -14,7 +14,6 @@ export default function ProfilePage() {
 
   // Navigation handlers
   const goToRiskAssessment = () => router.push("/risk-assessment");
-  const goToAdminDashboard = () => router.push("/admin-dashboard");
 
   return (
     <Protected>
@@ -31,14 +30,6 @@ export default function ProfilePage() {
               <p className="text-sm text-neutral-600">{user?.email}</p>
             </div>
             <div className="flex items-center gap-3">
-              {user?.role === "admin" && (
-                <button
-                  onClick={goToAdminDashboard}
-                  className="hidden sm:inline-flex rounded-full bg-lime-500 px-4 py-2 text-sm font-semibold text-white hover:bg-lime-600 transition"
-                >
-                  Admin Dashboard
-                </button>
-              )}
               <button
                 onClick={goToRiskAssessment}
                 className="hidden sm:inline-flex rounded-full border border-neutral-200 px-4 py-2 text-sm font-semibold text-neutral-800 hover:bg-neutral-50 transition"

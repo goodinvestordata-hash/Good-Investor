@@ -125,6 +125,15 @@ export function Navbar() {
                     >
                       Profile
                     </Link>
+                    {user?.role === "admin" && (
+                      <Link
+                        href="/admin-dashboard"
+                        onClick={() => setProfileOpen(false)}
+                        className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 transition"
+                      >
+                        Admin Dashboard
+                      </Link>
+                    )}
                     <Link
                       href="/my-subscriptions"
                       onClick={() => setProfileOpen(false)}
@@ -182,6 +191,15 @@ export function Navbar() {
                         {profileInitial}
                       </span>
                     </Link>
+                    {user?.role === "admin" && (
+                      <Link
+                        href="/admin-dashboard"
+                        onClick={closeMobile}
+                        className="py-3 text-base font-medium text-neutral-700 hover:text-neutral-900"
+                      >
+                        Admin Dashboard
+                      </Link>
+                    )}
                     <Link
                       href="/my-subscriptions"
                       onClick={closeMobile}
