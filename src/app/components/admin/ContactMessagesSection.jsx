@@ -376,7 +376,6 @@ export default function ContactMessagesSection({ onUnreadCountChange }) {
       {/* Header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h2 className="text-3xl font-bold text-slate-900">Ticket Management</h2>
           <p className="text-slate-600 text-sm mt-1">
             Total: <span className="font-semibold">{pagination.total || 0}</span> | Unread:{" "}
             <span className="font-semibold">{stats.unreadCount || 0}</span>
@@ -475,11 +474,11 @@ export default function ContactMessagesSection({ onUnreadCountChange }) {
         {loading ? (
           <div className="py-12 flex flex-col items-center justify-center gap-3 text-slate-500">
             <Loader2 className="w-7 h-7 animate-spin text-emerald-600" />
-            <p className="text-sm font-medium">Loading tickets...</p>
+            <p className="text-sm font-medium">Loading messages...</p>
           </div>
         ) : messages.length === 0 ? (
           <div className="py-12 text-center text-slate-500 space-y-1">
-            <p className="font-semibold text-slate-700">No tickets found</p>
+            <p className="font-semibold text-slate-700">No messages found</p>
             <p className="text-sm">Try adjusting your filters</p>
           </div>
         ) : (
