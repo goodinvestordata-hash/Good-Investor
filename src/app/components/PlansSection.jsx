@@ -72,6 +72,7 @@ export default function PlansSection() {
             acc[planId] = {
               expiresAt: payment.expiresAt,
               paymentId: payment._id,
+              planType: payment.planType || "N/A",
             };
           }
 

@@ -22,6 +22,10 @@ export default function PlanCard({ plan, activeSubscription = null }) {
       })
     : "";
 
+  const activePlanTypeLabel = isActivePlan
+    ? String(activeSubscription?.planType || plan?.type || "N/A").toUpperCase()
+    : "";
+
   const handleBuyNow = () => {
     if (isActivePlan) {
       router.push("/my-subscriptions");
@@ -65,9 +69,12 @@ export default function PlanCard({ plan, activeSubscription = null }) {
         )}
 
         {isActivePlan && (
-          <div className="absolute top-6 left-6 z-10">
+          <div className="absolute top-6 left-6 z-10 flex flex-wrap gap-2">
             <div className="inline-block px-3 py-1.5 text-xs font-bold uppercase tracking-wider bg-green-100 text-green-800 rounded-full border border-green-300">
               Active Plan
+            </div>
+            <div className="inline-block px-3 py-1.5 text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">
+              {activePlanTypeLabel}
             </div>
           </div>
         )}
