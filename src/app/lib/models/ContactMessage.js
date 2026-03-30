@@ -1,0 +1,62 @@
+import mongoose from "mongoose";
+
+const ContactMessageSchema = new mongoose.Schema(
+  {
+    referenceId: {
+      type: String,
+      unique: true,
+      sparse: true,
+      index: true,
+      trim: true,
+      maxlength: 64,
+      default: null,
+    },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 100,
+    },
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+      maxlength: 120,
+      index: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 15,
+    },
+    message: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 2000,
+    },
+    clientIp: {
+      type: String,
+      trim: true,
+      maxlength: 100,
+      default: null,
+    },
+    isRead: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+  },
+  {
+    timestamps: true,
+    collection: "contact_messages",
+  }
+);
+
+ContactMessageSchema.index({ createdAt: -1 });
+ContactMessageSchema.index({ isRead: 1, createdAt: -1 });
+
+export default mongoose.models.ContactMessage ||
+  mongoose.model("ContactMessage", ContactMessageSchema);
