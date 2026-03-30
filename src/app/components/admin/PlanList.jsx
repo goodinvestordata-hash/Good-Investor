@@ -22,7 +22,9 @@ export default function PlanList() {
   const fetchPlans = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/plans");
+      const response = await fetch("/api/plans", {
+        credentials: "include",
+      });
       const result = await response.json();
 
       if (result.success) {
@@ -53,6 +55,7 @@ export default function PlanList() {
 
       const response = await fetch(`/api/plans/${deleteConfirm.planId}`, {
         method: "DELETE",
+        credentials: "include",
       });
 
       const result = await response.json();
@@ -81,6 +84,7 @@ export default function PlanList() {
     try {
       const response = await fetch(`/api/plans/${plan._id}/status`, {
         method: "PATCH",
+        credentials: "include",
       });
 
       const result = await response.json();

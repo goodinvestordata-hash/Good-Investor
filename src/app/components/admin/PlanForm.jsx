@@ -101,6 +101,7 @@ export default function PlanForm({ plan = null, onSubmit, onCancel }) {
         {
           method: plan ? "PUT" : "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify(submitData),
         }
       );

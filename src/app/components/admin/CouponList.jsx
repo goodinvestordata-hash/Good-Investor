@@ -22,7 +22,9 @@ export default function CouponList() {
   const fetchCoupons = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/coupons");
+      const response = await fetch("/api/coupons", {
+        credentials: "include",
+      });
       const result = await response.json();
 
       if (result.success) {
@@ -55,6 +57,7 @@ export default function CouponList() {
         `/api/coupons/${encodeURIComponent(normalizedCouponId)}`,
         {
           method: "DELETE",
+          credentials: "include",
         }
       );
 
@@ -107,6 +110,7 @@ export default function CouponList() {
     try {
       const response = await fetch(`/api/coupons/${coupon._id}/status`, {
         method: "PATCH",
+        credentials: "include",
       });
 
       const result = await response.json();

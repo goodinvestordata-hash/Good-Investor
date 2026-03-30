@@ -36,7 +36,10 @@ export async function GET(req) {
       100
     );
     const search = String(searchParams.get("search") || "").trim();
-    const status = String(searchParams.get("status") || "all").trim();
+    const readStatus = String(searchParams.get("status") || "all").trim();
+    const ticketStatus = String(searchParams.get("ticketStatus") || "all").trim();
+    const priority = String(searchParams.get("priority") || "all").trim();
+    const assignedTo = String(searchParams.get("assignedTo") || "all").trim();
 
     const query = {};
 
@@ -47,10 +50,22 @@ export async function GET(req) {
       ];
     }
 
-    if (status === "read") {
+    if (readStatus === "read") {
       query.isRead = true;
-    } else if (status === "unread") {
+    } else if (readStatus === "unread") {
       query.isRead = false;
+    }
+
+    if (ticketStatus !== "all" && ["pending", "in_progress", "resolved", "rejected"].includes(ticketStatus)) {
+      query.status = ticketStatus;
+    }
+
+    if (priority !== "all" && ["low", "medium", "high"].includes(priority)) {
+      query.priority = priority;
+    }
+
+    if (assignedTo !== "all" && assignedTo.length > 0) {
+      query.assignedTo = assignedTo;
     }
 
     const skip = (page - 1) * limit;

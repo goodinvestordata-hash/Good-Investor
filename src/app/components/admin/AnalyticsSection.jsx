@@ -15,7 +15,9 @@ export default function AnalyticsSection() {
   const fetchAnalytics = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/admin/analytics");
+      const response = await fetch("/api/admin/analytics", {
+        credentials: "include",
+      });
       const result = await response.json();
 
       if (response.status === 401 || response.status === 403) {

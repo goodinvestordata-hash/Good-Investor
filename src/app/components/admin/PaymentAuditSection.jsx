@@ -28,7 +28,9 @@ export default function PaymentAuditSection() {
   const fetchPayments = async () => {
     try {
       setLoading(true);
-      const res = await fetch("/api/admin/payments-audit");
+      const res = await fetch("/api/admin/payments-audit", {
+        credentials: "include",
+      });
       const data = await res.json();
 
       if (data.success) {
