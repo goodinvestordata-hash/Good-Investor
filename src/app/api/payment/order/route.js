@@ -140,6 +140,7 @@ export async function POST(request) {
       notes: {
         planId: String(plan._id),
         planName: plan.name,
+        planType: plan.type,
         baseAmount: String(baseAmount),
         discountAmount: String(discountAmount),
         finalAmount: String(finalAmount),
@@ -155,6 +156,7 @@ export async function POST(request) {
       pricing: {
         planId: String(plan._id),
         planName: plan.name,
+        planType: plan.type,
         baseAmount,
         discountAmount,
         finalAmount,
