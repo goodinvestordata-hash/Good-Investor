@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
 import { transporter } from "@/app/lib/mailer";
+import connectDB from "@/app/lib/db";
+import ContactMessage from "@/app/lib/models/ContactMessage";
 
-const CONTACT_RECEIVER_EMAIL = "spkumar.researchanalyst@gmail.com";
+const CONTACT_RECEIVER_EMAIL =
+  process.env.CONTACT_RECEIVER_EMAIL || "surendrayenika@gmail.com";
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
-const RATE_LIMIT_MAX_REQUESTS = 3;
+const RATE_LIMIT_MAX_REQUESTS = 5;
 
 const ipRequestStore = globalThis.__contactRateLimitStore || new Map();
 if (!globalThis.__contactRateLimitStore) {
@@ -11,10 +14,16 @@ if (!globalThis.__contactRateLimitStore) {
 }
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE_REGEX = /^[+]?[-()\s\d]{8,20}$/;
+const PHONE_REGEX = /^\d{8,15}$/;
 
 function sanitizeText(value) {
   return String(value || "").trim();
+}
+
+function sanitizePhone(value) {
+  return String(value || "")
+    .replace(/\D/g, "")
+    .slice(0, 15);
 }
 
 function escapeHtml(value) {
@@ -55,7 +64,7 @@ export async function POST(request) {
     const body = await request.json();
     const name = sanitizeText(body?.name);
     const email = sanitizeText(body?.email).toLowerCase();
-    const phone = sanitizeText(body?.phone);
+    const phone = sanitizePhone(body?.phone);
     const message = sanitizeText(body?.message);
     const website = sanitizeText(body?.website); // Honeypot field
 
@@ -77,7 +86,7 @@ export async function POST(request) {
     }
 
     if (!phone || !PHONE_REGEX.test(phone)) {
-      errors.phone = "Please enter a valid phone number";
+      errors.phone = "Please enter a valid numeric phone number";
     }
 
     if (!message || message.length < 10 || message.length > 2000) {
@@ -100,8 +109,7 @@ export async function POST(request) {
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Too many requests. Please wait a minute and try again.",
+          message: "Too many requests. Please wait a minute and try again.",
         },
         { status: 429 }
       );
@@ -113,11 +121,26 @@ export async function POST(request) {
       timeStyle: "short",
       timeZone: "Asia/Kolkata",
     });
+
     const referenceId = `CT-${Date.now().toString(36).toUpperCase()}-${Math.random()
       .toString(36)
       .slice(2, 6)
       .toUpperCase()}`;
+
+    await connectDB();
+
+    await ContactMessage.create({
+      referenceId,
+      name,
+      email,
+      phone,
+      message,
+      clientIp,
+      isRead: false,
+    });
+
     const fromAddress = process.env.MAIL_FROM || process.env.MAIL_USER;
+    const receiverMail = escapeHtml(CONTACT_RECEIVER_EMAIL);
 
     const adminHtml = `
       <table width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;padding:24px;font-family:Arial,sans-serif;">
@@ -195,7 +218,7 @@ export async function POST(request) {
                   </div>
                   <p style="margin:14px 0 0;font-size:13px;color:#6b7280;">
                     For urgent queries, call <a href="tel:+917702262206" style="color:#15803d;text-decoration:none;font-weight:600;">+91 77022 62206</a>
-                    or email <a href="mailto:spkumar.researchanalyst@gmail.com" style="color:#15803d;text-decoration:none;font-weight:600;">spkumar.researchanalyst@gmail.com</a>.
+                    or email <a href="mailto:${receiverMail}" style="color:#15803d;text-decoration:none;font-weight:600;">${receiverMail}</a>.
                   </p>
                 </td>
               </tr>
@@ -205,7 +228,7 @@ export async function POST(request) {
       </table>
     `;
 
-    const ackText = `Dear ${name},\n\nThank you for contacting Trademilaan.\n\nWe have received your message and will get back to you shortly.\nReference ID: ${referenceId}\n\nFor urgent queries, call +91 77022 62206 or email spkumar.researchanalyst@gmail.com.`;
+    const ackText = `Dear ${name},\n\nThank you for contacting Trademilaan.\n\nWe have received your message and will get back to you shortly.\nReference ID: ${referenceId}\n\nFor urgent queries, call +91 77022 62206 or email ${CONTACT_RECEIVER_EMAIL}.`;
 
     await transporter.sendMail({
       from: fromAddress,
@@ -232,8 +255,7 @@ export async function POST(request) {
     return NextResponse.json(
       {
         success: true,
-        message:
-          "Thanks for reaching out. Our team will contact you shortly.",
+        message: "Message sent successfully",
       },
       { status: 200 }
     );

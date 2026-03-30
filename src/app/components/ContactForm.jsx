@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -16,9 +17,13 @@ const ContactForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    const normalizedValue =
+      name === "phone" ? value.replace(/\D/g, "").slice(0, 15) : value;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: normalizedValue,
     }));
     // Clear error when user starts typing
     if (errors[name]) {
@@ -44,8 +49,8 @@ const ContactForm = () => {
 
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required";
-    } else if (!/^[+]?[-()\s\d]{8,20}$/.test(formData.phone)) {
-      newErrors.phone = "Please enter a valid phone number";
+    } else if (!/^\d{8,15}$/.test(formData.phone)) {
+      newErrors.phone = "Please enter a valid numeric phone number";
     }
 
     if (!formData.message.trim()) {
@@ -217,8 +222,8 @@ const ContactForm = () => {
                   ? "border-red-300 focus:border-red-500 focus:ring-red-500"
                   : "border-neutral-300 focus:border-lime-500 focus:ring-lime-500"
               } focus:outline-none focus:ring-2 transition-colors`}
-              placeholder="+91 77022 62206"
-              maxLength={20}
+              placeholder="7702262206"
+              maxLength={15}
             />
             {errors.phone && (
               <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
@@ -259,9 +264,16 @@ const ContactForm = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-linear-to-r from-lime-500 to-lime-600 hover:from-lime-600 hover:to-lime-700 disabled:from-neutral-400 disabled:to-neutral-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl disabled:cursor-not-allowed"
+            className="w-full bg-linear-to-r from-lime-500 to-lime-600 hover:from-lime-600 hover:to-lime-700 disabled:from-neutral-400 disabled:to-neutral-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
           >
-            {isSubmitting ? "Sending Message..." : "Send Message"}
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Sending Message...
+              </>
+            ) : (
+              "Send Message"
+            )}
           </button>
         </form>
       </div>

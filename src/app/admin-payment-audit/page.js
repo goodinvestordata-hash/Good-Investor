@@ -236,7 +236,7 @@ export default function AdminPaymentAuditPage() {
                   DATE
                 </th>
                 <th className="text-left py-3 px-4 font-semibold text-neutral-900">
-                  CUSTOMER
+                  CUSTOMER NAME
                 </th>
                 <th className="text-left py-3 px-4 font-semibold text-neutral-900">
                   EMAIL
