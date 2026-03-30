@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import connectDB from "@/app/lib/db";
 import Plan from "@/app/lib/models/Plan";
 import Coupon from "@/app/lib/models/Coupon";
+import Payment from "@/app/lib/models/Payment";
+import { verifyToken } from "@/app/lib/jwt";
+import { cookies } from "next/headers";
 
 export async function POST(request) {
   try {
@@ -22,6 +25,47 @@ export async function POST(request) {
         { error: "Selected plan is unavailable" },
         { status: 400 },
       );
+    }
+
+    // Resolve current user email from auth cookie first, then fallback to payload.
+    let effectiveEmail = "";
+    try {
+      const cookieStore = await cookies();
+      const token = cookieStore.get("token")?.value;
+      if (token) {
+        const decoded = verifyToken(token);
+        effectiveEmail = String(decoded?.email || "")
+          .trim()
+          .toLowerCase();
+      }
+    } catch {
+      // Non-blocking: order can still proceed for unauthenticated sessions.
+    }
+
+    if (!effectiveEmail && body?.email) {
+      effectiveEmail = String(body.email).trim().toLowerCase();
+    }
+
+    if (effectiveEmail) {
+      const activeExistingSubscription = await Payment.findOne({
+        email: effectiveEmail,
+        planId: String(plan._id),
+        expiresAt: { $gt: new Date() },
+      })
+        .sort({ expiresAt: -1 })
+        .lean();
+
+      if (activeExistingSubscription) {
+        return NextResponse.json(
+          {
+            error:
+              "You already have an active subscription for this plan. Please renew after expiry.",
+            code: "ACTIVE_SUBSCRIPTION_EXISTS",
+            activeUntil: activeExistingSubscription.expiresAt,
+          },
+          { status: 409 },
+        );
+      }
     }
 
     const baseAmount = Number(plan.price);

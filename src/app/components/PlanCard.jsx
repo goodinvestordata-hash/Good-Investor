@@ -6,14 +6,28 @@ import { useAuth } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
 import BuyNowModal from "@/app/components/buy/BuyNowModal";
 
-export default function PlanCard({ plan }) {
+export default function PlanCard({ plan, activeSubscription = null }) {
   const { user } = useAuth();
   const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const isPopular = plan.type?.toLowerCase() === "popular" || plan.type?.toLowerCase() === "pro";
+  const isActivePlan = Boolean(activeSubscription?.expiresAt);
+
+  const activeTillLabel = isActivePlan
+    ? new Date(activeSubscription.expiresAt).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    : "";
 
   const handleBuyNow = () => {
+    if (isActivePlan) {
+      router.push("/my-subscriptions");
+      return;
+    }
+
     if (!user) {
       router.push("/login");
       return;
@@ -46,6 +60,14 @@ export default function PlanCard({ plan }) {
           <div className="absolute top-6 right-6 z-10">
             <div className="inline-block px-3 py-1.5 text-xs font-bold uppercase tracking-wider bg-linear-to-r from-[#9BE749] to-[#6d5bff] text-white rounded-full shadow-lg">
               ⭐ Most Popular
+            </div>
+          </div>
+        )}
+
+        {isActivePlan && (
+          <div className="absolute top-6 left-6 z-10">
+            <div className="inline-block px-3 py-1.5 text-xs font-bold uppercase tracking-wider bg-green-100 text-green-800 rounded-full border border-green-300">
+              Active Plan
             </div>
           </div>
         )}
@@ -125,11 +147,21 @@ export default function PlanCard({ plan }) {
           {/* CTA Button */}
           <button
             onClick={handleBuyNow}
-            className="w-full px-6 py-2 sm:py-3 font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn transform shadow-lg hover:shadow-xl bg-[#9BE749] text-black hover:bg-[#7dd938]  cursor-pointer"
+            className={`w-full px-6 py-2 sm:py-3 font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn transform shadow-lg hover:shadow-xl cursor-pointer ${
+              isActivePlan
+                ? "bg-neutral-200 text-neutral-700 hover:bg-neutral-300"
+                : "bg-[#9BE749] text-black hover:bg-[#7dd938]"
+            }`}
           >
-            Buy Now
+            {isActivePlan ? "View Active Subscription" : "Buy Now"}
             <ChevronRight size={18} className="transition-transform group-hover/btn:translate-x-1" />
           </button>
+
+          {isActivePlan && (
+            <p className="text-xs text-green-700 text-center mt-3 font-semibold">
+              Active till {activeTillLabel}
+            </p>
+          )}
 
           {/* Footer note */}
           <p className="text-xs text-neutral-500 text-center mt-4 font-medium">

@@ -16,5 +16,8 @@ const PaymentSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
+// Optimizes active subscription lookup for duplicate purchase prevention.
+PaymentSchema.index({ email: 1, planId: 1, expiresAt: -1 });
+
 export default mongoose.models.Payment ||
   mongoose.model("Payment", PaymentSchema);

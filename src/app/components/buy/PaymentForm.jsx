@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/app/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function PaymentForm({
   onPaymentComplete,
@@ -8,9 +9,11 @@ export default function PaymentForm({
   userDetails,
 }) {
   const { user } = useAuth();
+  const router = useRouter();
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [errorCode, setErrorCode] = useState("");
   const [success, setSuccess] = useState(false);
   const [verifyData, setVerifyData] = useState(null);
   const [couponCode, setCouponCode] = useState("");
@@ -60,6 +63,23 @@ export default function PaymentForm({
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const formatDateLabel = (dateValue) => {
+    if (!dateValue) return "N/A";
+    const date = new Date(dateValue);
+    if (Number.isNaN(date.getTime())) return "N/A";
+    return date.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  const getActiveSubscriptionMessage = (payload, fallbackPlanName) => {
+    const until = formatDateLabel(payload?.activeUntil);
+    const safePlanName = payload?.planName || fallbackPlanName || "this plan";
+    return `You already have an active subscription for ${safePlanName} till ${until}. Please renew after expiry.`;
   };
 
   // ✅ Coupon Verification Handler
@@ -140,6 +160,7 @@ export default function PaymentForm({
 
     setLoading(true);
     setError("");
+    setErrorCode("");
     setSuccess(false);
 
     try {
@@ -148,12 +169,19 @@ export default function PaymentForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           planId: planData.planId,
+          email: form.email,
           ...(appliedCoupon && { couponCode: appliedCoupon.code }),
         }),
       });
 
       const data = await res.json();
       if (!res.ok || !data.order) {
+        if (res.status === 409 && data?.code === "ACTIVE_SUBSCRIPTION_EXISTS") {
+          setErrorCode("ACTIVE_SUBSCRIPTION_EXISTS");
+          setError(getActiveSubscriptionMessage(data, selectedPlanName));
+          setLoading(false);
+          return;
+        }
         throw new Error(data.error || "Order creation failed");
       }
 
@@ -198,6 +226,7 @@ export default function PaymentForm({
 
             if (vData.success) {
               setSuccess(true);
+              setErrorCode("");
               setVerifyData({ ...response, ...vData });
 
               if (onPaymentComplete) {
@@ -207,9 +236,19 @@ export default function PaymentForm({
                 });
               }
             } else {
-              setError(vData.error || "Verification failed");
+              if (
+                verifyRes.status === 409 &&
+                vData?.code === "ACTIVE_SUBSCRIPTION_EXISTS"
+              ) {
+                setErrorCode("ACTIVE_SUBSCRIPTION_EXISTS");
+                setError(getActiveSubscriptionMessage(vData, selectedPlanName));
+              } else {
+                setErrorCode("");
+                setError(vData.error || "Verification failed");
+              }
             }
           } catch (err) {
+            setErrorCode("");
             setError(err?.message || "Payment verification failed");
           }
         },
@@ -218,11 +257,13 @@ export default function PaymentForm({
       const rzp = new window.Razorpay(options);
 
       rzp.on("payment.failed", function (response) {
+        setErrorCode("");
         setError(response?.error?.description || "Payment failed");
       });
 
       rzp.open();
     } catch (err) {
+      setErrorCode("");
       setError(err?.message || "Payment initialization failed");
     }
 
@@ -234,7 +275,7 @@ export default function PaymentForm({
     // Show loader while invoice is being generated
     if (success && !verifyData) {
       return (
-        <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-indigo-100 via-white to-indigo-50">
+        <div className="flex flex-col items-center justify-center h-screen bg-linear-to-br from-indigo-100 via-white to-indigo-50">
           <div className="flex flex-col items-center gap-6">
             {/* Spinner */}
             <div className="relative w-16 h-16">
@@ -307,6 +348,14 @@ export default function PaymentForm({
               Payment Failed
             </h2>
             <p>{error}</p>
+            {errorCode === "ACTIVE_SUBSCRIPTION_EXISTS" && (
+              <button
+                onClick={() => router.push("/my-subscriptions")}
+                className="mt-4 px-6 py-2 bg-lime-500 text-white rounded-lg hover:bg-lime-600 transition"
+              >
+                Go to My Subscriptions
+              </button>
+            )}
           </>
         )}
 
