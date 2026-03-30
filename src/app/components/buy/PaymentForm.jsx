@@ -12,6 +12,7 @@ export default function PaymentForm({
   const router = useRouter();
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [loading, setLoading] = useState(false);
+  const [isVerifyingPayment, setIsVerifyingPayment] = useState(false);
   const [error, setError] = useState("");
   const [errorCode, setErrorCode] = useState("");
   const [success, setSuccess] = useState(false);
@@ -159,6 +160,7 @@ export default function PaymentForm({
     }
 
     setLoading(true);
+    setIsVerifyingPayment(false);
     setError("");
     setErrorCode("");
     setSuccess(false);
@@ -206,6 +208,7 @@ export default function PaymentForm({
 
         handler: async function (response) {
           try {
+            setIsVerifyingPayment(true);
             const billingName = kycFullName || form.name;
             const verifyRes = await fetch("/api/payment/verify", {
               method: "POST",
@@ -230,6 +233,7 @@ export default function PaymentForm({
               setSuccess(true);
               setErrorCode("");
               setVerifyData({ ...response, ...vData });
+              setIsVerifyingPayment(false);
 
               if (onPaymentComplete) {
                 onPaymentComplete({
@@ -248,10 +252,12 @@ export default function PaymentForm({
                 setErrorCode("");
                 setError(vData.error || "Verification failed");
               }
+              setIsVerifyingPayment(false);
             }
           } catch (err) {
             setErrorCode("");
             setError(err?.message || "Payment verification failed");
+            setIsVerifyingPayment(false);
           }
         },
       };
@@ -261,16 +267,41 @@ export default function PaymentForm({
       rzp.on("payment.failed", function (response) {
         setErrorCode("");
         setError(response?.error?.description || "Payment failed");
+        setIsVerifyingPayment(false);
       });
 
       rzp.open();
     } catch (err) {
       setErrorCode("");
       setError(err?.message || "Payment initialization failed");
+      setIsVerifyingPayment(false);
     }
 
     setLoading(false);
   };
+
+  if (isVerifyingPayment) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen bg-linear-to-br from-indigo-100 via-white to-indigo-50">
+        <div className="flex flex-col items-center gap-6">
+          <div className="relative w-16 h-16">
+            <div className="absolute inset-0 rounded-full border-4 border-gray-200"></div>
+            <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-green-600 border-r-green-600 animate-spin"></div>
+          </div>
+
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">
+              Payment Received
+            </h2>
+            <p className="text-gray-600 mb-1">
+              Verifying payment and preparing your invoice...
+            </p>
+            <p className="text-sm text-gray-500">Please do not close this window.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // ✅ Success / Failure Screen
   if (success || error) {
