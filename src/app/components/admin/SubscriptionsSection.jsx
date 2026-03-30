@@ -15,7 +15,9 @@ export default function SubscriptionsSection() {
   const fetchAllPayments = async () => {
     try {
       setLoading(true);
-      const res = await fetch("/api/admin/payments");
+      const res = await fetch("/api/admin/payments", {
+        credentials: "include",
+      });
       const data = await res.json();
 
       if (data.success) {

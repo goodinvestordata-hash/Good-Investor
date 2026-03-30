@@ -73,6 +73,7 @@ export default function CouponForm({ coupon = null, onSubmit, onCancel }) {
         {
           method: coupon ? "PUT" : "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify(submitData),
         }
       );
