@@ -8,9 +8,11 @@ export default function CouponList() {
   const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingCoupon, setEditingCoupon] = useState(null);
   const [deleting, setDeleting] = useState(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(null); // { couponId, couponCode }
 
   // Fetch coupons on mount
   useEffect(() => {
@@ -38,21 +40,42 @@ export default function CouponList() {
   };
 
   const handleDeleteCoupon = async (couponId) => {
-    if (!confirm("Are you sure you want to delete this coupon?")) {
+    const normalizedCouponId = String(couponId || "").trim();
+
+    if (!normalizedCouponId) {
+      setError("Invalid coupon ID. Please refresh and try again.");
       return;
     }
 
     try {
-      setDeleting(couponId);
-      const response = await fetch(`/api/coupons/${couponId}`, {
-        method: "DELETE",
-      });
+      setDeleting(normalizedCouponId);
+      setError("");
+      setSuccess("");
+      const response = await fetch(
+        `/api/coupons/${encodeURIComponent(normalizedCouponId)}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       const result = await response.json();
 
       if (result.success) {
-        setCoupons((prev) => prev.filter((c) => c._id !== couponId));
-        setError("");
+        if (result.archived && result.data) {
+          setCoupons((prev) =>
+            prev.map((c) =>
+              String(c._id) === normalizedCouponId ? result.data : c
+            )
+          );
+          setSuccess(result.message || "Coupon archived successfully");
+        } else {
+          setCoupons((prev) =>
+            prev.filter((c) => String(c._id) !== normalizedCouponId)
+          );
+          setSuccess("Coupon deleted successfully");
+        }
+        setDeleteConfirm(null);
+        setTimeout(() => setSuccess(""), 3000);
       } else {
         setError(result.message || "Failed to delete coupon");
       }
@@ -62,6 +85,22 @@ export default function CouponList() {
     } finally {
       setDeleting(null);
     }
+  };
+
+  const requestDeleteCoupon = (couponId, couponCode) => {
+    setDeleteConfirm({ couponId, couponCode });
+    setError("");
+    setSuccess("");
+  };
+
+  const cancelDeleteCoupon = () => {
+    if (deleting) return;
+    setDeleteConfirm(null);
+  };
+
+  const confirmDeleteCoupon = async () => {
+    if (!deleteConfirm?.couponId) return;
+    await handleDeleteCoupon(deleteConfirm.couponId);
   };
 
   const handleToggleStatus = async (coupon) => {
@@ -158,6 +197,20 @@ export default function CouponList() {
       {error && (
         <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
           {error}
+        </div>
+      )}
+
+      {/* Success Message */}
+      {success && (
+        <div className="mb-4 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg flex items-center justify-between">
+          <span>{success}</span>
+          <button
+            onClick={() => setSuccess("")}
+            className="text-green-700 hover:text-green-900"
+            aria-label="Dismiss success message"
+          >
+            ✕
+          </button>
         </div>
       )}
 
@@ -309,12 +362,18 @@ export default function CouponList() {
                           <Edit2 size={16} className="text-blue-600" />
                         </button>
                         <button
-                          onClick={() => handleDeleteCoupon(coupon._id)}
+                          onClick={() =>
+                            requestDeleteCoupon(coupon._id, coupon.code)
+                          }
                           disabled={deleting === coupon._id}
                           className="p-2 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
                           title="Delete coupon"
                         >
-                          <Trash2 size={16} className="text-red-600" />
+                          {deleting === coupon._id ? (
+                            <Loader size={16} className="animate-spin text-red-600" />
+                          ) : (
+                            <Trash2 size={16} className="text-red-600" />
+                          )}
                         </button>
                       </div>
                     </td>
@@ -322,6 +381,45 @@ export default function CouponList() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-sm w-full p-6 animate-in fade-in zoom-in duration-200">
+            <div className="mb-4">
+              <h3 className="text-lg font-bold text-gray-900">Delete Coupon?</h3>
+              <p className="text-sm text-gray-600 mt-1">
+                Are you sure you want to delete coupon{" "}
+                <span className="font-semibold">"{deleteConfirm.couponCode}"</span>?
+                If this coupon has usage history, it will be archived instead of permanently deleted.
+              </p>
+            </div>
+
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={cancelDeleteCoupon}
+                disabled={!!deleting}
+                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeleteCoupon}
+                disabled={!!deleting}
+                className="px-4 py-2 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                {deleting ? (
+                  <>
+                    <Loader size={16} className="animate-spin" /> Deleting...
+                  </>
+                ) : (
+                  <>Delete Coupon</>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}
