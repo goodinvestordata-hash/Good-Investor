@@ -51,38 +51,39 @@ export default function AdminDashboardPage() {
     return diff <= 7;
   };
 
-  useEffect(() => {
-    async function fetchAllData() {
-      setLoadingData(true);
-      try {
-        const [
-          usersRes,
-          paymentsRes,
-          agreementsRes,
-          signedAgreementsRes,
-          documentsRes,
-          riskProfilesRes,
-        ] = await Promise.all([
-          fetch("/api/admin/users").then((r) => r.json()),
-          fetch("/api/admin/payments").then((r) => r.json()),
-          fetch("/api/admin/agreements").then((r) => r.json()),
-          fetch("/api/admin/signed-agreements").then((r) => r.json()),
-          fetch("/api/admin/documents").then((r) => r.json()),
-          fetch("/api/admin/riskprofiles").then((r) => r.json()),
-        ]);
-        setData({
-          users: usersRes?.users || [],
-          payments: paymentsRes?.payments || [],
-          agreements: agreementsRes?.agreements || [],
-          signedAgreements: signedAgreementsRes?.signedAgreements || [],
-          documents: documentsRes?.documents || [],
-          riskprofiles: riskProfilesRes?.riskprofiles || [],
-        });
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      }
-      setLoadingData(false);
+  const fetchAllData = async () => {
+    setLoadingData(true);
+    try {
+      const [
+        usersRes,
+        paymentsRes,
+        agreementsRes,
+        signedAgreementsRes,
+        documentsRes,
+        riskProfilesRes,
+      ] = await Promise.all([
+        fetch("/api/admin/users").then((r) => r.json()),
+        fetch("/api/admin/payments").then((r) => r.json()),
+        fetch("/api/admin/agreements").then((r) => r.json()),
+        fetch("/api/admin/signed-agreements").then((r) => r.json()),
+        fetch("/api/admin/documents").then((r) => r.json()),
+        fetch("/api/admin/riskprofiles").then((r) => r.json()),
+      ]);
+      setData({
+        users: usersRes?.users || [],
+        payments: paymentsRes?.payments || [],
+        agreements: agreementsRes?.agreements || [],
+        signedAgreements: signedAgreementsRes?.signedAgreements || [],
+        documents: documentsRes?.documents || [],
+        riskprofiles: riskProfilesRes?.riskprofiles || [],
+      });
+    } catch (err) {
+      console.error("Error fetching data:", err);
     }
+    setLoadingData(false);
+  };
+
+  useEffect(() => {
     fetchAllData();
   }, []);
 
@@ -125,7 +126,7 @@ export default function AdminDashboardPage() {
             loadingData ? (
               <p className="text-sm text-neutral-500">Loading data...</p>
             ) : (
-              <UsersSection data={data.users} />
+              <UsersSection data={data.users} onRefresh={fetchAllData} />
             )
           )}
 
