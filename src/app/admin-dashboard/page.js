@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import UsersSection from "../components/admin/UsersSection";
-import PaymentsSection from "../components/admin/PaymentsSection";
 import AgreementsSection from "../components/admin/AgreementsSection";
 import SignedAgreementsSection from "../components/admin/SignedAgreementsSection";
 import DocumentsSection from "../components/admin/DocumentsSection";
@@ -16,7 +15,6 @@ import CouponSection from "../components/admin/CouponSection";
 
 const COLLECTIONS = [
   { key: "users", label: "Users", icon: "👥" },
-  { key: "payments", label: "Payments", icon: "💳" },
   { key: "agreements", label: "Agreements", icon: "📄" },
   { key: "signedAgreements", label: "Signed Agreements", icon: "✍️" },
   { key: "documents", label: "Documents", icon: "📑" },
@@ -36,34 +34,23 @@ export default function AdminDashboardPage() {
 
   const [data, setData] = useState({
     users: [],
-    payments: [],
     agreements: [],
     signedAgreements: [],
     documents: [],
     riskprofiles: [],
   });
 
-  const isExpiringSoon = (date) => {
-    if (!date) return false;
-    const expiry = new Date(date);
-    const now = new Date();
-    const diff = (expiry - now) / (1000 * 60 * 60 * 24);
-    return diff <= 7;
-  };
-
   const fetchAllData = async () => {
     setLoadingData(true);
     try {
       const [
         usersRes,
-        paymentsRes,
         agreementsRes,
         signedAgreementsRes,
         documentsRes,
         riskProfilesRes,
       ] = await Promise.all([
         fetch("/api/admin/users").then((r) => r.json()),
-        fetch("/api/admin/payments").then((r) => r.json()),
         fetch("/api/admin/agreements").then((r) => r.json()),
         fetch("/api/admin/signed-agreements").then((r) => r.json()),
         fetch("/api/admin/documents").then((r) => r.json()),
@@ -71,7 +58,6 @@ export default function AdminDashboardPage() {
       ]);
       setData({
         users: usersRes?.users || [],
-        payments: paymentsRes?.payments || [],
         agreements: agreementsRes?.agreements || [],
         signedAgreements: signedAgreementsRes?.signedAgreements || [],
         documents: documentsRes?.documents || [],
@@ -127,14 +113,6 @@ export default function AdminDashboardPage() {
               <p className="text-sm text-neutral-500">Loading data...</p>
             ) : (
               <UsersSection data={data.users} onRefresh={fetchAllData} />
-            )
-          )}
-
-          {activeTab === "payments" && (
-            loadingData ? (
-              <p className="text-sm text-neutral-500">Loading data...</p>
-            ) : (
-              <PaymentsSection data={data.payments} isExpiringSoon={isExpiringSoon} />
             )
           )}
 
