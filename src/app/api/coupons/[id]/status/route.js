@@ -5,13 +5,20 @@ import Coupon from "@/app/lib/models/Coupon";
 import { verifyAuth, isAdminUser } from "@/app/lib/auth/tokenUtils";
 import { sanitizeCoupon } from "@/app/lib/validation/couponValidation";
 
+const resolveCouponId = async (params) => {
+  const resolvedParams = await params;
+  return typeof resolvedParams?.id === "string"
+    ? resolvedParams.id.trim()
+    : "";
+};
+
 /**
  * PATCH /api/coupons/:id/status
  * Admin only: Toggle coupon active/inactive status
  */
 export async function PATCH(req, { params }) {
   try {
-    const { id } = params;
+    const id = await resolveCouponId(params);
 
     // Check authentication and authorization
     const { isValid, user, error: authError } = verifyAuth(req);

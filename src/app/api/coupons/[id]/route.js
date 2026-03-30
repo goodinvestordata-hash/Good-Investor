@@ -8,13 +8,20 @@ import {
   sanitizeCoupon,
 } from "@/app/lib/validation/couponValidation";
 
+const resolveCouponId = async (params) => {
+  const resolvedParams = await params;
+  return typeof resolvedParams?.id === "string"
+    ? resolvedParams.id.trim()
+    : "";
+};
+
 /**
  * GET /api/coupons/:id
  * Anyone can view coupon by ID (but hidden/inactive coupons only visible to admin)
  */
 export async function GET(req, { params }) {
   try {
-    const { id } = params;
+    const id = await resolveCouponId(params);
 
     // Validate MongoDB ID
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -77,7 +84,7 @@ export async function GET(req, { params }) {
  */
 export async function PUT(req, { params }) {
   try {
-    const { id } = params;
+    const id = await resolveCouponId(params);
 
     // Check authentication and authorization
     const { isValid, user, error: authError } = verifyAuth(req);
@@ -188,7 +195,7 @@ export async function PUT(req, { params }) {
  */
 export async function DELETE(req, { params }) {
   try {
-    const { id } = params;
+    const id = await resolveCouponId(params);
 
     // Check authentication and authorization
     const { isValid, user, error: authError } = verifyAuth(req);
@@ -226,7 +233,36 @@ export async function DELETE(req, { params }) {
 
     await connectDB();
 
-    // Delete coupon
+    const existingCoupon = await Coupon.findById(id);
+
+    if (!existingCoupon) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Coupon not found",
+        },
+        { status: 404 }
+      );
+    }
+
+    // Production-safe behavior:
+    // Keep history for already-used coupons by archiving instead of hard deleting.
+    if ((existingCoupon.usedCount || 0) > 0) {
+      existingCoupon.isActive = false;
+      await existingCoupon.save();
+
+      return NextResponse.json(
+        {
+          success: true,
+          message:
+            "Coupon has usage history, so it was archived (deactivated) instead of being permanently deleted",
+          data: sanitizeCoupon(existingCoupon),
+          archived: true,
+        },
+        { status: 200 }
+      );
+    }
+
     const deletedCoupon = await Coupon.findByIdAndDelete(id);
 
     if (!deletedCoupon) {

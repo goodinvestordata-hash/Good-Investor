@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Loader } from "lucide-react";
 import PlanCard from "./PlanCard";
+import { useAuth } from "@/app/context/AuthContext";
 
 /**
  * PlansSection Component
@@ -10,9 +11,11 @@ import PlanCard from "./PlanCard";
  * Ready to be integrated into /services page or standalone
  */
 export default function PlansSection() {
+  const { user, loading: authLoading } = useAuth();
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [activeSubscriptionsByPlan, setActiveSubscriptionsByPlan] = useState({});
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -36,6 +39,53 @@ export default function PlansSection() {
 
     fetchPlans();
   }, []);
+
+  useEffect(() => {
+    const fetchActiveSubscriptions = async () => {
+      if (authLoading || !user) {
+        setActiveSubscriptionsByPlan({});
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/user/payments");
+        const data = await res.json();
+
+        if (!res.ok || !data?.success || !Array.isArray(data?.payments)) {
+          return;
+        }
+
+        const now = new Date();
+        const activeMap = data.payments.reduce((acc, payment) => {
+          const planId = String(payment?.planId || "").trim();
+          if (!planId || !payment?.expiresAt) return acc;
+
+          const expiresAtDate = new Date(payment.expiresAt);
+          if (Number.isNaN(expiresAtDate.getTime()) || expiresAtDate <= now) {
+            return acc;
+          }
+
+          if (
+            !acc[planId] ||
+            new Date(acc[planId].expiresAt) < expiresAtDate
+          ) {
+            acc[planId] = {
+              expiresAt: payment.expiresAt,
+              paymentId: payment._id,
+            };
+          }
+
+          return acc;
+        }, {});
+
+        setActiveSubscriptionsByPlan(activeMap);
+      } catch (err) {
+        console.error("Error fetching active subscriptions:", err);
+      }
+    };
+
+    fetchActiveSubscriptions();
+  }, [user, authLoading]);
 
   if (loading) {
     return (
@@ -83,7 +133,11 @@ export default function PlansSection() {
       {/* Plans Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16 sm:mb-20">
         {plans.map((plan) => (
-          <PlanCard key={plan._id} plan={plan} />
+          <PlanCard
+            key={plan._id}
+            plan={plan}
+            activeSubscription={activeSubscriptionsByPlan[String(plan._id)] || null}
+          />
         ))}
       </div>
 

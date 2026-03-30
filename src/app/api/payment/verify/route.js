@@ -133,6 +133,31 @@ export async function POST(request) {
 
   // Store payment in MongoDB
   try {
+    const normalizedEmail = String(email || "").trim().toLowerCase();
+    const normalizedPlanId = String(orderPlanId || "").trim();
+
+    // Final guard against duplicate active subscriptions for the same plan.
+    // This prevents duplicates even if multiple checkouts are attempted quickly.
+    const existingActiveSubscription = await Payment.findOne({
+      email: normalizedEmail,
+      planId: normalizedPlanId,
+      expiresAt: { $gt: new Date() },
+    })
+      .sort({ expiresAt: -1 })
+      .lean();
+
+    if (existingActiveSubscription) {
+      return NextResponse.json(
+        {
+          error:
+            "You already have an active subscription for this plan. Please renew after expiry.",
+          code: "ACTIVE_SUBSCRIPTION_EXISTS",
+          activeUntil: existingActiveSubscription.expiresAt,
+        },
+        { status: 409 },
+      );
+    }
+
     // Set paidAt to now, expiresAt to one month later
     const paidAt = new Date();
     const expiresAt = new Date(paidAt);
@@ -145,7 +170,7 @@ export async function POST(request) {
       planId: orderPlanId,
       planName: orderPlanName,
       name,
-      email,
+      email: normalizedEmail,
       phone,
       amount: safeAmount,
       paidAt,
