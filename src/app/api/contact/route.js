@@ -4,7 +4,7 @@ import connectDB from "@/app/lib/db";
 import ContactMessage from "@/app/lib/models/ContactMessage";
 
 const CONTACT_RECEIVER_EMAIL =
-  process.env.CONTACT_RECEIVER_EMAIL || "surendrayenika@gmail.com";
+  process.env.CONTACT_RECEIVER_EMAIL || "spkumar.researchanalyst@gmail.com";
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 5;
 
