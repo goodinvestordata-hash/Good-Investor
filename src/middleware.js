@@ -100,6 +100,7 @@ export async function middleware(request) {
     '/api/auth/logout',
     '/api/auth/google',
     '/api/contact',
+    '/api/user/accept-disclaimer',
     '/api/payment/verify', // Razorpay webhook doesn't have CSRF token
   ];
   

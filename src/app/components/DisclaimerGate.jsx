@@ -1,11 +1,18 @@
 "use client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 
 export default function DisclaimerGate() {
   const router = useRouter();
-  const { fetchMe } = useAuth();
+  const { user, loading, fetchMe } = useAuth();
+
+  useEffect(() => {
+    if (!loading && user?.disclaimerAccepted) {
+      router.replace("/");
+    }
+  }, [loading, user, router]);
 
   const accept = async () => {
     await fetch("/api/user/accept-disclaimer", { method: "POST" });
