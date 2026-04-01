@@ -143,7 +143,7 @@ export default function BuyDetailsForm({ onSuccess, planData }) {
         onChange={update}
       />
       <p className="text-xs text-neutral-500 -mt-2 mb-4">
-        PAN format: AAAAA9999A (example: AFIPN3886L)
+        PAN format: AAAAA9999A 
       </p>
 
       <button
