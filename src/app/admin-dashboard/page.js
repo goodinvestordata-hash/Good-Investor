@@ -6,7 +6,6 @@ import { useAuth } from "../context/AuthContext";
 import UsersSection from "../components/admin/UsersSection";
 import AgreementsSection from "../components/admin/AgreementsSection";
 import SignedAgreementsSection from "../components/admin/SignedAgreementsSection";
-import DocumentsSection from "../components/admin/DocumentsSection";
 import RiskProfilesSection from "../components/admin/RiskProfilesSection";
 import AnalyticsSection from "../components/admin/AnalyticsSection";
 import PlansSection from "../components/admin/PlansSection";
@@ -19,7 +18,6 @@ const COLLECTIONS = [
   { key: "users", label: "Users", icon: "👥" },
   { key: "agreements", label: "Agreements", icon: "📄" },
   { key: "signedAgreements", label: "Signed Agreements", icon: "✍️" },
-  { key: "documents", label: "Documents", icon: "📑" },
   { key: "riskprofiles", label: "Risk Profiles", icon: "📊" },
   { key: "analytics", label: "Admin Analytics", icon: "📈" },
   { key: "plans", label: "Create Plan", icon: "🎯" },
@@ -65,7 +63,6 @@ export default function AdminDashboardPage() {
     users: [],
     agreements: [],
     signedAgreements: [],
-    documents: [],
     riskprofiles: [],
   });
 
@@ -76,14 +73,12 @@ export default function AdminDashboardPage() {
         usersRes,
         agreementsRes,
         signedAgreementsRes,
-        documentsRes,
         riskProfilesRes,
         contactMessagesRes,
       ] = await Promise.all([
         fetch("/api/admin/users").then((r) => r.json()),
         fetch("/api/admin/agreements").then((r) => r.json()),
         fetch("/api/admin/signed-agreements").then((r) => r.json()),
-        fetch("/api/admin/documents").then((r) => r.json()),
         fetch("/api/admin/riskprofiles").then((r) => r.json()),
         fetch("/api/admin/contact-messages?limit=1").then((r) => r.json()),
       ]);
@@ -91,7 +86,6 @@ export default function AdminDashboardPage() {
         users: usersRes?.users || [],
         agreements: agreementsRes?.agreements || [],
         signedAgreements: signedAgreementsRes?.signedAgreements || [],
-        documents: documentsRes?.documents || [],
         riskprofiles: riskProfilesRes?.riskprofiles || [],
       });
       setContactUnreadCount(contactMessagesRes?.stats?.unreadCount || 0);
@@ -166,14 +160,6 @@ export default function AdminDashboardPage() {
               <p className="text-sm text-neutral-500">Loading data...</p>
             ) : (
               <SignedAgreementsSection data={data.signedAgreements} />
-            )
-          )}
-
-          {activeTab === "documents" && (
-            loadingData ? (
-              <p className="text-sm text-neutral-500">Loading data...</p>
-            ) : (
-              <DocumentsSection data={data.documents} />
             )
           )}
 
