@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Search, Download } from "lucide-react";
 
 export default function PaymentAuditSection() {
@@ -254,9 +254,8 @@ export default function PaymentAuditSection() {
                 const expired = isExpired(payment.expiresAt);
                 const isExpanded = expandedPaymentId === payment._id;
                 return (
-                  <>
+                  <React.Fragment key={payment._id}>
                     <tr
-                      key={payment._id}
                       onClick={() => setExpandedPaymentId(isExpanded ? null : payment._id)}
                       className={`border-b border-neutral-100 cursor-pointer transition duration-200 ${
                         isExpanded ? "bg-lime-50" : "hover:bg-neutral-50"
@@ -359,7 +358,7 @@ export default function PaymentAuditSection() {
                         </td>
                       </tr>
                     )}
-                  </>
+                  </React.Fragment>
                 );
               })
             )}
