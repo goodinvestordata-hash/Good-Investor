@@ -11,8 +11,6 @@ export const metadata = {
 export default function ContactPage() {
   return (
     <div className="w-full">
-      {/* Hero Section */}
-      <ContactHero />
 
       {/* Main Content */}
       <section className="w-full py-16 md:py-24 px-6 bg-neutral-50">

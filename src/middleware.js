@@ -26,8 +26,8 @@ function setSecurityHeaders(response) {
       "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
       "img-src 'self' data: https: *.cloudinary.com",
       "font-src 'self' data: fonts.gstatic.com",
-      "connect-src 'self' https: wss: *.razorpay.com *.cloudinary.com",
-      "frame-src 'self' checkout.razorpay.com",
+      "connect-src 'self' https: wss: *.razorpay.com *.cloudinary.com maps.googleapis.com maps.google.com www.google.com",
+      "frame-src 'self' checkout.razorpay.com maps.google.com www.google.com",
       "form-action 'self'",
       "frame-ancestors 'none'",
     ].join('; ')
