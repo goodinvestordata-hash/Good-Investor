@@ -209,6 +209,44 @@ export async function POST(request) {
       );
     }
 
+    // Save invoice to Invoice collection for admin dashboard
+    const mongoose = (await import("mongoose")).default;
+    const InvoiceSchema = new mongoose.Schema({
+      clientName: String,
+      amount: Number,
+      startDate: Date,
+      endDate: Date,
+      createdAt: { type: Date, default: Date.now },
+      email: String,
+      phone: String,
+      state: String,
+      pan: String,
+      planId: String,
+      planName: String,
+      razorpay_payment_id: String,
+    });
+    const Invoice =
+      mongoose.models.Invoice || mongoose.model("Invoice", InvoiceSchema);
+
+    // Create invoice record with 1 month validity
+    const invoiceStartDate = new Date();
+    const invoiceEndDate = new Date(invoiceStartDate);
+    invoiceEndDate.setMonth(invoiceEndDate.getMonth() + 1);
+
+    await Invoice.create({
+      clientName: name,
+      amount: safeAmount,
+      startDate: invoiceStartDate,
+      endDate: invoiceEndDate,
+      email: normalizedEmail,
+      phone,
+      state: state || "",
+      pan: pan || panNumber || "",
+      planId: orderPlanId,
+      planName: orderPlanName,
+      razorpay_payment_id,
+    });
+
     // Generate invoice PDF (in memory, not saved to disk)
     const invoiceData = {
       clientName: name,
