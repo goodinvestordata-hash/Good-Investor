@@ -117,6 +117,7 @@ export default function UsersSection({ data = [], onRefresh }) {
           <p className="text-base text-slate-500 mt-1">Total Users: {filteredAndSortedUsers.length}</p>
         </div>
         <button
+          type="button"
           onClick={() => (onRefresh ? onRefresh() : window.location.reload())}
           className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-3 text-white font-semibold hover:bg-emerald-600 transition shadow-sm hover:shadow-md"
         >
@@ -137,6 +138,7 @@ export default function UsersSection({ data = [], onRefresh }) {
             />
           </div>
           <button
+            type="button"
             onClick={exportUsersCsv}
             className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-3 text-emerald-700 font-semibold hover:bg-emerald-100 transition"
           >
@@ -147,6 +149,7 @@ export default function UsersSection({ data = [], onRefresh }) {
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-slate-600 font-medium mr-1">Sort by:</span>
           <button
+            type="button"
             onClick={() => setSortBy("joined")}
             className={`px-4 py-2 rounded-lg font-medium transition ${
               sortBy === "joined"
@@ -157,6 +160,7 @@ export default function UsersSection({ data = [], onRefresh }) {
             Date Joined
           </button>
           <button
+            type="button"
             onClick={() => setSortBy("name")}
             className={`px-4 py-2 rounded-lg font-medium transition ${
               sortBy === "name"
@@ -167,6 +171,7 @@ export default function UsersSection({ data = [], onRefresh }) {
             Name
           </button>
           <button
+            type="button"
             onClick={() => setSortBy("email")}
             className={`px-4 py-2 rounded-lg font-medium transition ${
               sortBy === "email"

@@ -115,12 +115,27 @@ export default function AgreementModal({
         user?.panNumber ||
         user?.pan ||
         "NOT_PROVIDED";
+      const clientPhone =
+        userDetails?.phone ||
+        user?.phone ||
+        "";
+      const clientDob =
+        userDetails?.dob ||
+        user?.dob ||
+        "";
+      const clientState =
+        userDetails?.state ||
+        user?.state ||
+        "";
 
       const signingPayload = {
         agreementHtml, // Now using pre-captured HTML
         userId: user?._id || user?.id,
         clientName,
         clientPan,
+        clientPhone,
+        clientDob,
+        clientState,
         signatureData: signedData.signatureUrl,
         signedName: signedData.signedName,
         signedTimestamp: signedData.signedTimestamp,

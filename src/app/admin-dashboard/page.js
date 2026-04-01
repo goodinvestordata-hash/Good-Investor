@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../context/AuthContext";
 import UsersSection from "../components/admin/UsersSection";
 import SignedAgreementsSection from "../components/admin/SignedAgreementsSection";
+import SignedUsersSection from "../components/admin/SignedUsersSection";
 import RiskProfilesSection from "../components/admin/RiskProfilesSection";
 import AnalyticsSection from "../components/admin/AnalyticsSection";
 import PlansSection from "../components/admin/PlansSection";
@@ -16,6 +17,7 @@ import ContactMessagesSection from "../components/admin/ContactMessagesSection";
 const COLLECTIONS = [
   { key: "users", label: "Users", icon: "👥" },
   { key: "signedAgreements", label: "Signed Agreements", icon: "✍️" },
+  { key: "signedUsers", label: "Signed Users", icon: "📋" },
   { key: "riskprofiles", label: "Risk Profiles", icon: "📊" },
   { key: "analytics", label: "Admin Analytics", icon: "📈" },
   { key: "plans", label: "Create Plan", icon: "🎯" },
@@ -37,26 +39,43 @@ export default function AdminDashboardPage() {
   const [data, setData] = useState({
     users: [],
     signedAgreements: [],
+    signedUsers: [],
     riskprofiles: [],
   });
 
   const fetchAllData = async () => {
     setLoadingData(true);
     try {
+      const safeFetchJson = async (url, fallback = {}) => {
+        try {
+          const res = await fetch(url);
+          if (!res.ok) {
+            throw new Error(`Request failed: ${url} (${res.status})`);
+          }
+          return await res.json();
+        } catch (error) {
+          console.error(`Error fetching ${url}:`, error);
+          return fallback;
+        }
+      };
+
       const [
         usersRes,
         signedAgreementsRes,
+        signedUsersRes,
         riskProfilesRes,
         contactMessagesRes,
       ] = await Promise.all([
-        fetch("/api/admin/users").then((r) => r.json()),
-        fetch("/api/admin/signed-agreements").then((r) => r.json()),
-        fetch("/api/admin/riskprofiles").then((r) => r.json()),
-        fetch("/api/admin/contact-messages?limit=1").then((r) => r.json()),
+        safeFetchJson("/api/admin/users", { users: [] }),
+        safeFetchJson("/api/admin/signed-agreements", { signedAgreements: [] }),
+        safeFetchJson("/api/admin/signed-users", { signedUsers: [] }),
+        safeFetchJson("/api/admin/riskprofiles", { riskprofiles: [] }),
+        safeFetchJson("/api/admin/contact-messages?limit=1", { stats: { unreadCount: 0 } }),
       ]);
       setData({
         users: usersRes?.users || [],
         signedAgreements: signedAgreementsRes?.signedAgreements || [],
+        signedUsers: signedUsersRes?.signedUsers || [],
         riskprofiles: riskProfilesRes?.riskprofiles || [],
       });
       setContactUnreadCount(contactMessagesRes?.stats?.unreadCount || 0);
@@ -104,12 +123,13 @@ export default function AdminDashboardPage() {
     <main className="p-6 mt-24">
       <div className="flex gap-6">
         {/* Sidebar */}
-        <aside className="w-60 border rounded-lg p-4 bg-white sticky top-28 h-fit">
+        <aside className="w-60 shrink-0 border rounded-lg p-4 bg-white sticky top-28 h-fit">
           <h2 className="font-bold text-lg mb-4 text-neutral-900">Admin Menu</h2>
           <nav className="flex flex-col gap-1">
             {COLLECTIONS.map((col) => (
               <button
                 key={col.key}
+                type="button"
                 onClick={() => setActiveTab(col.key)}
                 className={`text-left p-3 rounded-lg font-medium transition flex items-center gap-2 cursor-pointer ${
                   activeTab === col.key
@@ -129,7 +149,7 @@ export default function AdminDashboardPage() {
         </aside>
 
         {/* Main Content */}
-        <section className="flex-1">
+        <section className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-3xl font-bold">{currentCollection?.label}</h1>
             {loadingData && activeTab !== "analytics" && activeTab !== "plans" && activeTab !== "subscriptions" && activeTab !== "paymentAudit" && activeTab !== "contactMessages" && (
@@ -151,6 +171,14 @@ export default function AdminDashboardPage() {
               <p className="text-sm text-neutral-500">Loading data...</p>
             ) : (
               <SignedAgreementsSection data={data.signedAgreements} />
+            )
+          )}
+
+          {activeTab === "signedUsers" && (
+            loadingData ? (
+              <p className="text-sm text-neutral-500">Loading data...</p>
+            ) : (
+              <SignedUsersSection data={data.signedUsers} onRefresh={fetchAllData} />
             )
           )}
 
