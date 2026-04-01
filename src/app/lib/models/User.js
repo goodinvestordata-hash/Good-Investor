@@ -77,6 +77,16 @@ const UserSchema = new mongoose.Schema(
         },
       },
     ],
+
+    // Admin Flags for Signed Agreement Management
+    agreementMailedToUser: { type: Boolean, default: false },
+    mitcMailedToUser: { type: Boolean, default: false },
+    kycUpdatedByAdmin: { type: Boolean, default: false },
+    invoiceMailedToUser: { type: Boolean, default: false },
+
+    // Tracking dates for flag changes
+    agreementMailedAt: { type: Date, default: null },
+    invoiceMailedAt: { type: Date, default: null },
   },
 
   { timestamps: true },

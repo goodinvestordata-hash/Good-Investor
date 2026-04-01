@@ -382,6 +382,7 @@ export default function ContactMessagesSection({ onUnreadCountChange }) {
           </p>
         </div>
         <button
+          type="button"
           onClick={() =>
             fetchMessages(
               page,
@@ -662,6 +663,7 @@ export default function ContactMessagesSection({ onUnreadCountChange }) {
                       {editingId === m._id ? (
                         <div className="flex items-center gap-1">
                           <button
+                            type="button"
                             onClick={saveEdit}
                             disabled={actionLoading === m._id}
                             className="inline-flex items-center gap-1 rounded-md bg-emerald-100 px-2 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-200 disabled:opacity-50"
@@ -670,6 +672,7 @@ export default function ContactMessagesSection({ onUnreadCountChange }) {
                             <Check className="w-3 h-3" />
                           </button>
                           <button
+                            type="button"
                             onClick={cancelEdit}
                             disabled={actionLoading === m._id}
                             className="inline-flex items-center gap-1 rounded-md bg-red-100 px-2 py-1.5 text-xs font-semibold text-red-700 hover:bg-red-200 disabled:opacity-50"
@@ -681,6 +684,7 @@ export default function ContactMessagesSection({ onUnreadCountChange }) {
                       ) : (
                         <div className="flex items-center gap-1 flex-wrap">
                           <button
+                            type="button"
                             onClick={() =>
                               handleToggleRead(m._id, m.isRead)
                             }
@@ -695,6 +699,7 @@ export default function ContactMessagesSection({ onUnreadCountChange }) {
                             )}
                           </button>
                           <button
+                            type="button"
                             onClick={() =>
                               handleDelete(m._id)
                             }
@@ -724,6 +729,7 @@ export default function ContactMessagesSection({ onUnreadCountChange }) {
           </p>
           <div className="flex items-center gap-2">
             <button
+              type="button"
               onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
               disabled={!pagination.hasPrevPage || loading}
               className="px-3 py-1.5 rounded border border-slate-200 text-sm disabled:opacity-50 hover:bg-slate-50"
@@ -731,6 +737,7 @@ export default function ContactMessagesSection({ onUnreadCountChange }) {
               Previous
             </button>
             <button
+              type="button"
               onClick={() => setPage((prev) => prev + 1)}
               disabled={!pagination.hasNextPage || loading}
               className="px-3 py-1.5 rounded border border-slate-200 text-sm disabled:opacity-50 hover:bg-slate-50"

@@ -119,6 +119,7 @@ export default function SignedAgreementsSection({ data }) {
               </div>
 
               <button
+                type="button"
                 onClick={() => handleDownload(a._id, a.clientEmail)}
                 disabled={downloadingId === a._id}
                 className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition"

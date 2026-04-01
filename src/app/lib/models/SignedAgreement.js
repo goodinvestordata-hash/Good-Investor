@@ -23,6 +23,26 @@ const signedAgreementSchema = new mongoose.Schema(
       required: false,
       default: "NOT_PROVIDED",
     },
+    clientPhone: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    clientDob: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    clientState: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    signedPlanName: {
+      type: String,
+      required: false,
+      default: null,
+    },
     agreementHtml: {
       type: String,
       required: false,

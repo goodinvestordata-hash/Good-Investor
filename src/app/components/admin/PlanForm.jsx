@@ -139,6 +139,7 @@ export default function PlanForm({ plan = null, onSubmit, onCancel }) {
           {plan ? "Edit Plan" : "Create New Plan"}
         </h2>
         <button
+          type="button"
           onClick={onCancel}
           className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
         >

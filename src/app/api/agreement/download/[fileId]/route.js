@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/app/lib/db";
 import SignedAgreement from "@/app/lib/models/SignedAgreement";
+import User from "@/app/lib/models/User";
 import { generateCompleteAgreementPDF } from "@/app/lib/generateCompletePDF";
 import { sendAgreementPDFMail } from "@/app/lib/mailer";
 import { requireAuth, userOwnsResource } from "@/app/lib/authServer";

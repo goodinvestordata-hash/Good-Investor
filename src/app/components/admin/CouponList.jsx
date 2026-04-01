@@ -187,6 +187,7 @@ export default function CouponList() {
           </p>
         </div>
         <button
+          type="button"
           onClick={() => {
             setEditingCoupon(null);
             setShowForm(true);
@@ -209,6 +210,7 @@ export default function CouponList() {
         <div className="mb-4 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg flex items-center justify-between">
           <span>{success}</span>
           <button
+            type="button"
             onClick={() => setSuccess("")}
             className="text-green-700 hover:text-green-900"
             aria-label="Dismiss success message"
@@ -230,6 +232,7 @@ export default function CouponList() {
         <div className="text-center py-12 bg-neutral-50 rounded-lg border border-neutral-200">
           <p className="text-neutral-600 mb-4">No coupons created yet</p>
           <button
+            type="button"
             onClick={() => {
               setEditingCoupon(null);
               setShowForm(true);
@@ -336,6 +339,7 @@ export default function CouponList() {
                     {/* Status */}
                     <td className="px-6 py-4 text-center">
                       <button
+                        type="button"
                         onClick={() => handleToggleStatus(coupon)}
                         className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center justify-center gap-1 mx-auto ${
                           coupon.isActive
@@ -359,6 +363,7 @@ export default function CouponList() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2 justify-center">
                         <button
+                          type="button"
                           onClick={() => handleEditCoupon(coupon)}
                           className="p-2 hover:bg-blue-100 rounded-lg transition-colors cursor-pointer"
                           title="Edit coupon"
@@ -366,6 +371,7 @@ export default function CouponList() {
                           <Edit2 size={16} className="text-blue-600" />
                         </button>
                         <button
+                          type="button"
                           onClick={() =>
                             requestDeleteCoupon(coupon._id, coupon.code)
                           }
@@ -404,6 +410,7 @@ export default function CouponList() {
 
             <div className="flex gap-3 justify-end">
               <button
+                type="button"
                 onClick={cancelDeleteCoupon}
                 disabled={!!deleting}
                 className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors disabled:opacity-50"
@@ -411,6 +418,7 @@ export default function CouponList() {
                 Cancel
               </button>
               <button
+                type="button"
                 onClick={confirmDeleteCoupon}
                 disabled={!!deleting}
                 className="px-4 py-2 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
