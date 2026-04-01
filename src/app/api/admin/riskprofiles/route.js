@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/app/lib/db";
+import User from "@/app/lib/models/User";
 
 export async function GET() {
   await connectDB();
-  // RiskProfile is dynamically created in risk-profile API
+  
   const mongoose = (await import("mongoose")).default;
   const RiskProfile =
     mongoose.models.RiskProfile ||
@@ -15,8 +16,55 @@ export async function GET() {
         email: String,
         answers: Object,
         createdAt: { type: Date, default: Date.now },
+        updatedAt: { type: Date, default: Date.now },
       }),
     );
-  const riskProfiles = await RiskProfile.find().lean();
-  return NextResponse.json({ riskprofiles: riskProfiles });
+
+  try {
+    // Fetch from RiskProfile collection
+    const riskProfilesFromCollection = await RiskProfile.find().lean();
+
+    // Fetch from User model (old risk profiles saved directly in User documents)
+    const usersWithRiskProfiles = await User.find(
+      { riskProfile: { $exists: true, $ne: null } },
+      { _id: 1, username: 1, email: 1, riskProfile: 1, createdAt: 1 }
+    ).lean();
+
+    // Convert User risk profiles to RiskProfile format
+    const riskProfilesFromUsers = usersWithRiskProfiles.map((user) => ({
+      userId: user._id.toString(),
+      username: user.username || "",
+      email: user.email,
+      answers: user.riskProfile,
+      createdAt: user.createdAt || new Date(),
+      _id: `user_${user._id}`, // Unique ID to avoid duplicates
+    }));
+
+    // Combine and deduplicate by userId
+    const allProfiles = [...riskProfilesFromCollection, ...riskProfilesFromUsers];
+    const deduplicatedProfiles = [];
+    const seenUserIds = new Set();
+
+    for (const profile of allProfiles) {
+      if (!seenUserIds.has(profile.userId)) {
+        seenUserIds.add(profile.userId);
+        deduplicatedProfiles.push(profile);
+      }
+    }
+
+    // Sort by creation date (newest first)
+    deduplicatedProfiles.sort((a, b) => {
+      const dateA = new Date(a.createdAt || 0);
+      const dateB = new Date(b.createdAt || 0);
+      return dateB - dateA;
+    });
+
+    return NextResponse.json({ riskprofiles: deduplicatedProfiles });
+  } catch (error) {
+    console.error("Error fetching risk profiles:", error);
+    return NextResponse.json(
+      { message: "Error fetching risk profiles", error: error.message },
+      { status: 500 }
+    );
+  }
 }

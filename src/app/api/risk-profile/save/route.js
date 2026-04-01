@@ -49,6 +49,34 @@ export async function POST(req) {
       );
     }
 
+    // Also save to RiskProfile collection for admin dashboard
+    const mongoose = (await import("mongoose")).default;
+    const RiskProfileSchema = new mongoose.Schema({
+      userId: String,
+      username: String,
+      email: String,
+      answers: Object,
+      createdAt: { type: Date, default: Date.now },
+      updatedAt: { type: Date, default: Date.now },
+    });
+    
+    const RiskProfile =
+      mongoose.models.RiskProfile ||
+      mongoose.model("RiskProfile", RiskProfileSchema);
+
+    // Update or create RiskProfile document
+    await RiskProfile.findOneAndUpdate(
+      { userId: user._id.toString() },
+      {
+        userId: user._id.toString(),
+        username: user.username || "",
+        email: user.email,
+        answers: riskProfile,
+        updatedAt: new Date(),
+      },
+      { upsert: true, new: true }
+    );
+
     console.log("Risk profile saved successfully for user:", user._id);
 
     return NextResponse.json({
