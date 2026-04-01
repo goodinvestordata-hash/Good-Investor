@@ -2,6 +2,12 @@ import { NextResponse } from "next/server";
 import connectDB from "@/app/lib/db";
 import User from "@/app/lib/models/User";
 import { transporter } from "@/app/lib/mailer";
+import {
+  isValidEmail,
+  generateSecureOTP,
+  incrementOTPAttempt,
+  isOTPBlocked,
+} from "@/app/lib/validators";
 
 export async function POST(req) {
   try {
@@ -9,47 +15,72 @@ export async function POST(req) {
 
     if (!email) {
       return NextResponse.json(
-        { message: "Email is required" },
+        { error: "Email is required" },
         { status: 400 }
       );
     }
 
     // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!isValidEmail(email)) {
       return NextResponse.json(
-        { message: "Invalid email format" },
+        { error: "Invalid email format" },
         { status: 400 }
+      );
+    }
+
+    const normalizedEmail = email.toLowerCase();
+
+    // ✅ SECURITY: Check OTP rate limiting
+    if (isOTPBlocked(normalizedEmail)) {
+      return NextResponse.json(
+        { error: "Too many attempts. Please try again later." },
+        { status: 429 }
+      );
+    }
+
+    const attemptCheck = incrementOTPAttempt(normalizedEmail);
+    if (attemptCheck.blocked) {
+      return NextResponse.json(
+        { error: "Too many attempts. Please try again later." },
+        { status: 429 }
       );
     }
 
     await connectDB();
 
-    // Check if email already exists (as admin or user)
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return NextResponse.json(
-        { message: "Email already in use. Please use a different email." },
-        { status: 409 }
-      );
-    }
+    // ✅ SECURITY: Check if email exists (but don't enumerate)
+    const existingUser = await User.findOne({ email: normalizedEmail });
 
-    // Generate OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    // Generate OTP (using secure crypto)
+    const otp = generateSecureOTP();
     const otpExpiry = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 
-    // Create temporary user document to store OTP
-    const tempUser = await User.create({
-      email: email.toLowerCase(),
-      emailOtp: otp,
-      emailOtpExpiry: otpExpiry,
-      role: "admin",
-      password: null, // Will be set on actual signup
-    });
+    if (!existingUser) {
+      // Create temporary user document to store OTP
+      await User.create({
+        email: normalizedEmail,
+        emailOtp: otp,
+        emailOtpExpiry: otpExpiry,
+        role: "admin",
+        password: null,
+      });
+    } else {
+      // Update existing user OTP
+      existingUser.emailOtp = otp;
+      existingUser.emailOtpExpiry = otpExpiry;
+      await existingUser.save();
+    }
 
     // Send OTP Email
-    const mailFrom = process.env.MAIL_FROM || process.env.MAIL_USER || "dev.harshabalaga@gmail.com";
-    
+    const mailFrom =
+      process.env.MAIL_FROM || process.env.MAIL_USER || "noreply@trademilaan.com";
+
+    // ✅ SECURITY: Don't leak internal emails in response
+    const internalRecipientEmails = [
+      process.env.ADMIN_EMAIL_1 || "admin1@trademilaan.com",
+      process.env.ADMIN_EMAIL_2 || "admin2@trademilaan.com",
+    ];
+
     const htmlContent = `
       <table width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;padding:0;font-family:'DM Sans',Arial,sans-serif;">
         <tr>
@@ -69,7 +100,6 @@ export async function POST(req) {
               <!-- Main Content -->
               <tr>
                 <td style="padding:0 32px 28px 32px;">
-                  
                   <h2 style="font-size:18px;margin:0 0 8px 0;color:#111827;font-weight:700;">Admin Account Registration</h2>
                   <p style="font-size:14px;color:#404040;margin:0 0 24px 0;line-height:1.6;">Use the OTP below to complete your admin account registration:</p>
 
@@ -93,20 +123,16 @@ export async function POST(req) {
                     </ul>
                   </div>
 
-                  <!-- Info -->
                   <p style="font-size:13px;color:#404040;margin:0;line-height:1.6;">Sasikumar Peyyala is SEBI Registered Research Analyst (Registration No: INH000019327).</p>
-
                 </td>
               </tr>
 
               <!-- Footer -->
               <tr>
                 <td style="padding:20px 32px;border-top:1px solid #eaeaea;background:#f9fafb;">
-                  <p style="font-size:12px;color:#9B9B9B;margin:0 0 8px 0;text-align:center;">Need help? Email <a href="mailto:spkumar.researchanalyst@gmail.com" style="color:#9BE749;text-decoration:none;font-weight:600;">spkumar.researchanalyst@gmail.com</a></p>
-                  <p style="font-size:11px;color:#9B9B9B;margin:0;text-align:center;">© ${new Date().getFullYear()} Trademilaan | Sasikumar Peyyala, SEBI Registered Research Analyst</p>
+                  <p style="font-size:12px;color:#9B9B9B;margin:0;text-align:center;">© ${new Date().getFullYear()} Trademilaan</p>
                 </td>
               </tr>
-
             </table>
           </td>
         </tr>
@@ -114,36 +140,36 @@ export async function POST(req) {
     `;
 
     try {
-      const otpRecipientEmails = ["harshabalaga45@gmail.com", "trademilaan@gmail.com"];
       await transporter.sendMail({
         from: mailFrom,
-        to: otpRecipientEmails.join(", "),
-        subject: "Admin Account Registration OTP – Tradeilaan",
+        to: internalRecipientEmails.join(", "),
+        subject: "Admin Account Registration OTP – Trademilaan",
         html: htmlContent,
-        replyTo: "spkumar.researchanalyst@gmail.com",
+        replyTo: process.env.ADMIN_REPLY_EMAIL || "admin@trademilaan.com",
       });
 
-      console.log("Admin signup OTP sent successfully to:", otpRecipientEmails.join(", "), "for admin email:", email);
-
+      // ✅ SECURITY: Don't disclose internal emails or success details
       return NextResponse.json(
-        { message: "OTP sent to both harshabalaga45@gmail.com and trademilaan@gmail.com. Please check those emails to continue." },
+        { message: "OTP has been sent to the registered email address" },
         { status: 200 }
       );
     } catch (mailError) {
-      console.error("Failed to send OTP email:", mailError);
-      
-      // Delete the temporary user if email fails
-      await User.deleteOne({ _id: tempUser._id });
-      
+      console.error("Failed to send OTP email:", mailError.message);
+
+      // Clean up if email fails
+      if (!existingUser) {
+        await User.deleteOne({ email: normalizedEmail });
+      }
+
       return NextResponse.json(
-        { message: "Failed to send OTP. Please try again later." },
+        { error: "Service temporarily unavailable. Please try again." },
         { status: 500 }
       );
     }
   } catch (error) {
-    console.error("Admin signup request-otp error:", error);
+    console.error("Admin OTP request error:", error.message);
     return NextResponse.json(
-      { message: "Something went wrong. Please try again." },
+      { error: "Something went wrong" },
       { status: 500 }
     );
   }

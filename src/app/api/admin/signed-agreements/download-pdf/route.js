@@ -2,19 +2,25 @@ import { NextResponse } from "next/server";
 import connectDB from "@/app/lib/db";
 import SignedAgreement from "@/app/lib/models/SignedAgreement";
 import { generateCompleteAgreementPDF } from "@/app/lib/generateCompletePDF";
+import { requireAdmin } from "@/app/lib/authServer";
+import { isValidObjectId } from "@/app/lib/validators";
 
 export async function POST(req) {
   try {
-    await connectDB();
+    // ✅ SECURITY: Require admin authentication
+    await requireAdmin();
 
     const { agreementId } = await req.json();
 
-    if (!agreementId) {
+    // ✅ SECURITY: Validate ObjectId
+    if (!agreementId || !isValidObjectId(agreementId)) {
       return NextResponse.json(
-        { error: "Agreement ID is required" },
+        { error: "Invalid agreement ID" },
         { status: 400 }
       );
     }
+
+    await connectDB();
 
     // Fetch the signed agreement
     const agreement = await SignedAgreement.findById(agreementId).lean();
@@ -26,8 +32,7 @@ export async function POST(req) {
       );
     }
 
-    // Generate the EXACT same PDF that was sent in email
-    // Using the same function as email sending
+    // Generate PDF
     const pdfBuffer = await generateCompleteAgreementPDF({
       ...agreement,
       _id: agreement._id.toString(),
@@ -49,21 +54,22 @@ export async function POST(req) {
       lastDownloadedAt: new Date(),
     });
 
-    // Return PDF with proper filename
-    const fileName = `agreement-${agreement.clientEmail || agreement.userId}-${new Date(agreement.signedTimestamp).getTime()}.pdf`;
+    // Return PDF
+    const fileName = `agreement-${agreement.clientName || "unknown"}-${new Date(agreement.signedTimestamp).getTime()}.pdf`;
 
     return new NextResponse(pdfBuffer, {
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="${fileName}"`,
+        "Cache-Control": "no-store",
       },
     });
   } catch (error) {
-    console.error("Error generating PDF:", error);
+    console.error("Admin agreement download error:", error.message);
     return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
+      { error: error.statusCode === 403 ? "Forbidden" : "Something went wrong" },
+      { status: error.statusCode || 500 }
     );
   }
 }

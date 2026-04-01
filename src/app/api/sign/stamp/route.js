@@ -2,6 +2,8 @@
 import { NextResponse } from "next/server";
 import { PDFDocument } from "pdf-lib";
 import cloudinary from "cloudinary";
+import { requireAuth } from "@/app/lib/authServer";
+import { isValidUrl } from "@/app/lib/validators";
 
 // IMPORTANT: Cloudinary config (ensure these are set in env)
 cloudinary.v2.config({
@@ -29,19 +31,42 @@ function parseDataUrl(dataUrl) {
 
 export async function POST(req) {
   try {
+    // ✅ SECURITY: Require authentication
+    await requireAuth();
+
     const { pdfUrl, signatureUrl } = await req.json();
 
     if (!pdfUrl || !signatureUrl) {
       return NextResponse.json(
         { error: "pdfUrl and signatureUrl are required" },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
-    console.log(">>> Starting Stamp Workflow");
+    // ✅ SECURITY: Validate PDF URL (prevent SSRF)
+    if (!pdfUrl.startsWith("data:") && !isValidUrl(pdfUrl)) {
+      return NextResponse.json(
+        { error: "Invalid PDF URL" },
+        { status: 400 }
+      );
+    }
+
+    // ✅ SECURITY: Validate signature URL (prevent SSRF)
+    if (!signatureUrl.startsWith("data:") && !isValidUrl(signatureUrl)) {
+      return NextResponse.json(
+        { error: "Invalid signature URL" },
+        { status: 400 }
+      );
+    }
 
     // 1. Load PDF buffer
-    const pdfBuffer = await fetchBuffer(pdfUrl);
+    let pdfBuffer;
+    if (pdfUrl.startsWith("data:")) {
+      const parsed = parseDataUrl(pdfUrl);
+      pdfBuffer = parsed.buffer;
+    } else {
+      pdfBuffer = await fetchBuffer(pdfUrl);
+    }
 
     // 2. Resolve signature buffer
     let sigBuffer, sigMime;
@@ -57,8 +82,6 @@ export async function POST(req) {
           ? "image/jpeg"
           : "image/png";
     }
-
-    console.log("Signature MIME:", sigMime);
 
     // 3. Embed signature into PDF
     const pdfDoc = await PDFDocument.load(pdfBuffer);
@@ -92,12 +115,12 @@ export async function POST(req) {
     const stampedBuffer = Buffer.from(stampedBytes);
     const filename = `signed-agreement-${Date.now()}.pdf`;
 
-    // 5. Upload to Cloudinary as RAW PDF (THIS IS THE KEY FIX)
+    // 5. Upload to Cloudinary as RAW PDF
     const upload = await new Promise((resolve, reject) => {
       const stream = cloudinary.v2.uploader.upload_stream(
         {
           folder: "trademilaan/signed-agreements",
-          resource_type: "raw", // supports PDF
+          resource_type: "raw",
           format: "pdf",
           use_filename: true,
           unique_filename: false,
@@ -106,14 +129,9 @@ export async function POST(req) {
         (error, result) => {
           if (error) return reject(error);
           resolve(result);
-        },
+        }
       );
       stream.end(stampedBuffer);
-    });
-
-    console.log("Cloudinary Upload:", {
-      public_id: upload.public_id,
-      secure_url: upload.secure_url,
     });
 
     const finalPdfUrl = upload.secure_url + "#toolbar=1&navpanes=0&scrollbar=1";
@@ -126,18 +144,13 @@ export async function POST(req) {
         filename,
         publicId: upload.public_id,
       },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (err) {
-    console.error("STAMP ERROR:", err);
-
+    console.error("Sign stamp error:", err.message);
     return NextResponse.json(
-      {
-        error: "Failed to stamp signature",
-        detail: err.message,
-        at: new Date().toISOString(),
-      },
-      { status: 500 },
+      { error: "Something went wrong" },
+      { status: error.statusCode === 403 ? 403 : 500 }
     );
   }
 }

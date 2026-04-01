@@ -3,9 +3,13 @@ import { NextResponse } from "next/server";
 import connectDB from "@/app/lib/db";
 import SignedAgreement from "@/app/lib/models/SignedAgreement";
 import crypto from "crypto";
+import { requireAuth } from "@/app/lib/authServer";
 
 export async function POST(req) {
   try {
+    // ✅ SECURITY: Require authentication to sign agreements
+    const user = await requireAuth();
+
     await connectDB();
     const {
       agreementHtml,
@@ -56,6 +60,18 @@ export async function POST(req) {
       return NextResponse.json(
         { message: "Missing required signing information" },
         { status: 400 },
+      );
+    }
+
+    // ✅ SECURITY: Verify user owns the agreement being signed (prevent IDOR)
+    if (userId !== user.userId) {
+      console.error("Unauthorized attempt to sign agreement for different user:", {
+        requestedUserId: userId,
+        authenticatedUserId: user.userId,
+      });
+      return NextResponse.json(
+        { message: "Forbidden: Cannot sign agreements for other users" },
+        { status: 403 },
       );
     }
 

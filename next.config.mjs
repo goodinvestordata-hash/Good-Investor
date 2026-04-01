@@ -5,7 +5,12 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === "production",
   },
   images: {
-    domains: ["profitmart.in"],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'profitmart.in',
+      },
+    ],
   },
 };
 

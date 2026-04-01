@@ -3,6 +3,9 @@ import bcrypt from "bcryptjs";
 import connectDB from "@/app/lib/db";
 import User from "@/app/lib/models/User";
 import { signToken } from "@/app/lib/jwt";
+import { isValidEmail, isValidOTP, incrementOTPAttempt, resetOTPAttempts } from "@/app/lib/validators";
+import { serializeAuthUser } from "@/app/lib/serializers";
+import { setSecureCookie } from "@/app/lib/apiHelpers";
 
 export async function POST(req) {
   try {
@@ -11,24 +14,43 @@ export async function POST(req) {
     // Validate all fields
     if (!email || !password || !otp) {
       return NextResponse.json(
-        { message: "Missing required fields" },
+        { error: "Email, password, and OTP are required" },
+        { status: 400 }
+      );
+    }
+
+    // Validate email format
+    if (!isValidEmail(email)) {
+      return NextResponse.json(
+        { error: "Invalid email format" },
         { status: 400 }
       );
     }
 
     // Validate password length
-    if (password.length < 8) {
+    if (typeof password !== "string" || password.length < 8) {
       return NextResponse.json(
-        { message: "Password must be at least 8 characters" },
+        { error: "Password must be at least 8 characters" },
         { status: 400 }
       );
     }
 
     // Validate OTP format
-    if (!/^\d{6}$/.test(otp)) {
+    if (!isValidOTP(otp)) {
       return NextResponse.json(
-        { message: "OTP must be 6 digits" },
+        { error: "Invalid OTP format" },
         { status: 400 }
+      );
+    }
+
+    const normalizedEmail = email.toLowerCase();
+
+    // ✅ SECURITY: Track OTP verification attempts
+    const attemptCheck = incrementOTPAttempt(normalizedEmail);
+    if (attemptCheck.blocked) {
+      return NextResponse.json(
+        { error: "Too many attempts. Please try again later." },
+        { status: 429 }
       );
     }
 
@@ -36,29 +58,29 @@ export async function POST(req) {
 
     // Find user with this email and OTP
     const user = await User.findOne({
-      email: email.toLowerCase(),
+      email: normalizedEmail,
       role: "admin",
     });
 
     if (!user) {
       return NextResponse.json(
-        { message: "Admin account not found. Please request OTP again." },
-        { status: 404 }
+        { error: "Invalid credentials" },
+        { status: 401 }
       );
     }
 
     // Verify OTP
     if (user.emailOtp !== otp) {
       return NextResponse.json(
-        { message: "Invalid OTP" },
-        { status: 400 }
+        { error: "Invalid OTP" },
+        { status: 401 }
       );
     }
 
     // Check if OTP is expired
     if (!user.emailOtpExpiry || user.emailOtpExpiry < new Date()) {
       return NextResponse.json(
-        { message: "OTP has expired. Request a new one." },
+        { error: "OTP has expired" },
         { status: 400 }
       );
     }
@@ -74,36 +96,27 @@ export async function POST(req) {
     user.emailVerified = true;
     user.authProvider = "email";
     user.lastLoginAt = new Date();
-
     await user.save();
+
+    // ✅ SECURITY: Clear OTP attempts on successful signup
+    resetOTPAttempts(normalizedEmail);
 
     // Generate JWT token
     const token = signToken(user);
 
-    // Set response with cookie
+    // Return safe user data
     const res = NextResponse.json({
       message: "Admin account created successfully",
-      user: {
-        id: user._id,
-        email: user.email,
-        role: user.role,
-      },
+      user: serializeAuthUser(user),
     });
 
-    res.cookies.set("token", token, {
-      httpOnly: true,
-      path: "/",
-      sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60, // 7 days
-    });
-
-    console.log("Admin account created successfully:", user.email);
-
+    // Set secure cookie
+    setSecureCookie(res, "token", token);
     return res;
   } catch (error) {
-    console.error("Admin signup error:", error);
+    console.error("Admin signup error:", error.message);
     return NextResponse.json(
-      { message: "Something went wrong. Please try again." },
+      { error: "Something went wrong" },
       { status: 500 }
     );
   }

@@ -50,7 +50,6 @@ const PlanSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: true,
-      index: true, // Index for quick filtering of active plans
     },
     displayOrder: {
       type: Number,
