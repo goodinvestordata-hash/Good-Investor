@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../context/AuthContext";
 import UsersSection from "../components/admin/UsersSection";
-import AgreementsSection from "../components/admin/AgreementsSection";
 import SignedAgreementsSection from "../components/admin/SignedAgreementsSection";
 import RiskProfilesSection from "../components/admin/RiskProfilesSection";
 import AnalyticsSection from "../components/admin/AnalyticsSection";
@@ -16,7 +15,6 @@ import ContactMessagesSection from "../components/admin/ContactMessagesSection";
 
 const COLLECTIONS = [
   { key: "users", label: "Users", icon: "👥" },
-  { key: "agreements", label: "Agreements", icon: "📄" },
   { key: "signedAgreements", label: "Signed Agreements", icon: "✍️" },
   { key: "riskprofiles", label: "Risk Profiles", icon: "📊" },
   { key: "analytics", label: "Admin Analytics", icon: "📈" },
@@ -38,7 +36,6 @@ export default function AdminDashboardPage() {
 
   const [data, setData] = useState({
     users: [],
-    agreements: [],
     signedAgreements: [],
     riskprofiles: [],
   });
@@ -48,20 +45,17 @@ export default function AdminDashboardPage() {
     try {
       const [
         usersRes,
-        agreementsRes,
         signedAgreementsRes,
         riskProfilesRes,
         contactMessagesRes,
       ] = await Promise.all([
         fetch("/api/admin/users").then((r) => r.json()),
-        fetch("/api/admin/agreements").then((r) => r.json()),
         fetch("/api/admin/signed-agreements").then((r) => r.json()),
         fetch("/api/admin/riskprofiles").then((r) => r.json()),
         fetch("/api/admin/contact-messages?limit=1").then((r) => r.json()),
       ]);
       setData({
         users: usersRes?.users || [],
-        agreements: agreementsRes?.agreements || [],
         signedAgreements: signedAgreementsRes?.signedAgreements || [],
         riskprofiles: riskProfilesRes?.riskprofiles || [],
       });
@@ -149,14 +143,6 @@ export default function AdminDashboardPage() {
               <p className="text-sm text-neutral-500">Loading data...</p>
             ) : (
               <UsersSection data={data.users} onRefresh={fetchAllData} />
-            )
-          )}
-
-          {activeTab === "agreements" && (
-            loadingData ? (
-              <p className="text-sm text-neutral-500">Loading data...</p>
-            ) : (
-              <AgreementsSection data={data.agreements} />
             )
           )}
 
