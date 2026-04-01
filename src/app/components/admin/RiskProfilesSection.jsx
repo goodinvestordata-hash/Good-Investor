@@ -21,9 +21,13 @@ export default function RiskProfilesSection({ data }) {
           <div key={r._id} className="border rounded-lg p-4 bg-white hover:shadow-md transition">
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
-                <div className="font-semibold">User ID: {r.userId}</div>
+                <div className="font-semibold">{r.fullName || "User"}</div>
                 <div className="text-sm text-neutral-600 mt-1">{r.email}</div>
                 {r.username && <div className="text-sm text-neutral-500 mt-1">@{r.username}</div>}
+                <div className="flex items-center gap-2 mt-2 flex-wrap">
+                  {r.phone && <span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">{r.phone}</span>}
+                  {r.state && <span className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded">{r.state}</span>}
+                </div>
               </div>
               <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">Profile</span>
             </div>
@@ -72,6 +76,10 @@ export default function RiskProfilesSection({ data }) {
                     <p className="text-sm font-medium text-neutral-900 mt-1">{selectedProfile.userId}</p>
                   </div>
                   <div>
+                    <p className="text-xs text-neutral-500 uppercase tracking-wide">Full Name</p>
+                    <p className="text-sm font-medium text-neutral-900 mt-1">{selectedProfile.fullName || "N/A"}</p>
+                  </div>
+                  <div>
                     <p className="text-xs text-neutral-500 uppercase tracking-wide">Email</p>
                     <p className="text-sm font-medium text-neutral-900 mt-1">{selectedProfile.email}</p>
                   </div>
@@ -80,6 +88,26 @@ export default function RiskProfilesSection({ data }) {
                     <p className="text-sm font-medium text-neutral-900 mt-1">{selectedProfile.username || "N/A"}</p>
                   </div>
                   <div>
+                    <p className="text-xs text-neutral-500 uppercase tracking-wide">Phone</p>
+                    <p className="text-sm font-medium text-neutral-900 mt-1">{selectedProfile.phone || "N/A"}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-neutral-500 uppercase tracking-wide">Date of Birth</p>
+                    <p className="text-sm font-medium text-neutral-900 mt-1">{selectedProfile.dob || "N/A"}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-neutral-500 uppercase tracking-wide">Gender</p>
+                    <p className="text-sm font-medium text-neutral-900 mt-1">{selectedProfile.gender || "N/A"}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-neutral-500 uppercase tracking-wide">State</p>
+                    <p className="text-sm font-medium text-neutral-900 mt-1">{selectedProfile.state || "N/A"}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-neutral-500 uppercase tracking-wide">PAN Number</p>
+                    <p className="text-sm font-medium text-neutral-900 mt-1">{selectedProfile.panNumber || "N/A"}</p>
+                  </div>
+                  <div className="col-span-2">
                     <p className="text-xs text-neutral-500 uppercase tracking-wide">Submitted Date</p>
                     <p className="text-sm font-medium text-neutral-900 mt-1">
                       {selectedProfile.createdAt ? new Date(selectedProfile.createdAt).toLocaleString() : "N/A"}

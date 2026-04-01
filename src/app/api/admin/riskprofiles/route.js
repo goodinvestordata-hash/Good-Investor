@@ -27,14 +27,32 @@ export async function GET() {
     // Fetch from User model (old risk profiles saved directly in User documents)
     const usersWithRiskProfiles = await User.find(
       { riskProfile: { $exists: true, $ne: null } },
-      { _id: 1, username: 1, email: 1, riskProfile: 1, createdAt: 1 }
+      { 
+        _id: 1, 
+        username: 1, 
+        email: 1, 
+        riskProfile: 1, 
+        createdAt: 1,
+        fullName: 1,
+        phone: 1,
+        state: 1,
+        gender: 1,
+        dob: 1,
+        panNumber: 1,
+      }
     ).lean();
 
-    // Convert User risk profiles to RiskProfile format
+    // Convert User risk profiles to RiskProfile format with additional fields
     const riskProfilesFromUsers = usersWithRiskProfiles.map((user) => ({
       userId: user._id.toString(),
       username: user.username || "",
       email: user.email,
+      fullName: user.fullName || "",
+      phone: user.phone || "",
+      state: user.state || "",
+      gender: user.gender || "",
+      dob: user.dob || "",
+      panNumber: user.panNumber || "",
       answers: user.riskProfile,
       createdAt: user.createdAt || new Date(),
       _id: `user_${user._id}`, // Unique ID to avoid duplicates
