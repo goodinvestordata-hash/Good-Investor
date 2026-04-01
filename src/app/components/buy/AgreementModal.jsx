@@ -136,6 +136,7 @@ export default function AgreementModal({
         clientPhone,
         clientDob,
         clientState,
+        signedPlanName: planData?.planName || planData?.name || "",
         signatureData: signedData.signatureUrl,
         signedName: signedData.signedName,
         signedTimestamp: signedData.signedTimestamp,

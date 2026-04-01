@@ -7,9 +7,13 @@ import { transporter } from "@/app/lib/mailer";
 export async function POST(req) {
   try {
     const { fullName, dob, gender, state, email, panNumber } = await req.json();
+    const normalizedPan = String(panNumber || "")
+      .toUpperCase()
+      .replace(/\s+/g, "")
+      .trim();
 
     // 1. Basic validation
-    if (!fullName || !dob || !gender || !state || !email || !panNumber) {
+    if (!fullName || !dob || !gender || !state || !email || !normalizedPan) {
       return NextResponse.json(
         { message: "All fields are required" },
         { status: 400 },
@@ -18,7 +22,7 @@ export async function POST(req) {
 
     // 2. PAN format validation
     const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
-    if (!panRegex.test(panNumber)) {
+    if (!panRegex.test(normalizedPan)) {
       return NextResponse.json(
         { message: "Invalid PAN format" },
         { status: 400 },
@@ -66,7 +70,7 @@ export async function POST(req) {
       }
       user.email = normalizedEmail;
     }
-    user.panNumber = panNumber;
+    user.panNumber = normalizedPan;
     user.emailOtp = otp;
     user.emailOtpExpiry = new Date(Date.now() + 5 * 60 * 1000); // 5 mins
 

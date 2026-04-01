@@ -98,7 +98,8 @@ export async function GET() {
         email: cleanValue(agreement.clientEmail) || cleanValue(user.email) || "N/A",
         mobile: cleanValue(agreement.clientPhone) || cleanValue(user.phone) || "—",
         state: cleanValue(agreement.clientState) || cleanValue(user.state) || "—",
-        serviceName: cleanValue(payment?.planName) || "—",
+        serviceName:
+          cleanValue(payment?.planName) || cleanValue(agreement.signedPlanName) || "—",
         agreementMailedToUser: Boolean(user.agreementMailedToUser),
         mitcMailedToUser: Boolean(user.mitcMailedToUser),
         kycUpdatedByAdmin: Boolean(user.kycUpdatedByAdmin),

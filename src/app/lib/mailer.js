@@ -139,6 +139,8 @@ export async function sendAgreementPDFMail({ to, pdfBuffer, clientName, clientPa
   }
 }
 import nodemailer from "nodemailer";
+import connectDB from "@/app/lib/db";
+import User from "@/app/lib/models/User";
 
 console.log("MAILER FILE LOADED");
 
@@ -253,8 +255,19 @@ export async function sendTermsAndConditionsMail(email) {
     });
 
     console.log("MAIL SENT ✅", info.messageId);
+
+    // Source of truth: mark MITC mailed only when mail send succeeds.
+    await connectDB();
+    await User.findOneAndUpdate(
+      { email: String(email).toLowerCase().trim() },
+      { mitcMailedToUser: true },
+      { new: false }
+    );
+
+    return info;
   } catch (err) {
     console.error("MAIL SEND FAILED ❌", err);
+    throw err;
   }
 }
 

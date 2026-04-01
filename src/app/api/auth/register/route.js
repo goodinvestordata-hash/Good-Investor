@@ -38,7 +38,7 @@ export async function POST(req) {
 
   console.log("USER CREATED:", user._id.toString());
 
-  // 🚀 Fire-and-forget mail (do NOT block signup)
+  // Fire-and-forget mail. Flag is updated inside mailer on successful send.
   sendTermsAndConditionsMail(email).catch((err) => {
     console.error("TERMS MAIL ERROR (NON-BLOCKING)", err);
   });

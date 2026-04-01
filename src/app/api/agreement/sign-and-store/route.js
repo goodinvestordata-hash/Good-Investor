@@ -15,6 +15,8 @@ export async function POST(req) {
       clientPhone,
       clientDob,
       clientState,
+      signedPlanName,
+      signedPlanName,
       signatureData,
       signedName,
       signedTimestamp,

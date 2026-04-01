@@ -98,7 +98,7 @@ export function Navbar() {
             <div className="relative">
               <button
                 onClick={() => setProfileOpen(!profileOpen)}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-neutral-900 text-white text-sm font-semibold shadow hover:bg-neutral-800 transition"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-neutral-900 text-white text-sm cursor-pointer font-semibold shadow hover:bg-neutral-800 transition"
                 aria-label="Profile menu"
               >
                 {profileInitial}
@@ -160,12 +160,21 @@ export function Navbar() {
           )}
 
           {/* CTA */}
-          <Link
-            href="/contact"
-            className="hidden sm:inline-flex shrink-0 rounded-full bg-[#9BE749] px-3 md:px-6 py-1.5 md:py-2 text-sm md:text-base font-medium"
-          >
-            Enquire Now
-          </Link>
+          {user ? (
+            <Link
+              href="/contact"
+              className="hidden sm:inline-flex shrink-0 rounded-full bg-[#9BE749] px-3 md:px-6 py-1.5 md:py-2 text-sm md:text-base font-medium"
+            >
+              Enquire Now
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className="hidden sm:inline-flex shrink-0 rounded-full bg-[#9BE749] px-3 md:px-6 py-1.5 md:py-2 text-sm md:text-base font-medium"
+            >
+              Login
+            </Link>
+          )}
         </div>
       </div>
 
@@ -220,13 +229,23 @@ export function Navbar() {
                     {link.label}
                   </Link>
                 ))}
-                <Link
-                  href="/contact"
-                  onClick={closeMobile}
-                  className="mt-2 inline-flex items-center justify-center rounded-full bg-[#9BE749] px-4 py-2 text-sm font-semibold"
-                >
-                  Enquire Now
-                </Link>
+                {user ? (
+                  <Link
+                    href="/contact"
+                    onClick={closeMobile}
+                    className="mt-2 inline-flex items-center justify-center rounded-full bg-[#9BE749] px-4 py-2 text-sm font-semibold"
+                  >
+                    Enquire Now
+                  </Link>
+                ) : (
+                  <Link
+                    href="/login"
+                    onClick={closeMobile}
+                    className="mt-2 inline-flex items-center justify-center rounded-full bg-[#9BE749] px-4 py-2 text-sm font-semibold"
+                  >
+                    Login
+                  </Link>
+                )}
               </div>
             </div>
           </div>
