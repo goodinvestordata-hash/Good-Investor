@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../context/AuthContext";
 import UsersSection from "../components/admin/UsersSection";
 import SignedAgreementsSection from "../components/admin/SignedAgreementsSection";
+import InvoiceSection from "../components/admin/InvoiceSection";
 import RiskProfilesSection from "../components/admin/RiskProfilesSection";
 import AnalyticsSection from "../components/admin/AnalyticsSection";
 import PlansSection from "../components/admin/PlansSection";
@@ -17,6 +18,7 @@ const COLLECTIONS = [
   { key: "users", label: "Users", icon: "👥" },
   { key: "signedAgreements", label: "Signed Agreements", icon: "✍️" },
   { key: "riskprofiles", label: "Risk Profiles", icon: "📊" },
+  { key: "invoices", label: "Invoices", icon: "📄" },
   { key: "analytics", label: "Admin Analytics", icon: "📈" },
   { key: "plans", label: "Create Plan", icon: "🎯" },
   { key: "coupons", label: "Coupons", icon: "🎟️" },
@@ -38,6 +40,7 @@ export default function AdminDashboardPage() {
     users: [],
     signedAgreements: [],
     riskprofiles: [],
+    invoices: [],
   });
 
   const fetchAllData = async () => {
@@ -47,17 +50,20 @@ export default function AdminDashboardPage() {
         usersRes,
         signedAgreementsRes,
         riskProfilesRes,
+        invoicesRes,
         contactMessagesRes,
       ] = await Promise.all([
         fetch("/api/admin/users").then((r) => r.json()),
         fetch("/api/admin/signed-agreements").then((r) => r.json()),
         fetch("/api/admin/riskprofiles").then((r) => r.json()),
+        fetch("/api/admin/invoices").then((r) => r.json()),
         fetch("/api/admin/contact-messages?limit=1").then((r) => r.json()),
       ]);
       setData({
         users: usersRes?.users || [],
         signedAgreements: signedAgreementsRes?.signedAgreements || [],
         riskprofiles: riskProfilesRes?.riskprofiles || [],
+        invoices: invoicesRes?.invoices || [],
       });
       setContactUnreadCount(contactMessagesRes?.stats?.unreadCount || 0);
     } catch (err) {
@@ -159,6 +165,14 @@ export default function AdminDashboardPage() {
               <p className="text-sm text-neutral-500">Loading data...</p>
             ) : (
               <RiskProfilesSection data={data.riskprofiles} />
+            )
+          )}
+
+          {activeTab === "invoices" && (
+            loadingData ? (
+              <p className="text-sm text-neutral-500">Loading data...</p>
+            ) : (
+              <InvoiceSection data={data.invoices} />
             )
           )}
 
