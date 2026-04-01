@@ -1,28 +1,12 @@
 import connectDB from "@/app/lib/db";
 import Payment from "@/app/lib/models/Payment";
-import { verifyToken } from "@/app/lib/jwt";
-import { cookies } from "next/headers";
+import { requireAdmin } from "@/app/lib/authServer";
+import { NextResponse } from "next/server";
 
 export async function GET(req) {
   try {
-    // Verify user is authenticated and is admin
-    const cookieStore = await cookies();
-    const token = cookieStore.get("token")?.value;
-
-    if (!token) {
-      return new Response(
-        JSON.stringify({ success: false, message: "Not authenticated" }),
-        { status: 401 }
-      );
-    }
-
-    const decoded = verifyToken(token);
-    if (!decoded || decoded.role !== "admin") {
-      return new Response(
-        JSON.stringify({ success: false, message: "Admin access required" }),
-        { status: 403 }
-      );
-    }
+    // ✅ SECURITY: Use centralized requireAdmin() instead of inline verification
+    await requireAdmin();
 
     // Connect to database
     await connectDB();
@@ -37,26 +21,27 @@ export async function GET(req) {
     const totalTransactions = payments.length;
     const activeCount = payments.filter((p) => new Date(p.expiresAt) > new Date()).length;
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        payments: payments || [],
-        stats: {
-          totalRevenue,
-          totalTransactions,
-          activeCount,
-        },
-      }),
-      { status: 200 }
-    );
+    return NextResponse.json({
+      success: true,
+      payments: payments || [],
+      stats: {
+        totalRevenue,
+        totalTransactions,
+        activeCount,
+      },
+    });
   } catch (error) {
+    // Handle auth errors
+    if (error.statusCode === 401) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (error.statusCode === 403) {
+      return NextResponse.json({ error: "Forbidden - Admin access required" }, { status: 403 });
+    }
+    
     console.error("Error fetching admin payments:", error);
-    return new Response(
-      JSON.stringify({
-        success: false,
-        message: "Failed to fetch payments",
-        error: error.message,
-      }),
+    return NextResponse.json(
+      { error: "Failed to fetch payments" },
       { status: 500 }
     );
   }

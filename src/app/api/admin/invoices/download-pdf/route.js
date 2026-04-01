@@ -1,19 +1,25 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/app/lib/db";
 import { generateInvoicePDF } from "@/app/lib/generateInvoicePDF";
+import { requireAdmin } from "@/app/lib/authServer";
+import { isValidObjectId } from "@/app/lib/validators";
 
 export async function POST(req) {
   try {
-    await connectDB();
+    // ✅ SECURITY: Require admin authentication
+    await requireAdmin();
 
     const { invoiceId } = await req.json();
 
-    if (!invoiceId) {
+    // ✅ SECURITY: Validate ObjectId
+    if (!invoiceId || !isValidObjectId(invoiceId)) {
       return NextResponse.json(
-        { error: "Invoice ID is required" },
+        { error: "Invalid invoice ID" },
         { status: 400 }
       );
     }
+
+    await connectDB();
 
     // Fetch the invoice
     const mongoose = (await import("mongoose")).default;
@@ -74,13 +80,14 @@ export async function POST(req) {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="${fileName}"`,
+        "Cache-Control": "no-store",
       },
     });
   } catch (error) {
-    console.error("Error generating invoice PDF:", error);
+    console.error("Admin invoice download error:", error.message);
     return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
+      { error: error.statusCode === 403 ? "Forbidden" : "Something went wrong" },
+      { status: error.statusCode || 500 }
     );
   }
 }

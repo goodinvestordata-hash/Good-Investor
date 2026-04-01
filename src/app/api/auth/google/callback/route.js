@@ -3,6 +3,7 @@ import connectDB from "@/app/lib/db";
 import User from "@/app/lib/models/User";
 import { signToken } from "@/app/lib/jwt";
 import { sendTermsAndConditionsMail } from "@/app/lib/mailer";
+import { setSecureCookie } from "@/app/lib/apiHelpers";
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
@@ -81,13 +82,8 @@ export async function GET(req) {
 
   const res = NextResponse.redirect(redirectUrl);
 
-  res.cookies.set("token", jwt, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 7,
-  });
+  // ✅ SECURITY: Use setSecureCookie utility for consistent cookie handling
+  setSecureCookie(res, "token", jwt, 7 * 24 * 60 * 60); // 7 days
 
   return res;
 }

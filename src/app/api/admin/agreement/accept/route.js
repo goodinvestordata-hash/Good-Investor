@@ -1,25 +1,30 @@
 import { NextResponse } from "next/server";
-import { verifyToken } from "@/app/lib/jwt";
 import connectDB from "@/app/lib/db";
 import User from "@/app/lib/models/User";
+import { requireAdmin } from "@/app/lib/authServer";
 
 export async function POST(req) {
-  await connectDB();
-
-  const token = req.cookies.get("token")?.value;
-  if (!token) return NextResponse.json({ error: "Not Authenticated" }, { status: 401 });
-
-  let user;
   try {
-    user = verifyToken(token);
-  } catch {
-    return NextResponse.json({ error: "Invalid Token" }, { status: 403 });
+    // ✅ SECURITY: Require admin role (prevent privilege escalation)
+    const user = await requireAdmin();
+    
+    await connectDB();
+
+    await User.findByIdAndUpdate(user.userId, {
+      pdfAccepted: true,
+      pdfAcceptedAt: new Date()
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    if (error.statusCode === 401) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (error.statusCode === 403) {
+      return NextResponse.json({ error: "Forbidden - Admin access required" }, { status: 403 });
+    }
+    
+    console.error("Error accepting PDF:", error);
+    return NextResponse.json({ error: "Failed to accept PDF" }, { status: 500 });
   }
-
-  await User.findByIdAndUpdate(user.id, {
-    pdfAccepted: true,
-    pdfAcceptedAt: new Date()
-  });
-
-  return NextResponse.json({ success: true });
 }

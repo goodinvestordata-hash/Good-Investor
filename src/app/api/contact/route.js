@@ -2,16 +2,17 @@ import { NextResponse } from "next/server";
 import { transporter } from "@/app/lib/mailer";
 import connectDB from "@/app/lib/db";
 import ContactMessage from "@/app/lib/models/ContactMessage";
+import { createPerIpRateLimiter } from "@/app/lib/rateLimiter";
 
+// ✅ SECURITY: Get contact receiver from environment
 const CONTACT_RECEIVER_EMAIL =
-  process.env.CONTACT_RECEIVER_EMAIL || "spkumar.researchanalyst@gmail.com";
-const RATE_LIMIT_WINDOW_MS = 60 * 1000;
-const RATE_LIMIT_MAX_REQUESTS = 5;
+  process.env.CONTACT_RECEIVER_EMAIL || process.env.MAIL_FROM;
 
-const ipRequestStore = globalThis.__contactRateLimitStore || new Map();
-if (!globalThis.__contactRateLimitStore) {
-  globalThis.__contactRateLimitStore = ipRequestStore;
+if (!CONTACT_RECEIVER_EMAIL) {
+  throw new Error('CONTACT_RECEIVER_EMAIL or MAIL_FROM environment variable is required');
 }
+
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_REGEX = /^\d{8,15}$/;
@@ -35,32 +36,32 @@ function escapeHtml(value) {
     .replace(/'/g, "&#39;");
 }
 
+// ✅ SECURITY: Get client IP from headers
 function getClientIp(request) {
-  const forwardedFor = request.headers.get("x-forwarded-for") || "";
-  const realIp = request.headers.get("x-real-ip") || "";
+  const forwardedFor = request.headers.get("x-forwarded-for");
   if (forwardedFor) {
     return forwardedFor.split(",")[0].trim();
   }
-  return realIp.trim() || "unknown";
-}
-
-function isRateLimited(ip) {
-  const now = Date.now();
-  const existing = ipRequestStore.get(ip) || [];
-  const recent = existing.filter((ts) => now - ts < RATE_LIMIT_WINDOW_MS);
-
-  if (recent.length >= RATE_LIMIT_MAX_REQUESTS) {
-    ipRequestStore.set(ip, recent);
-    return true;
-  }
-
-  recent.push(now);
-  ipRequestStore.set(ip, recent);
-  return false;
+  return request.headers.get("x-real-ip") || "unknown";
 }
 
 export async function POST(request) {
   try {
+    // ✅ SECURITY: Rate limit contact form (5 requests per minute per IP)
+    const rateLimitCheck = createPerIpRateLimiter(request, 5, 60 * 1000);
+    if (rateLimitCheck.limited) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: `Too many requests. Please wait ${rateLimitCheck.retryAfter} seconds before trying again.`,
+        },
+        { 
+          status: 429,
+          headers: { 'Retry-After': rateLimitCheck.retryAfter.toString() }
+        }
+      );
+    }
+
     const body = await request.json();
     const name = sanitizeText(body?.name);
     const email = sanitizeText(body?.email).toLowerCase();
@@ -104,17 +105,6 @@ export async function POST(request) {
       );
     }
 
-    const clientIp = getClientIp(request);
-    if (isRateLimited(clientIp)) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Too many requests. Please wait a minute and try again.",
-        },
-        { status: 429 }
-      );
-    }
-
     const submittedAt = new Date();
     const submittedAtLabel = submittedAt.toLocaleString("en-IN", {
       dateStyle: "medium",
@@ -126,6 +116,9 @@ export async function POST(request) {
       .toString(36)
       .slice(2, 6)
       .toUpperCase()}`;
+
+    // ✅ SECURITY: Get client IP for logging
+    const clientIp = getClientIp(request);
 
     await connectDB();
 

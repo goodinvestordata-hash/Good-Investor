@@ -7,8 +7,22 @@ import Payment from "@/app/lib/models/Payment";
 import Coupon from "@/app/lib/models/Coupon";
 import { verifyToken } from "@/app/lib/jwt";
 import { cookies } from "next/headers";
+import { createPerIpRateLimiter } from "@/app/lib/rateLimiter";
+import { isValidEmail } from "@/app/lib/validators";
 
 export async function POST(request) {
+  // ✅ SECURITY: Rate limit payment verification (10 requests per minute per IP)
+  const rateLimitCheck = createPerIpRateLimiter(request, 10, 60 * 1000);
+  if (rateLimitCheck.limited) {
+    return NextResponse.json(
+      { error: `Too many payment requests. Try again in ${rateLimitCheck.retryAfter} seconds.` },
+      { 
+        status: 429,
+        headers: { 'Retry-After': rateLimitCheck.retryAfter.toString() }
+      }
+    );
+  }
+
   await connectDB();
   const body = await request.json();
   const {
@@ -37,6 +51,14 @@ export async function POST(request) {
   ) {
     return NextResponse.json(
       { error: "Missing required payment fields" },
+      { status: 400 },
+    );
+  }
+
+  // ✅ SECURITY: Validate email format
+  if (!isValidEmail(email)) {
+    return NextResponse.json(
+      { error: "Invalid email format" },
       { status: 400 },
     );
   }

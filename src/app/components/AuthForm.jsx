@@ -43,7 +43,7 @@ export default function AuthForm({ type }) {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-neutral-50 via-white to-lime-50/60">
+    <div className="relative min-h-screen bg-linear-to-br from-neutral-50 via-white to-lime-50/60">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,#9BE74933,transparent_30%),radial-gradient(circle_at_80%_0%,#c7ffc033,transparent_28%)]" />
 
       <div className="relative mx-auto flex min-h-screen max-w-6xl flex-col justify-center px-4 pb-16 pt-28 md:px-8">
@@ -112,7 +112,7 @@ export default function AuthForm({ type }) {
                 />
               </label>
 
-              <button className="w-full rounded-full bg-lime-400 px-4 py-3 text-sm font-semibold text-neutral-900 shadow-[0_12px_30px_rgba(0,0,0,0.12)] ring-1 ring-black/10 transition hover:translate-y-[-1px] hover:shadow-[0_14px_36px_rgba(0,0,0,0.18)] hover:ring-black/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/70 cursor-pointer">
+              <button className="w-full rounded-full bg-lime-400 px-4 py-3 text-sm font-semibold text-neutral-900 shadow-[0_12px_30px_rgba(0,0,0,0.12)] ring-1 ring-black/10 transition hover:-translate-y-px hover:shadow-[0_14px_36px_rgba(0,0,0,0.18)] hover:ring-black/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/70 cursor-pointer">
                 {type === "login" ? "Login securely" : "Create account"}
               </button>
             </form>
@@ -151,12 +151,13 @@ export default function AuthForm({ type }) {
             </div>
           </div>
 
-          <div className="relative hidden h-full min-h-[320px] overflow-hidden rounded-2xl border border-neutral-200/70 bg-gradient-to-br from-neutral-900 via-neutral-800 to-black shadow-[0_30px_80px_rgba(0,0,0,0.22)] lg:block">
-            <div className="absolute inset-0 bg-gradient-to-tr from-lime-400/40 via-lime-200/10 to-transparent" />
+          <div className="relative hidden h-full min-h-80 overflow-hidden rounded-2xl border border-neutral-200/70 bg-linear-to-br from-neutral-900 via-neutral-800 to-black shadow-[0_30px_80px_rgba(0,0,0,0.22)] lg:block">
+            <div className="absolute inset-0 bg-linear-to-tr from-lime-400/40 via-lime-200/10 to-transparent" />
             <Image
               src="/trademilaan.png"
               alt="Trading analytics dashboard"
               fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
               className="object-cover opacity-90"
               priority
             />
