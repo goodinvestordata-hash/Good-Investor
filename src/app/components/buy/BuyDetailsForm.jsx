@@ -15,7 +15,13 @@ export default function BuyDetailsForm({ onSuccess, planData }) {
   const [loading, setLoading] = useState(false);
 
   const update = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    const normalizedValue =
+      name === "panNumber"
+        ? value.toUpperCase().replace(/\s+/g, "").slice(0, 10)
+        : value;
+
+    setForm({ ...form, [name]: normalizedValue });
   };
 
   const submit = async () => {
@@ -131,8 +137,14 @@ export default function BuyDetailsForm({ onSuccess, planData }) {
         name="panNumber"
         placeholder="PAN Number"
         className="border p-2 w-full mb-4 uppercase"
+        value={form.panNumber}
+        maxLength={10}
+        autoCapitalize="characters"
         onChange={update}
       />
+      <p className="text-xs text-neutral-500 -mt-2 mb-4">
+        PAN format: AAAAA9999A (example: AFIPN3886L)
+      </p>
 
       <button
         onClick={submit}
