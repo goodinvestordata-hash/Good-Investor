@@ -146,6 +146,7 @@ export default function PlanList() {
       <div className="flex items-center justify-between mb-6">
         
         <button
+          type="button"
           onClick={() => {
             setEditingPlan(null);
             setShowForm(true);
@@ -161,6 +162,7 @@ export default function PlanList() {
         <div className="mb-4 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg flex items-center justify-between">
           <span>{success}</span>
           <button
+            type="button"
             onClick={() => setSuccess("")}
             className="text-green-700 hover:text-green-900"
           >
@@ -188,6 +190,7 @@ export default function PlanList() {
         <div className="text-center py-12 bg-neutral-50 rounded-lg border border-neutral-200">
           <p className="text-neutral-600 mb-4">No plans created yet</p>
           <button
+            type="button"
             onClick={() => {
               setEditingPlan(null);
               setShowForm(true);
@@ -259,6 +262,7 @@ export default function PlanList() {
                   </td>
                   <td className="px-6 py-4">
                     <button
+                      type="button"
                       onClick={() => handleToggleStatus(plan)}
                       className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
                         plan.isActive
@@ -280,6 +284,7 @@ export default function PlanList() {
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       <button
+                        type="button"
                         onClick={() => handleEditPlan(plan)}
                         className="p-2 hover:bg-blue-100 rounded-lg transition-colors cursor-pointer"
                         title="Edit plan"
@@ -287,6 +292,7 @@ export default function PlanList() {
                         <Edit2 size={16} className="text-blue-600" />
                       </button>
                       <button
+                        type="button"
                         onClick={() => handleDeletePlan(plan._id, plan.name)}
                         disabled={deleting === plan._id}
                         className="p-2 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
@@ -324,12 +330,14 @@ export default function PlanList() {
             {/* Actions */}
             <div className="flex gap-3 justify-end">
               <button
+                type="button"
                 onClick={cancelDelete}
                 className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
               >
                 Cancel
               </button>
               <button
+                type="button"
                 onClick={confirmDelete}
                 disabled={deleting}
                 className="px-4 py-2 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"

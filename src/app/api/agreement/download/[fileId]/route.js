@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/app/lib/db";
 import SignedAgreement from "@/app/lib/models/SignedAgreement";
+import User from "@/app/lib/models/User";
 import { generateCompleteAgreementPDF } from "@/app/lib/generateCompletePDF";
 import { sendAgreementPDFMail } from "@/app/lib/mailer";
 
@@ -80,6 +81,16 @@ export async function GET(req, { params }) {
         try {
           await sendAgreementPDFMail({ to: userEmail, pdfBuffer, clientName, clientPan });
           mailResults.push(`User mail sent to ${userEmail}`);
+
+          // Mark agreement mail flag only when mail send succeeds.
+          await User.findOneAndUpdate(
+            { email: String(userEmail).toLowerCase().trim() },
+            {
+              agreementMailedToUser: true,
+              agreementMailedAt: new Date(),
+            },
+            { new: false }
+          );
         } catch (err) {
           mailResults.push(`User mail FAILED to ${userEmail}: ${err.message}`);
         }

@@ -53,6 +53,7 @@ export default function AnalyticsSection() {
         <h2 className="text-red-800 font-bold mb-2">Error</h2>
         <p className="text-red-700">{error}</p>
         <button
+          type="button"
           onClick={fetchAnalytics}
           className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 cursor-pointer"
         >
@@ -72,6 +73,7 @@ export default function AnalyticsSection() {
       <div className="flex justify-between items-center gap-4 bg-white rounded-lg p-2 w-full border">
         <div className="flex gap-4 bg-white rounded-lg p-1">
           <button
+            type="button"
             onClick={() => setAnalyticsTab("payments")}
             className={`px-6 py-2 rounded-lg font-medium transition cursor-pointer ${
               analyticsTab === "payments"
@@ -82,6 +84,7 @@ export default function AnalyticsSection() {
             Payments
           </button>
           <button
+            type="button"
             onClick={() => setAnalyticsTab("signups")}
             className={`px-6 py-2 rounded-lg font-medium transition cursor-pointer ${
               analyticsTab === "signups"
@@ -94,6 +97,7 @@ export default function AnalyticsSection() {
         </div>
         {/* Refresh Button */}
         <button
+          type="button"
           onClick={fetchAnalytics}
           className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-800 transition cursor-pointer"
         >

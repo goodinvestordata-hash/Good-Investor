@@ -134,6 +134,7 @@ export default function PaymentAuditSection() {
       <div className="flex items-center justify-between flex-col sm:flex-row gap-4">
        
         <button
+          type="button"
           onClick={downloadCSV}
           className="inline-flex items-center gap-2 px-4 py-2 cursor-pointer bg-lime-500 text-white rounded-lg hover:bg-lime-600 transition whitespace-nowrap"
         >
@@ -192,6 +193,7 @@ export default function PaymentAuditSection() {
             ].map((filter) => (
               <button
                 key={filter.value}
+                type="button"
                 onClick={() => setStatusFilter(filter.value)}
                 className={`px-4 py-2 rounded-lg font-semibold transition cursor-pointer ${
                   statusFilter === filter.value
@@ -294,6 +296,7 @@ export default function PaymentAuditSection() {
                       </td>
                       <td className="py-4 px-4">
                         <button
+                          type="button"
                           onClick={(e) => {
                             e.stopPropagation();
                             setExpandedPaymentId(isExpanded ? null : payment._id);
@@ -370,6 +373,7 @@ export default function PaymentAuditSection() {
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2 flex-wrap">
           <button
+            type="button"
             onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
             disabled={currentPage === 1}
             className="px-3 py-1 border border-neutral-200 rounded hover:bg-neutral-50 disabled:opacity-50 cursor-pointer"
@@ -380,6 +384,7 @@ export default function PaymentAuditSection() {
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <button
               key={page}
+              type="button"
               onClick={() => setCurrentPage(page)}
               className={`px-3 py-1 rounded cursor-pointer ${
                 currentPage === page
@@ -392,6 +397,7 @@ export default function PaymentAuditSection() {
           ))}
 
           <button
+            type="button"
             onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
             disabled={currentPage === totalPages}
             className="px-3 py-1 border border-neutral-200 rounded hover:bg-neutral-50 disabled:opacity-50 cursor-pointer"

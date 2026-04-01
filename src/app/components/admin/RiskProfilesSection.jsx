@@ -36,6 +36,7 @@ export default function RiskProfilesSection({ data }) {
                 Submitted: {r.createdAt ? new Date(r.createdAt).toLocaleDateString() : "-"}
               </div>
               <button
+                type="button"
                 onClick={() => setSelectedProfile(r)}
                 className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium rounded transition"
               >
@@ -57,6 +58,7 @@ export default function RiskProfilesSection({ data }) {
                 <p className="text-sm text-neutral-500 mt-1">{selectedProfile.email}</p>
               </div>
               <button
+                type="button"
                 onClick={() => setSelectedProfile(null)}
                 className="p-2 hover:bg-neutral-100 rounded-lg transition"
                 aria-label="Close modal"
@@ -141,6 +143,7 @@ export default function RiskProfilesSection({ data }) {
             {/* Modal Footer */}
             <div className="sticky bottom-0 bg-neutral-50 border-t p-6 flex justify-end gap-2">
               <button
+                type="button"
                 onClick={() => setSelectedProfile(null)}
                 className="px-4 py-2 bg-neutral-200 hover:bg-neutral-300 text-neutral-900 font-medium rounded-lg transition"
               >
