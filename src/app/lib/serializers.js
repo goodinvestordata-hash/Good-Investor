@@ -30,8 +30,14 @@ export function serializeAuthUser(user) {
     email: safe.email,
     username: safe.username,
     fullName: safe.fullName,
+    dob: safe.dob,
+    gender: safe.gender,
+    state: safe.state,
+    panNumber: safe.panNumber,
+    phone: safe.phone,
     role: safe.role,
     emailVerified: safe.emailVerified,
+    disclaimerAccepted: Boolean(safe.disclaimerAccepted),
   };
 }
 
