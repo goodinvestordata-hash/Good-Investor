@@ -31,30 +31,7 @@ export default function AdminDashboardPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    // Redirect if not authenticated or not admin
-    if (!loading && (!user || user.role !== "admin")) {
-      router.push("/login");
-    }
-  }, [user, loading, router]);
-
-  // Show loading while checking auth
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-400 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Don't render if not admin
-  if (!user || user.role !== "admin") {
-    return null;
-  }
-
+  // Initialize all state hooks at the top (before any conditional returns)
   const [activeTab, setActiveTab] = useState("users");
   const [loadingData, setLoadingData] = useState(false);
   const [contactUnreadCount, setContactUnreadCount] = useState(0);
@@ -95,9 +72,37 @@ export default function AdminDashboardPage() {
     setLoadingData(false);
   };
 
+  // All hooks must be declared before any conditional returns
   useEffect(() => {
-    fetchAllData();
-  }, []);
+    // Redirect if not authenticated or not admin
+    if (!loading && (!user || user.role !== "admin")) {
+      router.push("/login");
+    }
+  }, [user, loading, router]);
+
+  useEffect(() => {
+    // Fetch data only if user is authenticated and is admin
+    if (!loading && user && user.role === "admin") {
+      fetchAllData();
+    }
+  }, [loading, user]);
+
+  // Show loading while checking auth
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-400 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if not admin
+  if (!user || user.role !== "admin") {
+    return null;
+  }
 
   const currentCollection = COLLECTIONS.find((c) => c.key === activeTab);
 
