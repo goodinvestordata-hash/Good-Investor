@@ -203,16 +203,16 @@ export default function SignedUsersSection({ data = [], onRefresh }) {
 
   return (
     <div className="space-y-3">
-      <div className="sticky top-2 z-20 md:static rounded-2xl border border-slate-200 bg-white/95 backdrop-blur supports-backdrop-filter:bg-white/85 p-3 shadow-[0_6px_24px_rgba(15,23,42,0.06)]">
+      <div className="sticky top-2 z-20 md:static rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur supports-backdrop-filter:bg-white/85 p-3 shadow-[0_6px_24px_rgba(15,23,42,0.06)]">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 mb-2">
           <div className="lg:col-span-2 relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-black/45 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by name, email, mobile, PAN, or service..."
-              className="w-full rounded-lg border border-slate-200 px-9 py-2 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400"
+              className="w-full rounded-lg border border-neutral-200 px-9 py-2 text-sm text-black/80 placeholder:text-black/45 focus:outline-none focus:ring-2 focus:ring-neutral-300 focus:border-neutral-400"
             />
           </div>
           <button
@@ -232,14 +232,14 @@ export default function SignedUsersSection({ data = [], onRefresh }) {
         </div>
 
         <div className="flex items-center gap-1 flex-wrap">
-          <span className="text-slate-600 text-sm font-medium mr-1">Sort:</span>
+          <span className="text-black/65 text-sm font-medium mr-1">Sort:</span>
           <button
             type="button"
             onClick={() => setSortBy("dateOfConsent")}
             className={`px-3 py-1.5 text-sm rounded-lg font-medium transition ${
               sortBy === "dateOfConsent"
-                ? "bg-slate-900 text-white"
-                : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                ? "bg-black text-white"
+                : "bg-neutral-100 text-black/75 hover:bg-neutral-200"
             }`}
           >
             Date
@@ -249,8 +249,8 @@ export default function SignedUsersSection({ data = [], onRefresh }) {
             onClick={() => setSortBy("name")}
             className={`px-3 py-1.5 text-sm rounded-lg font-medium transition ${
               sortBy === "name"
-                ? "bg-slate-900 text-white"
-                : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                ? "bg-black text-white"
+                : "bg-neutral-100 text-black/75 hover:bg-neutral-200"
             }`}
           >
             Name
@@ -260,8 +260,8 @@ export default function SignedUsersSection({ data = [], onRefresh }) {
             onClick={() => setSortBy("email")}
             className={`px-3 py-1.5 text-sm rounded-lg font-medium transition ${
               sortBy === "email"
-                ? "bg-slate-900 text-white"
-                : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                ? "bg-black text-white"
+                : "bg-neutral-100 text-black/75 hover:bg-neutral-200"
             }`}
           >
             Email
@@ -271,74 +271,74 @@ export default function SignedUsersSection({ data = [], onRefresh }) {
             onClick={() => setSortBy("serviceName")}
             className={`px-3 py-1.5 text-sm rounded-lg font-medium transition ${
               sortBy === "serviceName"
-                ? "bg-slate-900 text-white"
-                : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                ? "bg-black text-white"
+                : "bg-neutral-100 text-black/75 hover:bg-neutral-200"
             }`}
           >
             Service
           </button>
-          <span className="ml-auto text-sm text-slate-600 font-medium px-3 py-1.5 rounded-lg bg-slate-100">
-            Total: <span className="font-bold text-slate-900">{filteredAndSortedUsers.length}</span>
+          <span className="ml-auto text-sm text-black/70 font-medium px-3 py-1.5 rounded-lg bg-neutral-100 border border-neutral-200">
+            Total: <span className="font-bold text-black">{filteredAndSortedUsers.length}</span>
           </span>
         </div>
       </div>
 
       {/* Table Container with overflow-x-auto */}
-      <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-[0_8px_30px_rgba(15,23,42,0.06)]">
+      <div className="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-[0_8px_30px_rgba(15,23,42,0.06)]">
         {/* Mobile View */}
-        <div className="md:hidden p-4 space-y-4 bg-slate-50/50">
+        <div className="md:hidden p-4 space-y-4 bg-neutral-50/70">
           {filteredAndSortedUsers.map((u) => (
-            <div key={u._id} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div key={u._id} className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
               <div className="mb-4">
-                <p className="font-bold text-lg text-slate-900">{u?.name}</p>
-                <p className="text-sm text-slate-500">{u?.email}</p>
+                <p className="font-bold text-lg text-black/90">{u?.name}</p>
+                <p className="text-sm text-black/55">{u?.email}</p>
               </div>
 
-              <div className="space-y-2 text-sm text-slate-700">
+              <div className="space-y-2 text-sm text-black/75">
                 <p>
-                  <span className="font-semibold text-slate-900">PAN:</span> {u?.pan}
+                  <span className="font-semibold text-black/90">PAN:</span> {u?.pan}
                 </p>
                 <p>
-                  <span className="font-semibold text-slate-900">DOB:</span> {u?.dob}
+                  <span className="font-semibold text-black/90">DOB:</span> {u?.dob}
                 </p>
                 <p>
-                  <span className="font-semibold text-slate-900">Mobile:</span> {u?.mobile}
+                  <span className="font-semibold text-black/90">Mobile:</span> {u?.mobile}
                 </p>
                 <p>
-                  <span className="font-semibold text-slate-900">State:</span> {u?.state}
+                  <span className="font-semibold text-black/90">State:</span> {u?.state}
                 </p>
                 <p>
-                  <span className="font-semibold text-slate-900">Service:</span> {u?.serviceName}
+                  <span className="font-semibold text-black/90">Service:</span> {u?.serviceName}
                 </p>
                 <p>
-                  <span className="font-semibold text-slate-900">Consent Date:</span>{" "}
+                  <span className="font-semibold text-black/90">Consent Date:</span>{" "}
                   {formatDate(u?.dateOfConsent)}
                 </p>
                 <p>
-                  <span className="font-semibold text-slate-900">Valid From:</span>{" "}
+                  <span className="font-semibold text-black/90">Valid From:</span>{" "}
                   {formatDate(u?.validFrom)}
                 </p>
                 <p>
-                  <span className="font-semibold text-slate-900">Valid Till:</span>{" "}
+                  <span className="font-semibold text-black/90">Valid Till:</span>{" "}
                   {formatDate(u?.validTill)}
                 </p>
               </div>
 
               <div className="mt-4 space-y-2">
                 <div>
-                  <p className="text-xs font-semibold text-slate-600 mb-1">Agreement Mailed To User</p>
+                  <p className="text-xs font-semibold text-black/65 mb-1">Agreement Mailed To User</p>
                   {MailStatusText({ value: u?.agreementMailedToUser })}
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-slate-600 mb-1">MITC Mailed To User</p>
+                  <p className="text-xs font-semibold text-black/65 mb-1">MITC Mailed To User</p>
                   {MailStatusText({ value: u?.mitcMailedToUser })}
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-slate-600 mb-1">KYC Updated By Admin</p>
+                  <p className="text-xs font-semibold text-black/65 mb-1">KYC Updated By Admin</p>
                   {StatusBadge({ value: u?.kycUpdatedByAdmin })}
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-slate-600 mb-1">Invoice Mailed To User</p>
+                  <p className="text-xs font-semibold text-black/65 mb-1">Invoice Mailed To User</p>
                   {StatusBadge({ value: u?.invoiceMailedToUser })}
                 </div>
               </div>
@@ -349,51 +349,51 @@ export default function SignedUsersSection({ data = [], onRefresh }) {
         {/* Desktop View with horizontal scroll container */}
         <div className="hidden md:block w-full overflow-x-auto">
           <table className="w-full min-w-[1900px] text-sm">
-            <thead className="bg-slate-50 border-b border-slate-200">
+            <thead className="bg-neutral-50 border-b border-neutral-200">
               <tr>
-                <th className="text-left px-3 py-2.5 text-slate-700 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-3 py-2.5 text-black/80 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
                   Name
                 </th>
-                <th className="text-left px-3 py-2.5 text-slate-700 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-3 py-2.5 text-black/80 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
                   PAN
                 </th>
-                <th className="text-left px-3 py-2.5 text-slate-700 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-3 py-2.5 text-black/80 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
                   DOB
                 </th>
-                <th className="text-left px-3 py-2.5 text-slate-700 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-3 py-2.5 text-black/80 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
                   Consent Date
                 </th>
-                <th className="text-left px-3 py-2.5 text-slate-700 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-3 py-2.5 text-black/80 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
                   Email
                 </th>
-                <th className="text-left px-3 py-2.5 text-slate-700 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-3 py-2.5 text-black/80 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
                   Mobile
                 </th>
-                <th className="text-left px-3 py-2.5 text-slate-700 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-3 py-2.5 text-black/80 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
                   State
                 </th>
-                <th className="text-left px-3 py-2.5 text-slate-700 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-3 py-2.5 text-black/80 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
                   Service
                 </th>
-                <th className="text-left px-3 py-2.5 text-slate-700 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-3 py-2.5 text-black/80 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
                   Agreement Mailed
                 </th>
-                <th className="text-left px-3 py-2.5 text-slate-700 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-3 py-2.5 text-black/80 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
                   MITC Mailed
                 </th>
-                <th className="text-left px-3 py-2.5 text-slate-700 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-3 py-2.5 text-black/80 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
                   KYC Updated
                 </th>
-                <th className="text-left px-3 py-2.5 text-slate-700 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-3 py-2.5 text-black/80 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
                   Valid From
                 </th>
-                <th className="text-left px-3 py-2.5 text-slate-700 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-3 py-2.5 text-black/80 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
                   Valid Till
                 </th>
-                <th className="text-left px-3 py-2.5 text-slate-700 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-3 py-2.5 text-black/80 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
                   Renewal
                 </th>
-                <th className="text-left px-3 py-2.5 text-slate-700 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-3 py-2.5 text-black/80 font-semibold text-xs uppercase tracking-wide whitespace-nowrap">
                   Invoice Mailed
                 </th>
               </tr>
@@ -402,30 +402,30 @@ export default function SignedUsersSection({ data = [], onRefresh }) {
               {filteredAndSortedUsers.map((u) => (
                 <tr
                   key={u._id}
-                  className="border-b border-slate-100 hover:bg-emerald-50/30 transition"
+                  className="border-b border-neutral-100 hover:bg-neutral-50/70 transition"
                 >
-                  <td className="px-3 py-2.5 font-medium text-slate-900 whitespace-nowrap">
+                  <td className="px-3 py-2.5 font-medium text-black/90 whitespace-nowrap">
                     {u?.name}
                   </td>
-                  <td className="px-3 py-2.5 text-slate-700 font-mono text-sm whitespace-nowrap">
+                  <td className="px-3 py-2.5 text-black/75 font-mono text-sm whitespace-nowrap">
                     {u?.pan}
                   </td>
-                  <td className="px-3 py-2.5 text-slate-700 text-sm whitespace-nowrap">
+                  <td className="px-3 py-2.5 text-black/75 text-sm whitespace-nowrap">
                     {u?.dob}
                   </td>
-                  <td className="px-3 py-2.5 text-slate-700 text-sm whitespace-nowrap">
+                  <td className="px-3 py-2.5 text-black/75 text-sm whitespace-nowrap">
                     {formatDateWithTime(u?.dateOfConsent)}
                   </td>
-                  <td className="px-3 py-2.5 text-slate-700 text-sm whitespace-nowrap truncate">
+                  <td className="px-3 py-2.5 text-black/75 text-sm whitespace-nowrap truncate">
                     {u?.email}
                   </td>
-                  <td className="px-3 py-2.5 text-slate-700 text-sm whitespace-nowrap">
+                  <td className="px-3 py-2.5 text-black/75 text-sm whitespace-nowrap">
                     {u?.mobile}
                   </td>
-                  <td className="px-3 py-2.5 text-slate-700 text-sm whitespace-nowrap">
+                  <td className="px-3 py-2.5 text-black/75 text-sm whitespace-nowrap">
                     {u?.state}
                   </td>
-                  <td className="px-3 py-2.5 text-slate-700 text-sm font-medium whitespace-nowrap">
+                  <td className="px-3 py-2.5 text-black/80 text-sm font-medium whitespace-nowrap">
                     {u?.serviceName}
                   </td>
                   <td className="px-3 py-2.5">
@@ -450,13 +450,13 @@ export default function SignedUsersSection({ data = [], onRefresh }) {
                       {StatusBadge({ value: u?.kycUpdatedByAdmin })}
                     </button>
                   </td>
-                  <td className="px-3 py-2.5 text-slate-700 text-sm whitespace-nowrap">
+                  <td className="px-3 py-2.5 text-black/75 text-sm whitespace-nowrap">
                     {formatDate(u?.validFrom)}
                   </td>
-                  <td className="px-3 py-2.5 text-slate-700 text-sm whitespace-nowrap">
+                  <td className="px-3 py-2.5 text-black/75 text-sm whitespace-nowrap">
                     {formatDate(u?.validTill)}
                   </td>
-                  <td className="px-3 py-2.5 text-slate-700 text-sm whitespace-nowrap">
+                  <td className="px-3 py-2.5 text-black/75 text-sm whitespace-nowrap">
                     {formatDate(u?.renewalDate)}
                   </td>
                   <td className="px-3 py-2.5">
@@ -472,8 +472,8 @@ export default function SignedUsersSection({ data = [], onRefresh }) {
       {kycDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="w-full max-w-md rounded-xl bg-white p-4 shadow-xl">
-            <h3 className="text-base font-semibold text-slate-900">Update KYC Status</h3>
-            <p className="mt-1 text-sm text-slate-600">User: {kycDialog.name}</p>
+            <h3 className="text-base font-semibold text-black/90">Update KYC Status</h3>
+            <p className="mt-1 text-sm text-black/65">User: {kycDialog.name}</p>
 
             <div className="mt-4 grid grid-cols-2 gap-2">
               <button
@@ -489,7 +489,7 @@ export default function SignedUsersSection({ data = [], onRefresh }) {
                 className={`rounded-lg border px-3 py-2 text-sm font-medium ${
                   kycDialog.selectedValue
                     ? "border-emerald-300 bg-emerald-50 text-emerald-700"
-                    : "border-slate-200 bg-white text-slate-700"
+                    : "border-neutral-200 bg-white text-black/75"
                 }`}
               >
                 Yes
@@ -507,7 +507,7 @@ export default function SignedUsersSection({ data = [], onRefresh }) {
                 className={`rounded-lg border px-3 py-2 text-sm font-medium ${
                   !kycDialog.selectedValue
                     ? "border-rose-300 bg-rose-50 text-rose-700"
-                    : "border-slate-200 bg-white text-slate-700"
+                    : "border-neutral-200 bg-white text-black/75"
                 }`}
               >
                 No
@@ -518,7 +518,7 @@ export default function SignedUsersSection({ data = [], onRefresh }) {
               <button
                 type="button"
                 onClick={() => setKycDialog(null)}
-                className="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                className="rounded-lg border border-neutral-200 px-3 py-2 text-sm text-black/75 hover:bg-neutral-50"
               >
                 Cancel
               </button>
