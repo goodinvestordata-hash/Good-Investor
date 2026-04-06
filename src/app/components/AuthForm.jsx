@@ -38,8 +38,9 @@ export default function AuthForm({ type }) {
       return;
     }
 
+    const shouldShowDisclaimer = !data?.user?.disclaimerAccepted;
     await fetchMe();
-    router.push("/disclaimer");
+    router.push(shouldShowDisclaimer ? "/disclaimer" : "/");
   };
 
   return (

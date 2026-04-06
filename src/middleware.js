@@ -26,8 +26,8 @@ function setSecurityHeaders(response) {
       "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
       "img-src 'self' data: https: *.cloudinary.com",
       "font-src 'self' data: fonts.gstatic.com",
-      "connect-src 'self' https: wss: *.razorpay.com *.cloudinary.com",
-      "frame-src 'self' *.razorpay.com",
+      "connect-src 'self' https: wss: *.razorpay.com *.cloudinary.com maps.googleapis.com maps.google.com www.google.com",
+      "frame-src 'self' *.razorpay.com maps.google.com www.google.com",
       "form-action 'self'",
       "frame-ancestors 'none'",
     ].join('; ')
@@ -100,6 +100,7 @@ export async function middleware(request) {
     '/api/auth/logout',
     '/api/auth/google',
     '/api/contact',
+    '/api/user/accept-disclaimer',
     '/api/payment/verify', // Razorpay webhook doesn't have CSRF token
     '/api/buy/', // Buy endpoints use JWT authentication
     '/api/agreement/', // Agreement endpoints use JWT authentication
