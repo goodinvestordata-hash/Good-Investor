@@ -22,12 +22,12 @@ function setSecurityHeaders(response) {
     'Content-Security-Policy',
     [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.cloudinary.com checkout.razorpay.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.cloudinary.com *.razorpay.com",
       "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
       "img-src 'self' data: https: *.cloudinary.com",
       "font-src 'self' data: fonts.gstatic.com",
       "connect-src 'self' https: wss: *.razorpay.com *.cloudinary.com maps.googleapis.com maps.google.com www.google.com",
-      "frame-src 'self' checkout.razorpay.com maps.google.com www.google.com",
+      "frame-src 'self' *.razorpay.com maps.google.com www.google.com",
       "form-action 'self'",
       "frame-ancestors 'none'",
     ].join('; ')
@@ -102,6 +102,13 @@ export async function middleware(request) {
     '/api/contact',
     '/api/user/accept-disclaimer',
     '/api/payment/verify', // Razorpay webhook doesn't have CSRF token
+    '/api/buy/', // Buy endpoints use JWT authentication
+    '/api/agreement/', // Agreement endpoints use JWT authentication
+    '/api/user/', // User endpoints use JWT authentication
+    '/api/signature/', // Signature endpoints use JWT authentication
+    '/api/risk-profile/', // Risk profile endpoints use JWT authentication
+    '/api/payment/order', // Payment order endpoint uses JWT authentication
+    '/api/admin/', // Admin endpoints use JWT authentication
   ];
   
   const isExempt = csrfExemptRoutes.some(route => pathname.startsWith(route));
