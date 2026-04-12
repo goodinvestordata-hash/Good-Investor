@@ -77,7 +77,7 @@ export async function POST(request) {
     const cloudinaryResult = await uploadToCloudinary(
       buffer,
       safeName,
-      "trademilaan/agreements",
+      "Good Investor/agreements",
     );
 
     const last = await Agreement.findOne().sort({ version: -1 });

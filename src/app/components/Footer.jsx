@@ -33,7 +33,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative bottom-0 w-full bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 text-white overflow-hidden">
+    <footer className="relative bottom-0 w-full bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div
@@ -55,11 +55,11 @@ const Footer = () => {
             transition={{ duration: 0.5 }}
             className="space-y-4"
           >
-            <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-lime-400 to-green-500 bg-clip-text text-transparent">
+            <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-sky-300 to-teal-300 bg-clip-text text-transparent">
               About Us
             </h3>
             <p className="text-neutral-300 leading-relaxed text-sm">
-              Sasikumar Peyyala is a SEBI-registered research analyst with a
+              Eeda Damodara Rao is a SEBI-registered research analyst with a
               deep passion for AI and machine learning-driven trading
               strategies. With over nine years of experience in financial
               markets.
@@ -74,7 +74,7 @@ const Footer = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="space-y-4"
           >
-            <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-lime-400 to-green-500 bg-clip-text text-transparent">
+            <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-sky-300 to-teal-300 bg-clip-text text-transparent">
               Quick Links
             </h3>
             <ul className="space-y-3">
@@ -82,9 +82,9 @@ const Footer = () => {
                 <li key={index}>
                   <Link
                     href={link.path}
-                    className="text-neutral-300 hover:text-lime-400 transition-colors duration-300 text-sm flex items-center group"
+                    className="text-neutral-300 hover:text-sky-300 transition-colors duration-300 text-sm flex items-center group"
                   >
-                    <span className="mr-2 text-lime-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span className="mr-2 text-sky-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       →
                     </span>
                     {link.name}
@@ -102,7 +102,7 @@ const Footer = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="space-y-4"
           >
-            <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-lime-400 to-green-500 bg-clip-text text-transparent">
+            <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-sky-300 to-teal-300 bg-clip-text text-transparent">
               Follow Us
             </h3>
             <div className="flex gap-4">
@@ -112,11 +112,11 @@ const Footer = () => {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/10 backdrop-blur flex items-center justify-center hover:bg-lime-400 hover:scale-110 transition-all duration-300 group"
+                  className="w-10 h-10 rounded-full bg-white/10 backdrop-blur flex items-center justify-center hover:bg-sky-300 hover:scale-110 transition-all duration-300 group"
                   aria-label={social.name}
                 >
                   <svg
-                    className="w-5 h-5 fill-white group-hover:fill-black transition-colors duration-300"
+                    className="w-5 h-5 fill-white group-hover:fill-slate-900 transition-colors duration-300"
                     viewBox="0 0 24 24"
                   >
                     <path d={social.icon} />
@@ -134,13 +134,13 @@ const Footer = () => {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="space-y-4"
           >
-            <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-lime-400 to-green-500 bg-clip-text text-transparent">
+            <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-sky-300 to-teal-300 bg-clip-text text-transparent">
               Contact Us
             </h3>
             <div className="space-y-3 text-sm">
               <a
                 href="tel:07702262206"
-                className="flex items-center gap-3 text-neutral-300 hover:text-lime-400 transition-colors duration-300 group"
+                className="flex items-center gap-3 text-neutral-300 hover:text-sky-300 transition-colors duration-300 group"
               >
                 <svg
                   className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300"
@@ -149,12 +149,12 @@ const Footer = () => {
                 >
                   <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                 </svg>
-                7702262206
+                9704648777{" "}
               </a>
 
               <a
-                href="mailto:spkumar.researchanalyst@gmail.com"
-                className="flex items-center gap-3 text-neutral-300 hover:text-lime-400 transition-colors duration-300 group break-all"
+                href="mailto:damu.researchanalyst@gmail.com"
+                className="flex items-center gap-3 text-neutral-300 hover:text-sky-300 transition-colors duration-300 group break-all"
               >
                 <svg
                   className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300"
@@ -164,7 +164,7 @@ const Footer = () => {
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                 </svg>
-                spkumar.researchanalyst@gmail.com
+                damu.researchanalyst@gmail.com
               </a>
 
               <div className="flex items-start gap-3 text-neutral-300 group">
@@ -180,9 +180,8 @@ const Footer = () => {
                   />
                 </svg>
                 <span className="leading-relaxed">
-                  1 24,29 4 Kummaripalem Centerr, Near D S M, High School,
-                  Vidyadharapuram, Vijayawada, VIJAYAWADA, ANDHRA PRADESH,
-                  520012
+                  T2601, MY HOME TRIDASA,TELLAPUR SANGA REDDY, HYDERABAD,
+                  TELANGANA, 502032
                 </span>
               </div>
             </div>
@@ -193,18 +192,18 @@ const Footer = () => {
         <div className="border-t border-white/10 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-neutral-400">
             <p className="text-center md:text-left">
-              trademilaan Copyright©{currentYear}. All Right Reserved.
+              Good Investor Copyright©{currentYear}. All Right Reserved.
             </p>
             <p className="text-center md:text-right">
               Design & Developed by{" "}
-              <span className="text-lime-400 font-semibold">trademilaan</span>
+              <span className="text-sky-300 font-semibold">Good Investor</span>
             </p>
           </div>
         </div>
       </div>
 
       {/* Gradient Accent */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-lime-400 via-green-500 to-lime-400"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-sky-400 via-teal-400 to-sky-400"></div>
     </footer>
   );
 };

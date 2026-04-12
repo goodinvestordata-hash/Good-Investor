@@ -38,12 +38,12 @@ export default function PageIntroLoader() {
             transition={{ duration: 1.2, ease: "easeInOut" }}
           >
             <motion.div
-              className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-lime-400/80 via-white/40 to-transparent blur-3xl"
+              className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-sky-500/70 via-white/35 to-transparent blur-3xl"
               animate={{ rotate: 360 }}
               transition={{ repeat: Infinity, duration: 6, ease: "linear" }}
             />
             <motion.div
-              className="relative z-10 flex h-24 w-24 items-center justify-center rounded-2xl border border-emerald-400/50 bg-emerald-400/15 backdrop-blur"
+              className="relative z-10 flex h-24 w-24 items-center justify-center rounded-2xl border border-sky-400/45 bg-sky-500/15 backdrop-blur"
               initial={{ scale: 0.85, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.15, duration: 0.9, ease: "easeInOut" }}
@@ -54,7 +54,7 @@ export default function PageIntroLoader() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25, duration: 0.8, ease: "easeInOut" }}
               >
-                trademilaan
+                Good Investor
               </motion.span>
             </motion.div>
           </motion.div>

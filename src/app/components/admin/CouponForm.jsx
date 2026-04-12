@@ -73,6 +73,7 @@ export default function CouponForm({ coupon = null, onSubmit, onCancel }) {
         {
           method: coupon ? "PUT" : "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify(submitData),
         }
       );
@@ -110,6 +111,7 @@ export default function CouponForm({ coupon = null, onSubmit, onCancel }) {
           {coupon ? "Edit Coupon" : "Create New Coupon"}
         </h2>
         <button
+          type="button"
           onClick={onCancel}
           className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
         >

@@ -13,13 +13,13 @@
   background-color: #9BE749;
 }
 body {
-
-  font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+  font-family: var(--font-inter), "DM Sans", system-ui, -apple-system, sans-serif;
 }
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -149,4 +149,72 @@ body {
 
 .animate-subtle-ripple {
   animation: subtleRipple 600ms ease-out;
+}
+
+@keyframes gi-float-one {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(14px, 8px, 0) scale(1.03);
+  }
+}
+
+@keyframes gi-float-two {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-16px, 10px, 0) scale(1.02);
+  }
+}
+
+@keyframes gi-float-three {
+  0%,
+  100% {
+    transform: translate3d(-50%, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(calc(-50% + 8px), -10px, 0) scale(1.03);
+  }
+}
+
+@keyframes gi-particle {
+  0%,
+  100% {
+    opacity: 0.08;
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    opacity: 0.2;
+    transform: translate3d(0, -6px, 0);
+  }
+}
+
+.animate-gi-float-one {
+  animation: gi-float-one 20s ease-in-out infinite;
+}
+
+.animate-gi-float-two {
+  animation: gi-float-two 24s ease-in-out infinite;
+}
+
+.animate-gi-float-three {
+  animation: gi-float-three 22s ease-in-out infinite;
+}
+
+.animate-gi-particle {
+  animation: gi-particle 16s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-gi-float-one,
+  .animate-gi-float-two,
+  .animate-gi-float-three,
+  .animate-gi-particle {
+    animation: none !important;
+  }
+
 }

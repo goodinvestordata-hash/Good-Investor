@@ -30,7 +30,7 @@ const risks = [
   },
   {
     title: "SEBI SPECIFIED MECHANISM FOR FEE COLLECTION",
-    desc: "All research service fees must be paid online via Sasikumar Peyyala account gateway or CeFCoM other payments aren’t valid",
+    desc: "All research service fees must be paid online via Eeda Damodara Rao  account gateway or CeFCoM other payments aren’t valid",
   },
 ];
 
@@ -74,10 +74,10 @@ export default function RiskCards() {
 
       <div className="relative mx-auto max-w-7xl">
         <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
-          <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.25em] text-lime-600">
+          <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.25em] text-teal-700">
             Important Disclosures
           </p>
-          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900">
+          <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 bg-clip-text text-transparent">
             Risk Warnings & Important Disclaimers
           </h2>
         </div>
@@ -95,7 +95,7 @@ export default function RiskCards() {
                 containerClassName="h-full border border-red-200/50 bg-gradient-to-br from-red-100/60 to-orange-100/30 hover:border-red-300/70"
                 className="flex h-full flex-col gap-3 justify-start items-start text-left"
               >
-                <h3 className="font-bold text-base md:text-lg text-neutral-900 leading-snug">
+                <h3 className="font-bold text-base md:text-lg text-slate-900 leading-snug">
                   {item.title}
                 </h3>
                 <p className="text-xs md:text-sm text-slate-700 leading-relaxed">

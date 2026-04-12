@@ -21,7 +21,7 @@ export default function ServiceAgreement({ serviceName, signingDate }) {
       <p>
         This Service Agreement (“Agreement”) is made between
         <br />
-        Sasikumar Peyyala, having registered office at
+        Eeda Damodara Rao , having registered office at
         <br />
         1-2/4, 29/4, Kummaripalem center, Near DSM High School, Vidyadharapuram,
         Krishna, (hereinafter referred to as “Service Provider” or “RA”)
@@ -46,8 +46,8 @@ export default function ServiceAgreement({ serviceName, signingDate }) {
         </p>
         <p>
           b. “Service Provider”: A SEBI-registered Research Analyst (RA) with
-          Registration Name: Sasikumar Peyyala and Registration Number:
-          INH000019327
+          Registration Name: Eeda Damodara Rao and Registration Number:
+          INH000024967
         </p>
         <p>
           <b>2. USER ELIGIBILITY AND REGISTRATION TERMS</b>
@@ -85,7 +85,7 @@ export default function ServiceAgreement({ serviceName, signingDate }) {
         <p>
           b. Regulatory Compliance: The Service Provider is registered with the
           Securities and Exchange Board of India (SEBI) as a Research Analyst
-          under Registration Number INH000019327, valid from 07-01-2025.
+          under Registration Number INH000024967, valid from 07-01-2025.
         </p>
         <p>
           c. Use and Risk Disclosure: The User understands that all investments
@@ -168,7 +168,7 @@ export default function ServiceAgreement({ serviceName, signingDate }) {
             Securities and Exchange Board of India (SEBI) as a Research Analyst
             pursuant to the SEBI (Research Analysts) Regulations, 2014.
           </li>
-          <li>Registration Number: INH000019327</li>
+          <li>Registration Number: INH000024967</li>
           <li>Registration Date: 07-January-2025</li>
           <li>
             This registration is valid and subsisting as of the date of
@@ -322,12 +322,11 @@ export default function ServiceAgreement({ serviceName, signingDate }) {
         </p>
         <ul className="list-disc ml-6">
           <li>
-            Step 1: Email initial complaints to
-            spkumar.researchanalyst@gmail.com
+            Step 1: Email initial complaints to damu.researchanalyst@gmail.com
           </li>
           <li>
             Step 2: Escalate unresolved issues to
-            spkumar.researchanalyst@gmail.com.
+            damu.researchanalyst@gmail.com.
           </li>
           <li>
             Step 3: If unresolved, lodge with SEBI via SCORES
@@ -484,7 +483,7 @@ export default function ServiceAgreement({ serviceName, signingDate }) {
             hereinafter referred to as ‘the Service’.
           </li>
           <li>
-            The Service is being provided by Sasikumar Peyyala (hereinafter
+            The Service is being provided by Eeda Damodara Rao (hereinafter
             referred to as ‘the Service Provider’) and purchased by the User.
             This clause ensures clarity by explicitly stating that the Agreement
             applies only to the above-mentioned service among the various
@@ -623,11 +622,11 @@ export default function ServiceAgreement({ serviceName, signingDate }) {
         <p>
           For investor charter please visit :{" "}
           <a
-            href="www.trademilaan.in/investor-charter"
+            href="www.Good Investor.in/investor-charter"
             target="_blank"
             rel="noopener noreferrer"
           >
-            www.trademilaan.in/investor-charter
+            www.Good Investor.in/investor-charter
           </a>
         </p>
       </div>

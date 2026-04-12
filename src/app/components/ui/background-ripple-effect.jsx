@@ -1,104 +1,63 @@
 "use client";
-import { useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 import { cn } from "@/app/lib/utils";
 
 export const BackgroundRippleEffect = ({
-  rows = 8,
-  cols = 27,
-  cellSize = 56
+  className,
+  /** Full-viewport layer behind content (recommended on the home page). */
+  fixed = true,
 }) => {
-  const [clickedCell, setClickedCell] = useState(null);
-  const [rippleKey, setRippleKey] = useState(0);
-  const ref = useRef(null);
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 10 }, (_, i) => ({
+        id: i,
+        size: 3 + (i % 4) * 2,
+        left: `${5 + ((i * 11) % 90)}%`,
+        top: `${8 + ((i * 17) % 80)}%`,
+        duration: 14 + (i % 4) * 3,
+        delay: (i % 6) * 1.2,
+      })),
+    [],
+  );
 
   return (
     <div
-      ref={ref}
+      aria-hidden
       className={cn(
-        "absolute inset-0 h-full w-full",
-        "[--cell-border-color:bg-gray-400] [--cell-fill-color:var(--color-neutral-100)] [--cell-shadow-color:var(--color-neutral-500)]",
-        "dark:[--cell-border-color:var(--color-neutral-700)] dark:[--cell-fill-color:var(--color-neutral-900)] dark:[--cell-shadow-color:var(--color-neutral-800)]"
-      )}>
-      <div className="relative h-auto w-auto overflow-hidden">
-        <div
-          className="pointer-events-none absolute inset-0 z-[2] h-full w-full overflow-hidden" />
-        <DivGrid
-          key={`base-${rippleKey}`}
-          className="mask-radial-from-20% mask-radial-at-top opacity-600"
-          rows={rows}
-          cols={cols}
-          cellSize={cellSize}
-          borderColor="var(--cell-border-color)"
-          fillColor="var(--cell-fill-color)"
-          clickedCell={clickedCell}
-          onCellClick={(row, col) => {
-            setClickedCell({ row, col });
-            setRippleKey((k) => k + 1);
+        "pointer-events-none inset-0 h-full w-full overflow-hidden",
+        fixed ? "fixed z-[1] min-h-screen" : "absolute z-0 min-h-full",
+        className,
+      )}
+    >
+      {/* Core smooth gradient wash (slightly stronger so it reads on white) */}
+      <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_8%,rgba(15,118,110,0.18),rgba(255,255,255,0.0)_58%),radial-gradient(80%_55%_at_12%_18%,rgba(14,116,144,0.14),rgba(255,255,255,0)_62%),radial-gradient(80%_55%_at_88%_22%,rgba(71,85,105,0.14),rgba(255,255,255,0)_64%)]" />
+
+      {/* Slow moving glow orbs */}
+      <div className="absolute -top-24 -left-16 h-72 w-72 rounded-full bg-teal-400/28 blur-3xl animate-gi-float-one" />
+      <div className="absolute top-16 right-10 h-80 w-80 rounded-full bg-sky-500/22 blur-3xl animate-gi-float-two" />
+      <div className="absolute bottom-10 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-slate-500/20 blur-3xl animate-gi-float-three" />
+
+      {/* Subtle premium vignette */}
+      <div className="absolute inset-0 bg-[radial-gradient(120%_75%_at_50%_100%,rgba(255,255,255,0.0),rgba(15,23,42,0.12))]" />
+
+      {/* Tiny floating particles */}
+      {particles.map((p) => (
+        <span
+          key={p.id}
+          className="absolute rounded-full bg-slate-500/15 animate-gi-particle"
+          style={{
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            left: p.left,
+            top: p.top,
+            animationDuration: `${p.duration}s`,
+            animationDelay: `${p.delay}s`,
           }}
-          interactive />
-      </div>
+        />
+      ))}
     </div>
   );
 };
 
-const DivGrid = ({
-  className,
-  rows = 7,
-  cols = 30,
-  cellSize = 56,
-  borderColor = "#3f3f46",
-  fillColor = "rgba(14,165,233,0.3)",
-  clickedCell = null,
-  onCellClick = () => {},
-  interactive = true
-}) => {
-  const cells = useMemo(() => Array.from({ length: rows * cols }, (_, idx) => idx), [rows, cols]);
-
-  const gridStyle = {
-    display: "grid",
-    gridTemplateColumns: `repeat(${cols}, ${cellSize}px)`,
-    gridTemplateRows: `repeat(${rows}, ${cellSize}px)`,
-    width: cols * cellSize,
-    height: rows * cellSize,
-    marginInline: "auto",
-  };
-
-  return (
-    <div className={cn("relative z-[3]", className)} style={gridStyle}>
-      {cells.map((idx) => {
-        const rowIdx = Math.floor(idx / cols);
-        const colIdx = idx % cols;
-        const distance = clickedCell
-          ? Math.hypot(clickedCell.row - rowIdx, clickedCell.col - colIdx)
-          : 0;
-        const delay = clickedCell ? Math.max(0, distance * 55) : 0; // ms
-        const duration = 200 + distance * 80; // ms
-
-        const style = clickedCell
-          ? {
-              "--delay": `${delay}ms`,
-              "--duration": `${duration}ms`,
-            }
-          : {};
-
-        return (
-          <div
-            key={idx}
-            className={cn(
-              "cell relative border-[1px] border-black opacity-40 transition-opacity duration-150 will-change-transform hover:opacity-80 dark:shadow-[0px_0px_40px_1px_var(--cell-shadow-color)_inset]",
-              clickedCell && "animate-cell-ripple [animation-fill-mode:none]",
-              !interactive && "pointer-events-none"
-            )}
-            style={{
-              backgroundColor: fillColor,
-              borderColor: borderColor,
-              ...style,
-            }}
-            onClick={
-              interactive ? () => onCellClick?.(rowIdx, colIdx) : undefined
-            } />
-        );
-      })}
-    </div>
-  );
-};
+export default BackgroundRippleEffect;
+/* Animation keyframes live in globals.css (gi-*) */

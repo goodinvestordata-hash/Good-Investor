@@ -1,4 +1,4 @@
-// File: trademilaan/src/pages/MITCPage.jsx
+// File: Good Investor/src/pages/MITCPage.jsx
 import React from "react";
 import MITCHero from "@/components/MITCHero";
 import MITCContent from "@/components/MITCContent";

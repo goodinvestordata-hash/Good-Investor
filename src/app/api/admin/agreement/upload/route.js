@@ -2,9 +2,13 @@ import { NextResponse } from "next/server";
 import connectDB from "@/app/lib/db";
 import Agreement from "@/app/lib/models/Agreement";
 import { uploadToCloudinary } from "@/app/lib/cloudinary";
+import { requireAdmin } from "@/app/lib/authServer";
 
 export async function POST(req) {
   try {
+    // ✅ SECURITY: Require admin authentication to upload agreements
+    await requireAdmin();
+
     await connectDB();
 
     const formData = await req.formData();
@@ -26,7 +30,7 @@ export async function POST(req) {
     const upload = await uploadToCloudinary(
       buffer,
       safeName,
-      "trademilaan/agreements",
+      "Good Investor/agreements",
     );
 
     if (!upload || !upload.secureUrl || !upload.publicId) {
@@ -57,6 +61,13 @@ export async function POST(req) {
       pdfUrl: newAgreement.pdfUrl,
     });
   } catch (err) {
+    // ✅ SECURITY: Return proper auth error responses
+    if (err.statusCode === 401) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (err.statusCode === 403) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
     console.error("Agreement Upload Error:", err);
     return NextResponse.json({ message: "Upload failed" }, { status: 500 });
   }

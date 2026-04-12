@@ -33,7 +33,7 @@ export default function ContactDetails() {
                 href="tel:7702262206"
                 className="text-lg text-neutral-900 hover:text-purple-600 transition-colors"
               >
-                +91 77022 62206
+                +91 9704648777
               </a>
             </div>
           </div>
@@ -60,10 +60,10 @@ export default function ContactDetails() {
                 Email
               </h3>
               <a
-                href="mailto:spkumar.researchanalyst@gmail.com"
+                href="mailto:damu.researchanalyst@gmail.com"
                 className="text-lg text-neutral-900 hover:text-purple-600 transition-colors break-all"
               >
-                spkumar.researchanalyst@gmail.com
+                damu.researchanalyst@gmail.com
               </a>
             </div>
           </div>
@@ -96,8 +96,8 @@ export default function ContactDetails() {
                 Address
               </h3>
               <p className="text-sm text-neutral-900">
-                1 24,29 4 Kummaripalem Centerr, Near D S M, High School,
-                Vidyadharapuram, Vijayawada, VIJAYAWADA, ANDHRA PRADESH, 520012
+                T2601, MY HOME TRIDASA,TELLAPUR SANGA REDDY, HYDERABAD,
+                TELANGANA, 502032
               </p>
             </div>
           </div>
@@ -108,14 +108,14 @@ export default function ContactDetails() {
       <div className="bg-white rounded-2xl border border-neutral-200 shadow-[0_20px_40px_rgba(0,0,0,0.08)] overflow-hidden">
         <div className="w-full h-[300px] md:h-[400px]">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3820.1234567890123!2d80.6480153!3d16.5061743!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a35effc2c8b8b8b%3A0x1234567890abcdef!2sVijayawada%2C%20Andhra%20Pradesh%2C%20India!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin"
+            src="https://maps.google.com/maps?q=1%2024%2C29%204%20Kummaripalem%20Centerr%2C%20Near%20D%20S%20M%2C%20High%20School%2C%20Vidyadharapuram%2C%20Vijayawada%2C%20Andhra%20Pradesh%20520012&z=17&output=embed"
             width="100%"
             height="100%"
             style={{ border: 0 }}
             allowFullScreen=""
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            title="trademilaan Location"
+            title="Good Investor Location"
             className="w-full h-full"
           ></iframe>
         </div>

@@ -15,6 +15,7 @@ const UserSchema = new mongoose.Schema(
     state: { type: String },
     panNumber: { type: String },
     panVerified: { type: Boolean, default: false },
+    phone: { type: String },
 
     emailOtp: { type: String },
     emailOtpExpiry: { type: Date },
@@ -38,6 +39,22 @@ const UserSchema = new mongoose.Schema(
     pdfAccepted: { type: Boolean, default: false },
     pdfAcceptedAt: { type: Date, default: null },
 
+    // Risk Profile Assessment
+    riskProfile: {
+      years: String,
+      job: String,
+      savings: String,
+      support: String,
+      annual: String,
+      objective: String,
+      understanding: String,
+      strategy: String,
+      volatility: String,
+      riskiest: String,
+      reaction: String,
+      taker: String,
+    },
+
     // Analytics & Login Tracking
     authProvider: {
       type: String,
@@ -60,6 +77,16 @@ const UserSchema = new mongoose.Schema(
         },
       },
     ],
+
+    // Admin Flags for Signed Agreement Management
+    agreementMailedToUser: { type: Boolean, default: false },
+    mitcMailedToUser: { type: Boolean, default: false },
+    kycUpdatedByAdmin: { type: Boolean, default: false },
+    invoiceMailedToUser: { type: Boolean, default: false },
+
+    // Tracking dates for flag changes
+    agreementMailedAt: { type: Date, default: null },
+    invoiceMailedAt: { type: Date, default: null },
   },
 
   { timestamps: true },

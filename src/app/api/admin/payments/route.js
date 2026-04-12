@@ -1,23 +1,40 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/app/lib/db";
+import { requireAdmin } from "@/app/lib/authServer";
 
 export async function GET() {
-  await connectDB();
-  const mongoose = (await import("mongoose")).default;
-  const Payment =
-    mongoose.models.Payment ||
-    mongoose.model(
-      "Payment",
-      new mongoose.Schema({
-        name: String,
-        email: String,
-        phone: String,
-        amount: Number,
-        paidAt: Date,
-        expiresAt: Date,
-        createdAt: { type: Date, default: Date.now },
-      }),
+  try {
+    // ✅ SECURITY: Require admin authentication
+    await requireAdmin();
+
+    await connectDB();
+    const mongoose = (await import("mongoose")).default;
+    const Payment =
+      mongoose.models.Payment ||
+      mongoose.model(
+        "Payment",
+        new mongoose.Schema({
+          name: String,
+          email: String,
+          phone: String,
+          amount: Number,
+          paidAt: Date,
+          expiresAt: Date,
+          createdAt: { type: Date, default: Date.now },
+        })
+      );
+
+    // Fetch payments - exclude sensitive fields
+    const payments = await Payment.find()
+      .select("-razorpay_signature -razorpay_key_id")
+      .lean();
+
+    return NextResponse.json({ payments });
+  } catch (error) {
+    console.error("Admin payments error:", error.message);
+    return NextResponse.json(
+      { error: error.statusCode === 403 ? "Forbidden" : "Something went wrong" },
+      { status: error.statusCode || 500 }
     );
-  const payments = await Payment.find().lean();
-  return NextResponse.json({ payments });
+  }
 }

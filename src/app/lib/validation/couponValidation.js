@@ -71,7 +71,7 @@ export const validateCouponInput = (data) => {
 export const sanitizeCoupon = (coupon) => {
   if (!coupon) return null;
   return {
-    _id: coupon._id,
+    _id: coupon._id?.toString?.() || "",
     code: coupon.code,
     discountType: coupon.discountType,
     discountValue: coupon.discountValue,

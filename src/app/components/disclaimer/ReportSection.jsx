@@ -8,7 +8,7 @@ export default function ReportSection() {
     {
       icon: FiMail,
       label: "Email",
-      value: "spkumar.researchanalyst@gmail.com",
+      value: "damu.researchanalyst@gmail.com",
       color: "from-blue-500 to-cyan-500",
     },
     {

@@ -102,7 +102,8 @@ export default function AdminSignupForm() {
                   Admin Registration
                 </h2>
                 <p className="text-sm text-neutral-600 md:text-base">
-                  Create a secure admin account with OTP verification to manage the trademilaan platform.
+                  Create a secure admin account with OTP verification to manage
+                  the Good Investor platform.
                 </p>
               </div>
             </div>
@@ -120,7 +121,7 @@ export default function AdminSignupForm() {
                   <span className="text-sm font-semibold text-neutral-800">
                     Admin Email
                   </span>
-                  
+
                   <input
                     type="email"
                     placeholder="admin@example.com"
@@ -196,7 +197,13 @@ export default function AdminSignupForm() {
                 {/* Create Admin Button - Only enabled with all fields + OTP */}
                 <button
                   type="submit"
-                  disabled={loading || !otp || !password || !confirmPassword || otp.length !== 6}
+                  disabled={
+                    loading ||
+                    !otp ||
+                    !password ||
+                    !confirmPassword ||
+                    otp.length !== 6
+                  }
                   className="w-full rounded-full bg-lime-400 px-4 py-3 text-sm font-semibold text-neutral-900 shadow-[0_12px_30px_rgba(0,0,0,0.12)] ring-1 ring-black/10 transition hover:translate-y-[-1px] hover:shadow-[0_14px_36px_rgba(0,0,0,0.18)] hover:ring-black/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/70 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? "Creating Account..." : "Create Admin Account"}
@@ -231,7 +238,7 @@ export default function AdminSignupForm() {
           <div className="relative hidden h-full min-h-[320px] overflow-hidden rounded-2xl border border-neutral-200/70 bg-gradient-to-br from-neutral-900 via-neutral-800 to-black shadow-[0_30px_80px_rgba(0,0,0,0.22)] lg:block">
             <div className="absolute inset-0 bg-gradient-to-tr from-lime-400/40 via-lime-200/10 to-transparent" />
             <Image
-              src="/trademilaan.png"
+              src="/Good Investor.png"
               alt="Admin dashboard"
               fill
               className="object-cover opacity-90"

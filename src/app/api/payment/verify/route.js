@@ -2,10 +2,27 @@ import { NextResponse } from "next/server";
 import connectDB from "@/app/lib/db";
 
 import { generateInvoicePDF } from "@/app/lib/generateInvoicePDF";
+import { sendInvoicePDFMail } from "@/app/lib/mailer";
 import Payment from "@/app/lib/models/Payment";
 import Coupon from "@/app/lib/models/Coupon";
+import { verifyToken } from "@/app/lib/jwt";
+import { cookies } from "next/headers";
+import { createPerIpRateLimiter } from "@/app/lib/rateLimiter";
+import { isValidEmail } from "@/app/lib/validators";
 
 export async function POST(request) {
+  // ✅ SECURITY: Rate limit payment verification (10 requests per minute per IP)
+  const rateLimitCheck = createPerIpRateLimiter(request, 10, 60 * 1000);
+  if (rateLimitCheck.limited) {
+    return NextResponse.json(
+      { error: `Too many payment requests. Try again in ${rateLimitCheck.retryAfter} seconds.` },
+      { 
+        status: 429,
+        headers: { 'Retry-After': rateLimitCheck.retryAfter.toString() }
+      }
+    );
+  }
+
   await connectDB();
   const body = await request.json();
   const {
@@ -34,6 +51,14 @@ export async function POST(request) {
   ) {
     return NextResponse.json(
       { error: "Missing required payment fields" },
+      { status: 400 },
+    );
+  }
+
+  // ✅ SECURITY: Validate email format
+  if (!isValidEmail(email)) {
+    return NextResponse.json(
+      { error: "Invalid email format" },
       { status: 400 },
     );
   }
@@ -120,6 +145,8 @@ export async function POST(request) {
     );
   }
 
+  const orderPlanType = String(razorpayOrder?.notes?.planType || "").trim();
+
   const crypto = (await import("crypto")).default || (await import("crypto"));
   const sign = razorpay_order_id + "|" + razorpay_payment_id;
   const expectedSignature = crypto
@@ -132,6 +159,46 @@ export async function POST(request) {
 
   // Store payment in MongoDB
   try {
+    let decodedAuth = null;
+    try {
+      const cookieStore = await cookies();
+      const token = cookieStore.get("token")?.value;
+      if (token) {
+        decodedAuth = verifyToken(token);
+      }
+    } catch {
+      decodedAuth = null;
+    }
+
+    const normalizedEmail = String(
+      decodedAuth?.email || email || ""
+    )
+      .trim()
+      .toLowerCase();
+    const normalizedPlanId = String(orderPlanId || "").trim();
+
+    // Final guard against duplicate active subscriptions for the same plan.
+    // This prevents duplicates even if multiple checkouts are attempted quickly.
+    const existingActiveSubscription = await Payment.findOne({
+      email: normalizedEmail,
+      planId: normalizedPlanId,
+      expiresAt: { $gt: new Date() },
+    })
+      .sort({ expiresAt: -1 })
+      .lean();
+
+    if (existingActiveSubscription) {
+      return NextResponse.json(
+        {
+          error:
+            "You already have an active subscription for this plan. Please renew after expiry.",
+          code: "ACTIVE_SUBSCRIPTION_EXISTS",
+          activeUntil: existingActiveSubscription.expiresAt,
+        },
+        { status: 409 },
+      );
+    }
+
     // Set paidAt to now, expiresAt to one month later
     const paidAt = new Date();
     const expiresAt = new Date(paidAt);
@@ -141,10 +208,12 @@ export async function POST(request) {
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
+      userId: decodedAuth?.id ? String(decodedAuth.id) : null,
       planId: orderPlanId,
       planName: orderPlanName,
+      planType: orderPlanType || null,
       name,
-      email,
+      email: normalizedEmail,
       phone,
       amount: safeAmount,
       paidAt,
@@ -162,6 +231,44 @@ export async function POST(request) {
       );
     }
 
+    // Save invoice to Invoice collection for admin dashboard
+    const mongoose = (await import("mongoose")).default;
+    const InvoiceSchema = new mongoose.Schema({
+      clientName: String,
+      amount: Number,
+      startDate: Date,
+      endDate: Date,
+      createdAt: { type: Date, default: Date.now },
+      email: String,
+      phone: String,
+      state: String,
+      pan: String,
+      planId: String,
+      planName: String,
+      razorpay_payment_id: String,
+    });
+    const Invoice =
+      mongoose.models.Invoice || mongoose.model("Invoice", InvoiceSchema);
+
+    // Create invoice record with 1 month validity
+    const invoiceStartDate = new Date();
+    const invoiceEndDate = new Date(invoiceStartDate);
+    invoiceEndDate.setMonth(invoiceEndDate.getMonth() + 1);
+
+    await Invoice.create({
+      clientName: name,
+      amount: safeAmount,
+      startDate: invoiceStartDate,
+      endDate: invoiceEndDate,
+      email: normalizedEmail,
+      phone,
+      state: state || "",
+      pan: pan || panNumber || "",
+      planId: orderPlanId,
+      planName: orderPlanName,
+      razorpay_payment_id,
+    });
+
     // Generate invoice PDF (in memory, not saved to disk)
     const invoiceData = {
       clientName: name,
@@ -175,13 +282,26 @@ export async function POST(request) {
       subtotal: `Rs. ${Math.round(safeAmount / 1.18)}`,
       total: `Rs. ${safeAmount}`,
     };
-    await generateInvoicePDF(invoiceData);
+    const invoicePDFBuffer = await generateInvoicePDF(invoiceData);
+
+    // Send invoice email to user
+    await sendInvoicePDFMail({
+      to: email,
+      pdfBuffer: invoicePDFBuffer,
+      clientName: name,
+      email,
+      phone,
+      planName: orderPlanName,
+      amount: safeAmount,
+      clientPan: pan || panNumber || "",
+    });
 
     return NextResponse.json({
       success: true,
       razorpay_payment_id,
       planId: orderPlanId,
       planName: orderPlanName,
+      planType: orderPlanType || null,
       name,
       email,
       phone,
@@ -189,9 +309,10 @@ export async function POST(request) {
       ...(couponCode && { couponCode }),
     });
   } catch (err) {
+    console.error("Payment verification error:", err);
     return NextResponse.json(
       {
-        error: "Failed to save payment or generate invoice",
+        error: "Failed to save payment or send invoice",
         details: err.message,
       },
       { status: 500 },

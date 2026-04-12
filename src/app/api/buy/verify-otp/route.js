@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import connectDB from "@/app/lib/db";
 import User from "@/app/lib/models/User";
+import { incrementOTPAttempt, resetOTPAttempts } from "@/app/lib/validators";
 
 export async function POST(req) {
   const { otp } = await req.json();
@@ -25,6 +26,15 @@ export async function POST(req) {
     return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   }
 
+  // ✅ SECURITY: Rate limit OTP verification attempts
+  const attemptCheck = incrementOTPAttempt(`buy_otp_${decoded.id}`);
+  if (attemptCheck.blocked) {
+    return NextResponse.json(
+      { message: "Too many verification attempts. Please try again later." },
+      { status: 429 }
+    );
+  }
+
   await connectDB();
 
   const user = await User.findById(decoded.id);
@@ -43,7 +53,9 @@ export async function POST(req) {
     );
   }
 
-  // ✅ OTP VERIFIED
+  // ✅ OTP VERIFIED - Reset rate limit on success
+  resetOTPAttempts(`buy_otp_${decoded.id}`);
+  
   user.emailOtp = null;
   user.emailOtpExpiry = null;
   user.panVerified = true;

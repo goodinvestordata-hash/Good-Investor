@@ -5,12 +5,12 @@ import { motion } from "framer-motion";
 const services = [
   {
     label: "Equity",
-    title: "trademilaan Equity Pro",
+    title: "Good Investor Equity Pro",
     description:
       "AI-driven equity strategies with disciplined risk and consistent alpha hunting.",
     image: "/equity.jpeg",
-    gradient: ["#5b3bdc", "#7b5af0"],
-    accent: "#d8c9ff",
+    gradient: ["#0f172a", "#1e293b"],
+    accent: "#7dd3fc",
     points: [
       "Research-backed stock selection",
       "Risk-managed portfolio signals",
@@ -19,12 +19,12 @@ const services = [
   },
   {
     label: "options",
-    title: "trademilaan Index Options Pro",
+    title: "Good Investor Index Options Pro",
     description:
       "Precision option structures to navigate volatility with conviction.",
     image: "/options.jpg",
-    gradient: ["#c53b6f", "#d65f9b"],
-    accent: "#ffd8ec",
+    gradient: ["#0b3a55", "#0e7490"],
+    accent: "#a5f3fc",
     points: [
       "Volatility-aware strategies",
       "Defined risk option structures",
@@ -33,12 +33,12 @@ const services = [
   },
   {
     label: "Commodities",
-    title: "trademilaan Commodities Pro",
+    title: "Good Investor Commodities Pro",
     description:
       "Macro + data-backed insights for metals and energy momentum swings.",
     image: "/commodities.webp",
-    gradient: ["#e0621d", "#f08c3a"],
-    accent: "#ffe1c4",
+    gradient: ["#134e4a", "#0f766e"],
+    accent: "#99f6e4",
     points: [
       "Gold, silver & crude coverage",
       "Trend + demand-supply analysis",
@@ -73,7 +73,7 @@ const cardVariants = {
 
 export default function Cards() {
   return (
-    <section className="w-full py-24 md:py-28 px-5 sm:px-8 bg-white">
+    <section className="w-full py-24 md:py-28 px-5 sm:px-8 bg-gradient-to-b from-white via-slate-50/40 to-white">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -81,7 +81,7 @@ export default function Cards() {
         transition={{ duration: 0.5 }}
         className="text-center max-w-4xl mx-auto mb-14 md:mb-16"
       >
-        <p className="text-xs md:text-sm tracking-[0.35em] text-lime-600 font-semibold uppercase mb-4">
+        <p className="text-xs md:text-sm tracking-[0.35em] text-sky-700 font-semibold uppercase mb-4">
           Our Services
         </p>
         <h2 className="text-3xl md:text-5xl font-bold text-neutral-900 leading-tight">
@@ -106,7 +106,7 @@ export default function Cards() {
                 duration: 0.3,
               },
             }}
-            className="relative overflow-hidden rounded-[28px] shadow-[0_30px_80px_rgba(24,39,75,0.22)] min-h-[520px] md:min-h-[560px]"
+            className="relative overflow-hidden rounded-[28px] shadow-[0_30px_80px_rgba(15,23,42,0.28)] min-h-[520px] md:min-h-[560px] border border-white/10"
             style={{
               background: `linear-gradient(165deg, ${service.gradient[0]}, ${service.gradient[1]})`,
             }}
@@ -145,7 +145,7 @@ export default function Cards() {
               <div>
                 <Link
                   href="/services"
-                  className="mt-2 flex w-fit items-center justify-center gap-3 self-start rounded-full bg-white/15 px-5 py-3 text-sm font-semibold leading-none backdrop-blur transition-all duration-300 hover:bg-white hover:text-black group"
+                  className="mt-2 flex w-fit items-center justify-center gap-3 self-start rounded-full bg-white/15 px-5 py-3 text-sm font-semibold leading-none backdrop-blur transition-all duration-300 hover:bg-sky-100 hover:text-slate-900 group"
                 >
                   Learn More
                   <svg

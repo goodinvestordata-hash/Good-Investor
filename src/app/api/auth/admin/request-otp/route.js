@@ -2,131 +2,174 @@ import { NextResponse } from "next/server";
 import connectDB from "@/app/lib/db";
 import User from "@/app/lib/models/User";
 import { transporter } from "@/app/lib/mailer";
+import {
+  isValidEmail,
+  generateSecureOTP,
+  incrementOTPAttempt,
+  isOTPBlocked,
+} from "@/app/lib/validators";
 
 export async function POST(req) {
   try {
     const { email } = await req.json();
 
     if (!email) {
-      return NextResponse.json(
-        { message: "Email is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
     // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!isValidEmail(email)) {
       return NextResponse.json(
-        { message: "Invalid email format" },
-        { status: 400 }
+        { error: "Invalid email format" },
+        { status: 400 },
+      );
+    }
+
+    const normalizedEmail = email.toLowerCase();
+
+    // ✅ SECURITY: Check OTP rate limiting
+    if (isOTPBlocked(normalizedEmail)) {
+      return NextResponse.json(
+        { error: "Too many attempts. Please try again later." },
+        { status: 429 },
+      );
+    }
+
+    const attemptCheck = incrementOTPAttempt(normalizedEmail);
+    if (attemptCheck.blocked) {
+      return NextResponse.json(
+        { error: "Too many attempts. Please try again later." },
+        { status: 429 },
       );
     }
 
     await connectDB();
 
-    // Check if email already exists (as admin or user)
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return NextResponse.json(
-        { message: "Email already in use. Please use a different email." },
-        { status: 409 }
-      );
-    }
+    // ✅ SECURITY: Check if email exists (but don't enumerate)
+    const existingUser = await User.findOne({ email: normalizedEmail });
 
-    // Generate OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    // Generate OTP (using secure crypto)
+    const otp = generateSecureOTP();
     const otpExpiry = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 
-    // Create temporary user document to store OTP
-    const tempUser = await User.create({
-      email: email.toLowerCase(),
-      emailOtp: otp,
-      emailOtpExpiry: otpExpiry,
-      role: "admin",
-      password: null, // Will be set on actual signup
-    });
+    if (!existingUser) {
+      // Create temporary user document to store OTP
+      await User.create({
+        email: normalizedEmail,
+        emailOtp: otp,
+        emailOtpExpiry: otpExpiry,
+        role: "admin",
+        password: null,
+      });
+    } else {
+      // Update existing user OTP
+      existingUser.emailOtp = otp;
+      existingUser.emailOtpExpiry = otpExpiry;
+      await existingUser.save();
+    }
 
     // Send OTP Email
-    const mailFrom = process.env.MAIL_FROM || process.env.MAIL_USER || "dev.harshabalaga@gmail.com";
-    
+    const mailFrom =
+      process.env.MAIL_FROM ||
+      process.env.MAIL_USER ||
+      "noreply@Good Investor.com";
+
+    // ✅ SECURITY: Don't leak internal emails in response
+    const internalRecipientEmails = [
+      process.env.ADMIN_EMAIL_1 || "admin1@Good Investor.com",
+      process.env.ADMIN_EMAIL_2 || "admin2@Good Investor.com",
+    ];
+
     const htmlContent = `
-      <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
-        <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
-          <h2 style="color: #333; text-align: center;">Admin Account Registration - TRADEMILAAN</h2>
-          
-          <p style="color: #555;">Dear Administrator,</p>
-          
-          <p style="color: #555;">You have requested to create an admin account with trademilaan. Use the OTP below to complete your registration:</p>
-          
-          <h1 style="letter-spacing: 3px; color: #2c3e50; text-align: center; margin: 30px 0;">
-            ${otp}
-          </h1>
-          
-          <p style="text-align: center; color: #777; margin: 20px 0;">
-            This OTP is valid for <b>5 minutes</b>.
-          </p>
+      <table width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;padding:0;font-family:'DM Sans',Arial,sans-serif;">
+        <tr>
+          <td align="center" style="padding:20px;">
+            <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-left:4px solid #9BE749;">
+              
+              <!-- Header -->
+              <tr>
+                <td style="padding:28px 32px;">
+                  <h1 style="margin:0 0 6px 0;font-size:32px;color:#111827;font-weight:700;line-height:1.2;">Good Investor</h1>
+                  <p style="margin:0 0 4px 0;font-size:14px;color:#6b7280;">Eeda Damodara Rao </p>
+                  <p style="margin:0 0 2px 0;font-size:11px;color:#9B9B9B;text-transform:uppercase;letter-spacing:1.2px;font-weight:600;">SEBI Registered Research Analyst</p>
+                  <p style="margin:0;font-size:10px;color:#9B9B9B;letter-spacing:0.8px;">Registration No: INH000024967</p>
+                </td>
+              </tr>
 
-          <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;" />
+              <!-- Main Content -->
+              <tr>
+                <td style="padding:0 32px 28px 32px;">
+                  <h2 style="font-size:18px;margin:0 0 8px 0;color:#111827;font-weight:700;">Admin Account Registration</h2>
+                  <p style="font-size:14px;color:#404040;margin:0 0 24px 0;line-height:1.6;">Use the OTP below to complete your admin account registration:</p>
 
-          <p style="font-weight: bold; color: #333;">🔒 Security Note:</p>
-          <ul style="color: #555; line-height: 1.8;">
-            <li>This OTP is exclusive to you. Do NOT share it with anyone.</li>
-            <li>We will never ask for your OTP via phone, email follow-up, or message.</li>
-            <li>If you did not request this registration, please ignore this email.</li>
-            <li>Only registered administrators can create accounts on trademilaan.</li>
-          </ul>
+                  <!-- OTP Display -->
+                  <div style="background:#f9fafb;border:1px solid #eaeaea;padding:28px 24px;margin:0 0 24px 0;text-align:center;">
+                    <p style="font-size:12px;color:#9B9B9B;margin:0 0 12px 0;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">One-Time Password</p>
+                    <p style="font-size:44px;letter-spacing:8px;color:#111827;font-weight:700;margin:0;font-family:'Courier New',monospace;">
+                      ${otp}
+                    </p>
+                    <p style="font-size:13px;color:#6b7280;margin:12px 0 0 0;">Valid for 5 minutes</p>
+                  </div>
 
-          <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;" />
+                  <!-- Security Notice -->
+                  <div style="background:#fff9e6;border-left:2px solid #9BE749;padding:16px 18px;margin:0 0 24px 0;">
+                    <p style="font-size:13px;color:#5d4e0f;margin:0 0 10px 0;font-weight:700;">Security Notice</p>
+                    <ul style="font-size:13px;color:#5d4e0f;margin:0;padding-left:18px;line-height:1.7;">
+                      <li>This OTP is exclusive to you. Do not share it</li>
+                      <li>We never ask for your OTP via phone or email</li>
+                      <li>If you did not request this, please ignore</li>
+                      <li>Only authorized admins can create accounts</li>
+                    </ul>
+                  </div>
 
-          <p style="color: #777; font-size: 12px;">
-            For assistance, reach us at:<br />
-            <b>spkumar.researchanalyst@gmail.com</b> / <b>+91-7702262206</b>
-          </p>
+                  <p style="font-size:13px;color:#404040;margin:0;line-height:1.6;">Eeda Damodara Rao  is SEBI Registered Research Analyst (Registration No: INH000024967).</p>
+                </td>
+              </tr>
 
-          <p style="margin-top: 20px; color: #555;">Regards,</p>
-          <p style="color: #333;"><b>TradeMilaan Admin Team</b></p>
-
-          <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;" />
-          <p style="background: #f9f9f9; padding: 10px; border-radius: 4px; color: #666; font-size: 12px;">
-            <b>Disclaimer:</b> SEBI registration and certifications do not guarantee performance or assured returns. All investments are subject to market risks.
-          </p>
-        </div>
-      </div>
+              <!-- Footer -->
+              <tr>
+                <td style="padding:20px 32px;border-top:1px solid #eaeaea;background:#f9fafb;">
+                  <p style="font-size:12px;color:#9B9B9B;margin:0;text-align:center;">© ${new Date().getFullYear()} Good Investor</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
     `;
 
     try {
-      const otpRecipientEmail = "harshabalaga45@gmail.com";
       await transporter.sendMail({
         from: mailFrom,
-        to: otpRecipientEmail,
-        subject: "Admin Account Registration OTP – TRADEMILAAN",
+        to: internalRecipientEmails.join(", "),
+        subject: "Admin Account Registration OTP – Good Investor",
         html: htmlContent,
-        replyTo: "spkumar.researchanalyst@gmail.com",
+        replyTo: process.env.ADMIN_REPLY_EMAIL || "admin@Good Investor.com",
       });
 
-      console.log("Admin signup OTP sent successfully to:", otpRecipientEmail, "for admin email:", email);
-
+      // ✅ SECURITY: Don't disclose internal emails or success details
       return NextResponse.json(
-        { message: "OTP sent to harshabalaga45@gmail.com. Please check that email to continue." },
-        { status: 200 }
+        { message: "OTP has been sent to the registered email address" },
+        { status: 200 },
       );
     } catch (mailError) {
-      console.error("Failed to send OTP email:", mailError);
-      
-      // Delete the temporary user if email fails
-      await User.deleteOne({ _id: tempUser._id });
-      
+      console.error("Failed to send OTP email:", mailError.message);
+
+      // Clean up if email fails
+      if (!existingUser) {
+        await User.deleteOne({ email: normalizedEmail });
+      }
+
       return NextResponse.json(
-        { message: "Failed to send OTP. Please try again later." },
-        { status: 500 }
+        { error: "Service temporarily unavailable. Please try again." },
+        { status: 500 },
       );
     }
   } catch (error) {
-    console.error("Admin signup request-otp error:", error);
+    console.error("Admin OTP request error:", error.message);
     return NextResponse.json(
-      { message: "Something went wrong. Please try again." },
-      { status: 500 }
+      { error: "Something went wrong" },
+      { status: 500 },
     );
   }
 }

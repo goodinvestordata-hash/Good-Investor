@@ -152,7 +152,7 @@ export default function MITCContent() {
               8. Complaint Redressal
             </h2>
             <ul className="list-disc list-inside space-y-2">
-              <li>Email: spkumar.researchanalyst@gmail.com</li>
+              <li>Email: damu.researchanalyst@gmail.com</li>
               <li>Phone: +91 770 226 2206</li>
               <li>
                 Complaints will be acknowledged within 2 working days and

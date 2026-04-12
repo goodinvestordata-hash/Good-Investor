@@ -2,59 +2,61 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/app/lib/db";
 import SignedAgreement from "@/app/lib/models/SignedAgreement";
+import User from "@/app/lib/models/User";
 import { generateCompleteAgreementPDF } from "@/app/lib/generateCompletePDF";
 import { sendAgreementPDFMail } from "@/app/lib/mailer";
+import { requireAuth, userOwnsResource } from "@/app/lib/authServer";
+import { isValidObjectId } from "@/app/lib/validators";
 
 export async function GET(req, { params }) {
   try {
+    // ✅ SECURITY: Require authentication
+    const user = await requireAuth();
+
     const { fileId } = await params;
-    console.log("Download request for fileId:", fileId);
+
+    // ✅ SECURITY: Validate ObjectId format
+    if (!isValidObjectId(fileId)) {
+      return NextResponse.json(
+        { error: "Invalid agreement ID" },
+        { status: 400 }
+      );
+    }
 
     await connectDB();
 
-    // Fetch agreement by ID
+    // Fetch agreement
     const agreement = await SignedAgreement.findById(fileId);
-    console.log("Agreement found:", agreement ? "yes" : "no");
 
     if (!agreement) {
-      console.error("Agreement not found for fileId:", fileId);
       return NextResponse.json(
-        { message: "Agreement not found" },
-        { status: 404 },
+        { error: "Agreement not found" },
+        { status: 404 }
+      );
+    }
+
+    // ✅ SECURITY: IDOR Check - verify ownership
+    if (!userOwnsResource(agreement.userId, user.userId, user.role)) {
+      return NextResponse.json(
+        { error: "Forbidden" },
+        { status: 403 }
       );
     }
 
     // Check agreement status
     if (agreement.status !== "SIGNED") {
-      console.error("Agreement status is not SIGNED:", agreement.status);
       return NextResponse.json(
-        { message: "Agreement is not in signed state" },
-        { status: 400 },
+        { error: "Agreement is not in signed state" },
+        { status: 400 }
       );
     }
 
-    // Log download activity
+    // Update download tracking
     agreement.downloadCount = (agreement.downloadCount || 0) + 1;
     agreement.lastDownloadedAt = new Date();
     await agreement.save();
-    console.log("Download count updated:", agreement.downloadCount);
 
-    // Generate PDF using pdfkit
-    console.log("Generating PDF for fileId:", fileId);
-    console.log("Agreement data for PDF:", {
-      clientName: agreement.clientName,
-      clientPan: agreement.clientPan,
-      signedName: agreement.signedName,
-      signatureDataLength: agreement.signatureData
-        ? agreement.signatureData.length
-        : 0,
-      signatureDataStart: agreement.signatureData
-        ? agreement.signatureData.substring(0, 50)
-        : "MISSING",
-      signatureTab: agreement.signatureTab,
-      signedTimestamp: agreement.signedTimestamp,
-    });
-
+    // Generate PDF
     let pdfBuffer;
     try {
       pdfBuffer = await generateCompleteAgreementPDF({
@@ -64,51 +66,34 @@ export async function GET(req, { params }) {
           ? new Date(agreement.signedTimestamp).toLocaleDateString("en-IN")
           : new Date().toLocaleDateString("en-IN"),
       });
-      console.log(
-        "PDF buffer generated successfully:",
-        pdfBuffer.length,
-        "bytes",
-      );
-      // Send PDF to user and admin
-      const userEmail = agreement.clientEmail; // Ensure this field exists in your model
-      const adminEmail = "spkumar.researchanalyst@gmail.com";
-      const clientName = agreement.clientName || "User";
-      // Send PDF to user and admin, await both and log results
-      const mailResults = [];
-      if (userEmail) {
-        try {
-          await sendAgreementPDFMail({ to: userEmail, pdfBuffer, clientName });
-          mailResults.push(`User mail sent to ${userEmail}`);
-        } catch (err) {
-          mailResults.push(`User mail FAILED to ${userEmail}: ${err.message}`);
-        }
-      } else {
-        mailResults.push("No user email found, not sending to user");
-      }
-      try {
-        await sendAgreementPDFMail({ to: adminEmail, pdfBuffer, clientName });
-        mailResults.push(`Admin mail sent to ${adminEmail}`);
-      } catch (err) {
-        mailResults.push(`Admin mail FAILED to ${adminEmail}: ${err.message}`);
-      }
-      console.log("Agreement PDF mail results:", mailResults);
     } catch (pdfErr) {
-      console.error("PDF generation failed:", pdfErr);
+      console.error("PDF generation failed:", pdfErr.message);
       return NextResponse.json(
-        { message: "Failed to generate PDF", error: pdfErr.message },
-        { status: 500 },
+        { error: "Failed to generate PDF" },
+        { status: 500 }
       );
     }
 
     if (!pdfBuffer || pdfBuffer.length === 0) {
-      console.error("PDF buffer is empty");
       return NextResponse.json(
-        { message: "Generated PDF is empty" },
-        { status: 500 },
+        { error: "Failed to generate PDF" },
+        { status: 500 }
       );
     }
 
-    // Return PDF as binary file
+    // Send confirmation mail (non-blocking)
+    if (agreement.clientEmail) {
+      sendAgreementPDFMail({
+        to: agreement.clientEmail,
+        pdfBuffer,
+        clientName: agreement.clientName || "User",
+        clientPan: agreement.clientPan || "",
+      }).catch((err) => {
+        console.error("Email sending failed:", err.message);
+      });
+    }
+
+    // Return PDF
     return new NextResponse(pdfBuffer, {
       status: 200,
       headers: {
@@ -118,11 +103,11 @@ export async function GET(req, { params }) {
         "Cache-Control": "no-store",
       },
     });
-  } catch (err) {
-    console.error("DOWNLOAD ERROR:", err);
+  } catch (error) {
+    console.error("Agreement download error:", error.message);
     return NextResponse.json(
-      { message: "Failed to download agreement", error: err.message },
-      { status: 500 },
+      { error: "Something went wrong" },
+      { status: error.statusCode || 500 }
     );
   }
 }

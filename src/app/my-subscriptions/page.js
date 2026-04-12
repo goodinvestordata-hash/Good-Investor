@@ -50,6 +50,34 @@ export default function MySubscriptionsPage() {
     return days > 0 ? days : 0;
   };
 
+  const getPaymentIdValue = (payment) => {
+    return String(
+      payment?.razorpay_payment_id || payment?.paymentId || payment?._id || ""
+    );
+  };
+
+  const getPaymentIdLabel = (payment) => {
+    const paymentId = getPaymentIdValue(payment);
+    if (!paymentId) return "N/A";
+    return paymentId.length > 12 ? `${paymentId.slice(0, 12)}...` : paymentId;
+  };
+
+  const activePayments = payments.filter((p) => !isExpired(p.expiresAt));
+  const activePlanIds = new Set(
+    activePayments
+      .map((p) => String(p?.planId || p?.resolvedPlanId || "").trim())
+      .filter(Boolean)
+  );
+
+  const currentActivePlan =
+    activePayments.find(
+      (p) =>
+        p?.planName &&
+        !["unknown", "unknown plan", "n/a"].includes(
+          String(p.planName).trim().toLowerCase()
+        )
+    ) || activePayments[0] || null;
+
   if (loading || pageLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -89,25 +117,35 @@ export default function MySubscriptionsPage() {
         ) : (
           <div className="grid gap-4">
             {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div className="bg-gradient-to-br from-lime-50 to-lime-100/50 rounded-lg p-6 border border-lime-200">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              <div className="bg-linear-to-br from-lime-50 to-lime-100/50 rounded-lg p-6 border border-lime-200">
                 <p className="text-sm text-neutral-600 mb-1">Total Payments</p>
                 <p className="text-3xl font-bold text-lime-600">
                   {payments.length}
                 </p>
               </div>
 
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-lg p-6 border border-blue-200">
+              <div className="bg-linear-to-br from-blue-50 to-blue-100/50 rounded-lg p-6 border border-blue-200">
                 <p className="text-sm text-neutral-600 mb-1">Total Spent</p>
                 <p className="text-3xl font-bold text-blue-600">
                   ₹{payments.reduce((sum, p) => sum + p.amount, 0).toLocaleString("en-IN")}
                 </p>
               </div>
 
-              <div className="bg-gradient-to-br from-purple-50 to-purple-100/50 rounded-lg p-6 border border-purple-200">
+              <div className="bg-linear-to-br from-purple-50 to-purple-100/50 rounded-lg p-6 border border-purple-200">
                 <p className="text-sm text-neutral-600 mb-1">Active Plans</p>
                 <p className="text-3xl font-bold text-purple-600">
-                  {payments.filter((p) => !isExpired(p.expiresAt)).length}
+                  {activePlanIds.size || activePayments.length}
+                </p>
+              </div>
+
+              <div className="bg-linear-to-br from-amber-50 to-amber-100/50 rounded-lg p-6 border border-amber-200">
+                <p className="text-sm text-neutral-600 mb-1">Current Active Plan</p>
+                <p className="text-base font-bold text-amber-700 truncate" title={currentActivePlan?.planName || "No active plan"}>
+                  {currentActivePlan?.planName || "No active plan"}
+                </p>
+                <p className="text-xs font-semibold text-amber-600 mt-1 uppercase">
+                  {currentActivePlan?.planType || "-"}
                 </p>
               </div>
             </div>
@@ -117,6 +155,12 @@ export default function MySubscriptionsPage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-neutral-200">
+                    <th className="text-left py-3 px-4 font-semibold text-neutral-900">
+                      Plan
+                    </th>
+                    <th className="text-left py-3 px-4 font-semibold text-neutral-900">
+                      Plan Type
+                    </th>
                     <th className="text-left py-3 px-4 font-semibold text-neutral-900">
                       Payment ID
                     </th>
@@ -147,9 +191,15 @@ export default function MySubscriptionsPage() {
                         key={payment._id}
                         className="border-b border-neutral-100 hover:bg-neutral-50 transition"
                       >
+                        <td className="py-4 px-4 font-semibold text-neutral-900">
+                          {payment.planName || "N/A"}
+                        </td>
+                        <td className="py-4 px-4 text-neutral-700 uppercase text-xs font-bold tracking-wide">
+                          {payment.planType || "N/A"}
+                        </td>
                         <td className="py-4 px-4 font-mono text-sm text-neutral-600">
-                          <span title={payment.razorpay_payment_id}>
-                            {payment.razorpay_payment_id.slice(0, 12)}...
+                          <span title={getPaymentIdValue(payment) || "Payment ID unavailable"}>
+                            {getPaymentIdLabel(payment)}
                           </span>
                         </td>
                         <td className="py-4 px-4 font-semibold text-neutral-900">

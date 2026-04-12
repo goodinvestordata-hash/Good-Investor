@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Loader } from "lucide-react";
 import PlanCard from "./PlanCard";
+import { useAuth } from "@/app/context/AuthContext";
 
 /**
  * PlansSection Component
@@ -10,9 +11,11 @@ import PlanCard from "./PlanCard";
  * Ready to be integrated into /services page or standalone
  */
 export default function PlansSection() {
+  const { user, loading: authLoading } = useAuth();
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [activeSubscriptionsByPlan, setActiveSubscriptionsByPlan] = useState({});
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -37,11 +40,75 @@ export default function PlansSection() {
     fetchPlans();
   }, []);
 
+  useEffect(() => {
+    const fetchActiveSubscriptions = async () => {
+      if (authLoading || !user) {
+        setActiveSubscriptionsByPlan({});
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/user/payments");
+        const data = await res.json();
+
+        if (!res.ok || !data?.success || !Array.isArray(data?.payments)) {
+          setActiveSubscriptionsByPlan({});
+          return;
+        }
+
+        const now = new Date();
+        const planIdByName = new Map(
+          (plans || []).map((plan) => [
+            String(plan?.name || "").trim().toLowerCase(),
+            String(plan?._id || "").trim(),
+          ])
+        );
+
+        const activeMap = data.payments.reduce((acc, payment) => {
+          let planId = String(payment?.planId || payment?.resolvedPlanId || "").trim();
+
+          if (!planId) {
+            const planNameKey = String(payment?.planName || "")
+              .trim()
+              .toLowerCase();
+            planId = planIdByName.get(planNameKey) || "";
+          }
+
+          if (!planId || !payment?.expiresAt) return acc;
+
+          const expiresAtDate = new Date(payment.expiresAt);
+          if (Number.isNaN(expiresAtDate.getTime()) || expiresAtDate <= now) {
+            return acc;
+          }
+
+          if (
+            !acc[planId] ||
+            new Date(acc[planId].expiresAt) < expiresAtDate
+          ) {
+            acc[planId] = {
+              expiresAt: payment.expiresAt,
+              paymentId: payment._id,
+              planType: payment.planType || "N/A",
+            };
+          }
+
+          return acc;
+        }, {});
+
+        setActiveSubscriptionsByPlan(activeMap);
+      } catch (err) {
+        console.error("Error fetching active subscriptions:", err);
+      }
+    };
+
+    fetchActiveSubscriptions();
+  }, [user, authLoading, plans]);
+
   if (loading) {
     return (
       <div className="py-20 flex items-center justify-center">
         <div className="text-center">
-          <Loader size={40} className="animate-spin mx-auto mb-4 text-lime-500" />
+          <Loader size={40} className="animate-spin mx-auto mb-4 text-sky-600" />
           <p className="text-neutral-600">Loading plans...</p>
         </div>
       </div>
@@ -69,11 +136,11 @@ export default function PlansSection() {
   }
 
   return (
-    <div className="w-full py-16 sm:py-24 bg-linear-to-b from-white via-[#f6f9ff] to-white">
+    <div className="w-full py-16 sm:py-24 bg-linear-to-b from-white via-slate-50/60 to-white">
       {/* Section Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12 sm:mb-16">
         <h2 className="text-4xl sm:text-5xl lg:text-4xl font-black text-neutral-900 mb-6">
-          Choose Your <span className="bg-linear-to-r from-[#9BE749] to-[#6d5bff] bg-clip-text text-transparent">Perfect Plan</span>
+          Choose Your <span className="bg-linear-to-r from-sky-600 to-teal-600 bg-clip-text text-transparent">Perfect Plan</span>
         </h2>
         <p className="text-neutral-700 text-md max-w-3xl mx-auto font-medium">
           Select the perfect subscription plan tailored to your trading needs. Unlock premium insights, real-time analytics, and expert strategies.
@@ -83,13 +150,17 @@ export default function PlansSection() {
       {/* Plans Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16 sm:mb-20">
         {plans.map((plan) => (
-          <PlanCard key={plan._id} plan={plan} />
+          <PlanCard
+            key={plan._id}
+            plan={plan}
+            activeSubscription={activeSubscriptionsByPlan[String(plan._id)] || null}
+          />
         ))}
       </div>
 
       {/* Info Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-linear-to-r from-[#9BE749]/10 via-white to-[#6d5bff]/10 border border-[#9BE749]/30 rounded-2xl p-8 sm:p-12 text-center">
+        <div className="bg-linear-to-r from-sky-100/70 via-white to-teal-100/70 border border-sky-200/70 rounded-2xl p-8 sm:p-12 text-center">
           <h3 className="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">
             Need Help Choosing?
           </h3>
@@ -98,7 +169,7 @@ export default function PlansSection() {
           </p>
           <a
             href="/contact"
-            className="inline-block px-8 py-3.5 bg-linear-to-r from-[#9BE749] to-[#6d5bff] text-white font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform cursor-pointer"
+            className="inline-block px-8 py-3.5 bg-linear-to-r from-sky-600 to-teal-600 text-white font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform cursor-pointer"
           >
             Contact Our Team
           </a>

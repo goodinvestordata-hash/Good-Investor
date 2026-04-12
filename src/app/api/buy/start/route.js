@@ -7,9 +7,13 @@ import { transporter } from "@/app/lib/mailer";
 export async function POST(req) {
   try {
     const { fullName, dob, gender, state, email, panNumber } = await req.json();
+    const normalizedPan = String(panNumber || "")
+      .toUpperCase()
+      .replace(/\s+/g, "")
+      .trim();
 
     // 1. Basic validation
-    if (!fullName || !dob || !gender || !state || !email || !panNumber) {
+    if (!fullName || !dob || !gender || !state || !email || !normalizedPan) {
       return NextResponse.json(
         { message: "All fields are required" },
         { status: 400 },
@@ -18,7 +22,7 @@ export async function POST(req) {
 
     // 2. PAN format validation
     const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
-    if (!panRegex.test(panNumber)) {
+    if (!panRegex.test(normalizedPan)) {
       return NextResponse.json(
         { message: "Invalid PAN format" },
         { status: 400 },
@@ -66,7 +70,7 @@ export async function POST(req) {
       }
       user.email = normalizedEmail;
     }
-    user.panNumber = panNumber;
+    user.panNumber = normalizedPan;
     user.emailOtp = otp;
     user.emailOtpExpiry = new Date(Date.now() + 5 * 60 * 1000); // 5 mins
 
@@ -76,46 +80,67 @@ export async function POST(req) {
     await transporter.sendMail({
       from: process.env.MAIL_FROM || process.env.MAIL_USER,
       to: user.email,
-      subject: "Your OTP for Secure Verification – TRADEMILAAN",
+      subject: "Your OTP for Subscription Verification - Good Investor",
       html: `
-  <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
-    <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
-      
-      <h2 style="color: #333;">Your OTP for Secure Verification – TRADEMILAAN</h2>
-      
-      <p>Dear Customer,</p>
-      
-      <p>Your One-Time Password (OTP) for verification is:</p>
-      
-      <h1 style="letter-spacing: 3px; color: #2c3e50; text-align: center;">
-        ${otp}
-      </h1>
-      
-      <p style="text-align: center; color: #555;">
-        This OTP is valid for <b>5 minutes</b>.
-      </p>
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;padding:0;font-family:'DM Sans',Arial,sans-serif;">
+    <tr>
+      <td align="center" style="padding:20px;">
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-left:4px solid #9BE749;">
+          
+          <!-- Header -->
+          <tr>
+            <td style="padding:28px 32px;">
+              <h1 style="margin:0 0 6px 0;font-size:32px;color:#111827;font-weight:700;line-height:1.2;">Good Investor</h1>
+              <p style="margin:0 0 4px 0;font-size:14px;color:#6b7280;">Eeda Damodara Rao </p>
+              <p style="margin:0 0 2px 0;font-size:11px;color:#9B9B9B;text-transform:uppercase;letter-spacing:1.2px;font-weight:600;">SEBI Registered Research Analyst</p>
+              <p style="margin:0;font-size:10px;color:#9B9B9B;letter-spacing:0.8px;">Registration No: INH000024967</p>
+            </td>
+          </tr>
 
-      <hr style="margin: 20px 0;" />
+          <!-- Main Content -->
+          <tr>
+            <td style="padding:0 32px 28px 32px;">
+              
+              <h2 style="font-size:18px;margin:0 0 8px 0;color:#111827;font-weight:700;">Secure Verification Required</h2>
+              <p style="font-size:14px;color:#404040;margin:0 0 24px 0;line-height:1.6;">Your One-Time Password (OTP) for subscription verification:</p>
 
-      <p style="font-weight: bold;">🔒 Security Note:</p>
-      <ul style="color: #555;">
-        <li>Do NOT share this OTP with anyone.</li>
-        <li>We will never ask for your OTP via phone, email, or message.</li>
-        <li>If you did not initiate this request, please contact our support team immediately.</li>
-      </ul>
+              <!-- OTP Display -->
+              <div style="background:#f9fafb;border:1px solid #eaeaea;padding:28px 24px;margin:0 0 24px 0;text-align:center;">
+                <p style="font-size:12px;color:#9B9B9B;margin:0 0 12px 0;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">One-Time Password</p>
+                <p style="font-size:44px;letter-spacing:8px;color:#111827;font-weight:700;margin:0;font-family:'Courier New',monospace;">
+                  ${otp}
+                </p>
+                <p style="font-size:13px;color:#6b7280;margin:12px 0 0 0;">Valid for 5 minutes</p>
+              </div>
 
-      <p style="margin-top: 20px;">
-        For assistance, reach us at:
-        <br />
-        <b>spkumar.researchanalyst@gmail.com</b> / 
-        <b>+91-7702262206</b>
-      </p>
+              <!-- Security Notice -->
+              <div style="background:#fff9e6;border-left:2px solid #9BE749;padding:16px 18px;margin:0 0 24px 0;">
+                <p style="font-size:13px;color:#5d4e0f;margin:0 0 10px 0;font-weight:700;">Security Notice</p>
+                <ul style="font-size:13px;color:#5d4e0f;margin:0;padding-left:18px;line-height:1.7;">
+                  <li>Never share this OTP with anyone</li>
+                  <li>We never ask for your OTP via phone or follow-up emails</li>
+                  <li>If you did not request this, contact support immediately</li>
+                </ul>
+              </div>
 
-      <p style="margin-top: 20px;">Regards,</p>
-      <p><b>TradeMilaan Team</b></p>
+              <!-- Next Steps -->
+              <p style="font-size:14px;color:#404040;margin:0;line-height:1.6;">Enter this OTP on the verification screen to complete your subscription purchase.</p>
 
-    </div>
-  </div>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:20px 32px;border-top:1px solid #eaeaea;background:#f9fafb;">
+              <p style="font-size:12px;color:#9B9B9B;margin:0 0 8px 0;text-align:center;">Need help? Email <a href="mailto:damu.researchanalyst@gmail.com" style="color:#9BE749;text-decoration:none;font-weight:600;">damu.researchanalyst@gmail.com</a></p>
+              <p style="font-size:11px;color:#9B9B9B;margin:0;text-align:center;">© ${new Date().getFullYear()} Good Investor | Eeda Damodara Rao , SEBI Registered Research Analyst</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
   `,
     });
 

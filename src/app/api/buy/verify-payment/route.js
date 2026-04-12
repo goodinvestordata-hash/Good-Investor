@@ -50,7 +50,7 @@ export async function POST(req) {
     const uploadResult = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          folder: "trademilaan/payment-proofs",
+          folder: "Good Investor/payment-proofs",
           resource_type: "auto",
           public_id: `payment_${user._id}_${Date.now()}`,
         },

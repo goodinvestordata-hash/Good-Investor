@@ -1,29 +1,13 @@
 import connectDB from "@/app/lib/db";
 import User from "@/app/lib/models/User";
 import Payment from "@/app/lib/models/Payment";
-import { verifyToken } from "@/app/lib/jwt";
-import { cookies } from "next/headers";
+import { requireAdmin } from "@/app/lib/authServer";
+import { NextResponse } from "next/server";
 
 export async function GET(req) {
   try {
-    // Verify user is authenticated and is admin
-    const cookieStore = await cookies();
-    const token = cookieStore.get("token")?.value;
-
-    if (!token) {
-      return Response.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 }
-      );
-    }
-
-    const decoded = verifyToken(token);
-    if (!decoded || decoded.role !== "admin") {
-      return Response.json(
-        { success: false, message: "Admin access required" },
-        { status: 403 }
-      );
-    }
+    // ✅ SECURITY: Use centralized requireAdmin() instead of inline verification
+    await requireAdmin();
 
     await connectDB();
 
@@ -219,9 +203,17 @@ export async function GET(req) {
       monthly_revenue_details: monthlyRevenueDetails,
     });
   } catch (error) {
+    // Handle auth errors from requireAdmin()
+    if (error.statusCode === 401) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (error.statusCode === 403) {
+      return NextResponse.json({ error: "Forbidden - Admin access required" }, { status: 403 });
+    }
+    
     console.error("Analytics error:", error);
-    return Response.json(
-      { success: false, message: "Internal server error", error: error.message },
+    return NextResponse.json(
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

@@ -1,39 +1,48 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/app/lib/db";
-import mongoose from "mongoose";
+import User from "@/app/lib/models/User";
+import { verifyToken } from "@/app/lib/jwt";
 
-export async function POST(req) {
+export async function GET(req) {
   try {
-    const body = await req.json();
-    const { user, riskForm } = body;
-    if (!user || !riskForm) {
+    const token = req.cookies.get("token")?.value;
+    if (!token) {
       return NextResponse.json(
-        { error: "Missing user or form data" },
-        { status: 400 },
+        { message: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const decoded = verifyToken(token);
+    if (!decoded) {
+      return NextResponse.json(
+        { message: "Invalid token" },
+        { status: 401 }
       );
     }
 
     await connectDB();
-    const RiskProfile =
-      mongoose.models.RiskProfile ||
-      mongoose.model(
-        "RiskProfile",
-        new mongoose.Schema({
-          userId: String,
-          username: String,
-          email: String,
-          answers: Object,
-          createdAt: { type: Date, default: Date.now },
-        }),
+
+    const user = await User.findById(decoded.id).select("riskProfile");
+
+    console.log("Retrieved risk profile for user:", decoded.id);
+    console.log("Risk profile data:", user?.riskProfile);
+
+    if (!user) {
+      return NextResponse.json(
+        { message: "User not found" },
+        { status: 404 }
       );
-    await RiskProfile.create({
-      userId: user._id || user.id || user.email,
-      username: user.username,
-      email: user.email,
-      answers: riskForm,
+    }
+
+    return NextResponse.json({
+      riskProfile: user.riskProfile || null,
     });
-    return NextResponse.json({ success: true });
-  } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (error) {
+    console.error("Error fetching risk profile:", error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

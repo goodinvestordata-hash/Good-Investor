@@ -1,15 +1,128 @@
 // Send agreement PDF as attachment
-export async function sendAgreementPDFMail({ to, pdfBuffer, clientName }) {
+export async function sendAgreementPDFMail({
+  to,
+  pdfBuffer,
+  clientName,
+  clientPan,
+  userPan,
+}) {
   const from =
     process.env.MAIL_FROM ||
     process.env.MAIL_USER ||
-    "trademilaan.data@gmail.com";
+    "Good Investor.data@gmail.com";
+
+  const panDisplay = clientPan ? clientPan : "Not Provided";
+  const currentYear = new Date().getFullYear();
+  const signedDate = new Date().toLocaleDateString("en-IN", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  // ---------- HTML EMAIL ----------
+  const html = `
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;padding:0;font-family:'DM Sans',Arial,sans-serif;">
+    <tr>
+      <td align="center" style="padding:20px;">
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-left:4px solid #9BE749;">
+          
+          <!-- Header -->
+          <tr>
+            <td style="padding:28px 32px;">
+              <h1 style="margin:0 0 6px 0;font-size:32px;color:#111827;font-weight:700;line-height:1.2;">Good Investor</h1>
+              <p style="margin:0 0 4px 0;font-size:14px;color:#6b7280;">Eeda Damodara Rao </p>
+              <p style="margin:0 0 2px 0;font-size:11px;color:#9B9B9B;text-transform:uppercase;letter-spacing:1.2px;font-weight:600;">SEBI Registered Research Analyst</p>
+              <p style="margin:0;font-size:10px;color:#9B9B9B;letter-spacing:0.8px;">Registration No: INH000024967</p>
+            </td>
+          </tr>
+
+          <!-- Main Content -->
+          <tr>
+            <td style="padding:0 32px 28px 32px;">
+              
+              <!-- Greeting -->
+              <p style="font-size:15px;margin:0 0 2px 0;color:#111827;font-weight:600;">Dear ${clientName || "Valued Client"},</p>
+              <p style="font-size:13px;color:#6b7280;margin:0 0 24px 0;">PAN: ${panDisplay}</p>
+
+              <!-- Main Message -->
+              <h2 style="font-size:18px;margin:0 0 8px 0;color:#111827;font-weight:700;">Service Agreement Executed</h2>
+              <p style="font-size:14px;color:#404040;margin:0 0 24px 0;line-height:1.6;">
+                Your Service Agreement has been successfully signed and executed. The complete agreement PDF is attached to this email for your records.
+              </p>
+
+              <!-- Agreement Details Section -->
+              <p style="font-size:13px;font-weight:700;color:#9BE749;margin:0 0 12px 0;text-transform:uppercase;letter-spacing:0.8px;">Agreement Details</p>
+              <div style="margin:0 0 24px 0;">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#6b7280;font-weight:500;">Signed Date</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#111827;text-align:right;">${signedDate}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#6b7280;font-weight:500;">Client Name</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#111827;text-align:right;">${clientName || "Not Provided"}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#6b7280;font-weight:500;">PAN Number</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#111827;text-align:right;">${panDisplay}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:10px 0;font-size:14px;color:#6b7280;font-weight:500;">Document Type</td>
+                    <td style="padding:10px 0;font-size:14px;color:#111827;text-align:right;">Service Agreement</td>
+                  </tr>
+                </table>
+              </div>
+
+              <!-- Important Compliance Points -->
+              <p style="font-size:13px;font-weight:700;color:#9BE749;margin:0 0 8px 0;text-transform:uppercase;letter-spacing:0.8px;">Important Compliance Points</p>
+              <ul style="margin:0 0 20px 0;padding-left:18px;font-size:14px;color:#404040;line-height:1.8;">
+                <li style="margin-bottom:8px;">Services will be activated only after fulfillment of all regulatory and compliance requirements.</li>
+                <li style="margin-bottom:8px;">Ensure all KYC details are accurate and match your official documents.</li>
+                <li style="margin-bottom:8px;">Any delay in KYC verification may delay service activation.</li>
+                <li style="margin-bottom:8px;">Payments are subject to company policies and applicable regulatory guidelines.</li>
+                <li style="margin-bottom:8px;"><strong>Eeda Damodara Rao  does not provide any assured or guaranteed returns.</strong></li>
+                <li>Investments in securities markets are subject to market risks; please read all related documents carefully before investing.</li>
+              </ul>
+
+              <!-- Onboarding Steps -->
+              <p style="font-size:13px;font-weight:700;color:#9BE749;margin:0 0 8px 0;text-transform:uppercase;letter-spacing:0.8px;">Next Steps to Proceed with Onboarding</p>
+              <ol style="margin:0 0 24px 0;padding-left:18px;font-size:14px;color:#404040;line-height:1.8;">
+                <li style="margin-bottom:8px;">Kindly review the attached agreement carefully.</li>
+                <li style="margin-bottom:8px;">Report any errors or discrepancies immediately to <a href="mailto:damu.researchanalyst@gmail.com" style="color:#9BE749;text-decoration:none;font-weight:600;">damu.researchanalyst@gmail.com</a>.</li>
+                <li style="margin-bottom:8px;">Complete your subscription payment (if applicable).</li>
+                <li>Services will be activated only after successful KYC verification through a SEBI-registered KYC Registration Agency (KRA).</li>
+              </ol>
+
+              <!-- SEBI & Contact -->
+              <p style="font-size:12px;color:#404040;margin:0 0 12px 0;line-height:1.6;">Eeda Damodara Rao  is SEBI Registered Research Analyst (Registration No: INH000024967).</p>
+              <p style="font-size:12px;color:#404040;margin:0;line-height:1.6;">Need help? Email <a href="mailto:damu.researchanalyst@gmail.com" style="color:#9BE749;text-decoration:none;font-weight:600;">damu.researchanalyst@gmail.com</a></p>
+
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:20px 32px;border-top:1px solid #eaeaea;background:#f9fafb;">
+              <p style="font-size:11px;color:#9B9B9B;margin:0 0 6px 0;text-align:center;">© ${currentYear} Good Investor | Eeda Damodara Rao , SEBI Registered Research Analyst</p>
+              <p style="font-size:11px;color:#9B9B9B;margin:0;text-align:center;">
+                <a href="https://www.Good Investor.com/privacy-policy" style="color:#9BE749;text-decoration:none;">Privacy Policy</a> • 
+                <a href="https://www.Good Investor.com/terms-and-condition" style="color:#9BE749;text-decoration:none;">Terms & Conditions</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+  `;
 
   const mailOptions = {
     from,
     to,
-    subject: "Your Signed Agreement PDF - trademilaan",
-    text: `Dear ${clientName || "User"},\n\nPlease find attached your signed agreement PDF.\n\nRegards,\ntrademilaan`,
+    subject: "Your Signed Service Agreement - Good Investor",
+    html,
+    text: `Dear ${clientName || "Valued Client"},\n\nYour Service Agreement has been successfully signed and executed.\n\nPlease find the complete agreement PDF attached to this email.\n\nPAN: ${panDisplay}\nDate: ${signedDate}\n\nThank you for choosing Good Investor.\n\nRegards,\nEeda Damodara Rao \nSEBI Registered Research Analyst (INH000024967)\ndamu.researchanalyst@gmail.com\n+91 9704648777`,
     attachments: [
       {
         filename: "agreement.pdf",
@@ -17,6 +130,7 @@ export async function sendAgreementPDFMail({ to, pdfBuffer, clientName }) {
         contentType: "application/pdf",
       },
     ],
+    replyTo: "damu.researchanalyst@gmail.com",
   };
 
   try {
@@ -31,6 +145,8 @@ export async function sendAgreementPDFMail({ to, pdfBuffer, clientName }) {
   }
 }
 import nodemailer from "nodemailer";
+import connectDB from "@/app/lib/db";
+import User from "@/app/lib/models/User";
 
 console.log("MAILER FILE LOADED");
 
@@ -45,8 +161,8 @@ const transporter = nodemailer.createTransport({
     user: process.env.MAIL_USER,
     pass: process.env.MAIL_PASS,
   },
-  logger: true,
-  debug: true,
+  logger: process.env.NODE_ENV === "development",
+  debug: process.env.NODE_ENV === "development",
 });
 
 // Verify SMTP
@@ -69,74 +185,62 @@ export async function sendTermsAndConditionsMail(email) {
   const from =
     process.env.MAIL_FROM ||
     process.env.MAIL_USER ||
-    "trademilaan.data@gmail.com";
+    "Good Investor.data@gmail.com";
 
   // ---------- HTML EMAIL ----------
   const html = `
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f8;padding:24px;font-family:Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;padding:0;font-family:'DM Sans',Arial,sans-serif;">
     <tr>
-      <td align="center">
-        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;overflow:hidden;">
+      <td align="center" style="padding:20px;">
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-left:4px solid #9BE749;">
           
           <!-- Header -->
           <tr>
-            <td style="background:#0f172a;padding:20px;text-align:center;">
-              <h1 style="color:#22c55e;margin:0;font-size:22px;">trademilaan</h1>
-              <p style="color:#cbd5e1;margin:4px 0 0;font-size:13px;">
-                SEBI Registered Research Analyst
-              </p>
+            <td style="padding:28px 32px;">
+              <h1 style="margin:0 0 6px 0;font-size:32px;color:#111827;font-weight:700;line-height:1.2;">Good Investor</h1>
+              <p style="margin:0 0 4px 0;font-size:14px;color:#6b7280;">Eeda Damodara Rao </p>
+              <p style="margin:0 0 2px 0;font-size:11px;color:#9B9B9B;text-transform:uppercase;letter-spacing:1.2px;font-weight:600;">SEBI Registered Research Analyst</p>
+              <p style="margin:0;font-size:10px;color:#9B9B9B;letter-spacing:0.8px;">Registration No: INH000024967</p>
             </td>
           </tr>
 
-          <!-- Body -->
+          <!-- Main Content -->
           <tr>
-            <td style="padding:24px;color:#111827;">
-              <p style="font-size:15px;margin-top:0;">
-                Thank you for signing up with <strong>trademilaan</strong>.
-              </p>
-
-              <p style="font-size:14px;">
-                Before using our services, please review and understand our
-                <strong>Terms & Conditions</strong> as mandated by SEBI.
+            <td style="padding:0 32px 28px 32px;">
+              
+              <h2 style="font-size:18px;margin:0 0 8px 0;color:#111827;font-weight:700;">Terms & Conditions</h2>
+              <p style="font-size:14px;color:#404040;margin:0 0 24px 0;line-height:1.6;">
+                Thank you for signing up. Before using our research services, please review and understand our Terms & Conditions as mandated by SEBI.
               </p>
 
               <!-- Button -->
               <div style="text-align:center;margin:24px 0;">
                 <a href="${termsUrl}" target="_blank"
-                  style="background:#22c55e;color:#ffffff;
-                  padding:12px 20px;text-decoration:none;
-                  border-radius:6px;font-weight:bold;font-size:14px;">
-                  View Terms & Conditions
+                  style="background:#9BE749;color:#111827;padding:12px 32px;text-decoration:none;border-radius:4px;font-weight:600;font-size:14px;display:inline-block;">
+                  View Full Terms & Conditions
                 </a>
               </div>
 
-              <!-- Highlights -->
-              <ul style="font-size:14px;color:#374151;padding-left:18px;">
-                <li>Research-only platform — no trade execution or fund handling</li>
-                <li>Market risks apply; returns are not assured</li>
-                <li>AI-based research may involve inherent limitations</li>
+              <!-- Key Points -->
+              <p style="font-size:13px;font-weight:700;color:#9BE749;margin:24px 0 12px 0;text-transform:uppercase;letter-spacing:0.8px;">What You Should Know</p>
+              <ul style="font-size:14px;color:#404040;padding-left:18px;margin:0 0 24px 0;line-height:1.7;">
+                <li style="margin-bottom:6px;">Research-only platform with no trade execution</li>
+                <li style="margin-bottom:6px;">Market risks apply; returns not guaranteed</li>
+                <li>AI-based research may have limitations</li>
               </ul>
 
-              <p style="font-size:13px;color:#4b5563;">
-                For grievances, contact
-                <a href="mailto:spkumar.researchanalyst@gmail.com">
-                  spkumar.researchanalyst@gmail.com
-                </a>
-                or approach SEBI via SCORES.
-              </p>
+              <!-- Compliance Notice -->
+              <p style="font-size:12px;color:#404040;margin:0;line-height:1.6;">Eeda Damodara Rao  is SEBI Registered Research Analyst (Registration No: INH000024967). For grievances, email <a href="mailto:damu.researchanalyst@gmail.com" style="color:#9BE749;text-decoration:none;font-weight:600;">damu.researchanalyst@gmail.com</a> or visit <a href="https://scores.sebi.gov.in/" style="color:#9BE749;text-decoration:none;font-weight:600;">SCORES</a>.</p>
+
             </td>
           </tr>
 
           <!-- Footer -->
           <tr>
-            <td style="background:#f9fafb;padding:16px;font-size:11px;color:#6b7280;">
-              <p style="margin:0;">
-                <strong>Disclaimer:</strong> SEBI registration and NISM certification
-                do not guarantee performance or assured returns.
-                Investments are subject to market risks.
-              </p>
-              <p style="margin:8px 0 0;">
-                © ${new Date().getFullYear()} trademilaan. All rights reserved.
+            <td style="padding:20px 32px;border-top:1px solid #eaeaea;background:#f9fafb;">
+              <p style="font-size:11px;color:#9B9B9B;margin:0 0 6px 0;text-align:center;">© ${new Date().getFullYear()} Good Investor | Eeda Damodara Rao , SEBI Registered Research Analyst</p>
+              <p style="font-size:11px;color:#9B9B9B;margin:0;text-align:center;">
+                <strong>Disclaimer:</strong> SEBI registration does not guarantee performance or assured returns. Investments are subject to market risks.
               </p>
             </td>
           </tr>
@@ -151,14 +255,202 @@ export async function sendTermsAndConditionsMail(email) {
     const info = await transporter.sendMail({
       from,
       to: email,
-      subject: "trademilaan – Terms & Conditions",
+      subject: "Terms & Conditions – Good Investor",
       html,
-      replyTo: "trademilaan.data@gmail.com",
+      replyTo: "damu.researchanalyst@gmail.com",
     });
 
     console.log("MAIL SENT ✅", info.messageId);
+
+    // Source of truth: mark MITC mailed only when mail send succeeds.
+    await connectDB();
+    await User.findOneAndUpdate(
+      { email: String(email).toLowerCase().trim() },
+      { mitcMailedToUser: true },
+      { new: false },
+    );
+
+    return info;
   } catch (err) {
     console.error("MAIL SEND FAILED ❌", err);
+    throw err;
+  }
+}
+
+// Send invoice PDF as attachment
+export async function sendInvoicePDFMail({
+  to,
+  pdfBuffer,
+  clientName,
+  email,
+  phone,
+  planName,
+  amount,
+  clientPan,
+}) {
+  const from =
+    process.env.MAIL_FROM ||
+    process.env.MAIL_USER ||
+    "Good Investor.data@gmail.com";
+
+  const currentYear = new Date().getFullYear();
+  const invoiceDate = new Date().toLocaleDateString("en-IN", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  // ---------- HTML EMAIL ----------
+  const html = `
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;padding:0;font-family:'DM Sans',Arial,sans-serif;">
+    <tr>
+      <td align="center" style="padding:20px;">
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-left:4px solid #9BE749;">
+          
+          <!-- Header -->
+          <tr>
+            <td style="padding:28px 32px;">
+              <h1 style="margin:0 0 6px 0;font-size:32px;color:#111827;font-weight:700;line-height:1.2;">Good Investor</h1>
+              <p style="margin:0 0 4px 0;font-size:14px;color:#6b7280;">Eeda Damodara Rao </p>
+              <p style="margin:0 0 2px 0;font-size:11px;color:#9B9B9B;text-transform:uppercase;letter-spacing:1.2px;font-weight:600;">SEBI Registered Research Analyst</p>
+              <p style="margin:0;font-size:10px;color:#9B9B9B;letter-spacing:0.8px;">Registration No: INH000024967</p>
+            </td>
+          </tr>
+
+          <!-- Main Content -->
+          <tr>
+            <td style="padding:0 32px 28px 32px;">
+              
+              <!-- Greeting -->
+              <p style="font-size:13px;margin:0 0 2px 0;color:#111827;font-weight:600;">Dear Sir/Madam,</p>
+              <p style="font-size:13px;color:#6b7280;margin:0 0 16px 0;">Greetings from Good Investor (Eeda Damodara Rao ).</p>
+
+              <!-- Main Message -->
+              <h2 style="font-size:16px;margin:0 0 8px 0;color:#111827;font-weight:700;">Your subscription has been successfully initiated.</h2>
+              <p style="font-size:13px;color:#404040;margin:0 0 16px 0;line-height:1.6;">Please find the attached invoice for your records and taxation purposes.</p>
+
+              <!-- Important Notes -->
+              <p style="font-size:13px;font-weight:700;color:#9BE749;margin:0 0 12px 0;text-transform:uppercase;letter-spacing:0.8px;">Kindly Note the Following:</p>
+              <ul style="margin:0 0 20px 0;padding-left:18px;font-size:14px;color:#404040;line-height:1.8;list-style-type:disc;">
+                <li style="margin-bottom:8px;">Your services will be activated only after successful KYC verification through a SEBI-registered KYC Registration Agency (KRA).</li>
+                <li style="margin-bottom:8px;">Post verification, you may access research recommendations through the designated platform.</li>
+                <li style="margin-bottom:8px;">Please retain the attached invoice for your records and taxation purposes.</li>
+                <li>In case of any discrepancies in the invoice or subscription details, kindly report the same to us at the earliest.</li>
+              </ul>
+
+              <!-- Invoice Details Section -->
+              <p style="font-size:13px;font-weight:700;color:#9BE749;margin:0 0 12px 0;text-transform:uppercase;letter-spacing:0.8px;">Invoice Details</p>
+              <div style="margin:0 0 24px 0;">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#6b7280;font-weight:500;">Invoice Date</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#111827;text-align:right;">${invoiceDate}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#6b7280;font-weight:500;">Client Name</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#111827;text-align:right;">${clientName || "Not Provided"}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#6b7280;font-weight:500;">PAN Card Number</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#111827;text-align:right;">${clientPan || "Not Provided"}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#6b7280;font-weight:500;">Service/Plan</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#111827;text-align:right;">${planName || "Subscription Service"}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#6b7280;font-weight:500;">Amount Paid</td>
+                    <td style="padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#111827;text-align:right;font-weight:600;">Rs. ${amount}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:10px 0;font-size:14px;color:#6b7280;font-weight:500;">Contact</td>
+                    <td style="padding:10px 0;font-size:14px;color:#111827;text-align:right;">+91 ${phone}</td>
+                  </tr>
+                </table>
+              </div>
+
+              <!-- Compliance Disclosure -->
+              <p style="font-size:13px;font-weight:700;color:#9BE749;margin:0 0 12px 0;text-transform:uppercase;letter-spacing:0.8px;">Compliance Disclosure:</p>
+              <p style="font-size:14px;color:#404040;margin:0 0 12px 0;line-height:1.6;">Mr. Eeda Damodara Rao  is a SEBI Registered Research Analyst (Registration No: INH000024967). For Disclaimers and Disclosure please visit <a href="https://www.Good Investor.in" style="color:#9BE749;text-decoration:none;font-weight:600;">www.Good Investor.in</a></p>
+
+              <!-- Support Contact -->
+              <p style="font-size:14px;color:#404040;margin:0;line-height:1.6;">For any assistance, feel free to contact our support team at <a href="tel:7702262206" style="color:#9BE749;text-decoration:none;font-weight:600;">+91-7702262206</a> or <a href="mailto:damu.researchanalyst@gmail.com" style="color:#9BE749;text-decoration:none;font-weight:600;">damu.researchanalyst@gmail.com</a></p>
+
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:20px 32px;border-top:1px solid #eaeaea;background:#f9fafb;">
+              <p style="font-size:11px;color:#9B9B9B;margin:0 0 6px 0;text-align:center;">© ${currentYear} Good Investor | Eeda Damodara Rao , SEBI Registered Research Analyst</p>
+              <p style="font-size:11px;color:#9B9B9B;margin:0;text-align:center;">
+                <a href="https://www.Good Investor.com/privacy-policy" style="color:#9BE749;text-decoration:none;">Privacy Policy</a> • 
+                <a href="https://www.Good Investor.com/terms-and-condition" style="color:#9BE749;text-decoration:none;">Terms & Conditions</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+  `;
+
+  const mailOptions = {
+    from,
+    to: [to, "damu.researchanalyst@gmail.com"],
+    subject: "Subscription Initiated - Invoice & Activation Details",
+    html,
+    text: `Dear Sir/Madam,
+
+Greetings from Good Investor (Eeda Damodara Rao ).
+
+Your subscription has been successfully initiated.
+
+Please find the attached invoice for your records and taxation purposes.
+
+Kindly Note the Following:
+
+1. Your services will be activated only after successful KYC verification through a SEBI-registered KYC Registration Agency (KRA).
+2. Post verification, you may access research recommendations through the designated platform.
+3. Please retain the attached invoice for your records and taxation purposes.
+4. In case of any discrepancies in the invoice or subscription details, kindly report the same to us at the earliest.
+
+Invoice Details:
+Invoice Date: ${invoiceDate}
+Client Name: ${clientName || "Not Provided"}
+Service/Plan: ${planName || "Subscription Service"}
+Amount Paid: Rs. ${amount}
+Contact: +91 ${phone}
+
+Compliance Disclosure:
+Mr. Eeda Damodara Rao  is a SEBI Registered Research Analyst (Registration No: INH000024967).
+For Disclaimers and Disclosure please visit www.Good Investor.in
+
+For any assistance, feel free to contact our support team at +91-7702262206 or damu.researchanalyst@gmail.com
+
+Regards,
+Eeda Damodara Rao 
+SEBI Registered Research Analyst (INH000024967)`,
+    attachments: [
+      {
+        filename: "invoice.pdf",
+        content: pdfBuffer,
+        contentType: "application/pdf",
+      },
+    ],
+    replyTo: "damu.researchanalyst@gmail.com",
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Invoice PDF mail sent ✅", info);
+  } catch (err) {
+    console.error("Invoice PDF mail send failed ❌", err);
+    if (err && err.response) {
+      console.error("Mailer error response:", err.response);
+    }
+    throw err;
   }
 }
 

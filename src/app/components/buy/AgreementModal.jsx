@@ -115,12 +115,28 @@ export default function AgreementModal({
         user?.panNumber ||
         user?.pan ||
         "NOT_PROVIDED";
+      const clientPhone =
+        userDetails?.phone ||
+        user?.phone ||
+        "";
+      const clientDob =
+        userDetails?.dob ||
+        user?.dob ||
+        "";
+      const clientState =
+        userDetails?.state ||
+        user?.state ||
+        "";
 
       const signingPayload = {
         agreementHtml, // Now using pre-captured HTML
         userId: user?._id || user?.id,
         clientName,
         clientPan,
+        clientPhone,
+        clientDob,
+        clientState,
+        signedPlanName: planData?.planName || planData?.name || "",
         signatureData: signedData.signatureUrl,
         signedName: signedData.signedName,
         signedTimestamp: signedData.signedTimestamp,
@@ -241,10 +257,40 @@ export default function AgreementModal({
                       >
                         Download Invoice
                       </button>
+
                     ) : (
-                      <p className="mt-4 text-gray-500">
-                        Generating invoice...
-                      </p>
+                      <>
+                        <h2 className="text-2xl font-bold text-green-600 mb-4">
+                          Payment Successful!
+                        </h2>
+                        <p className="text-lg">Thank you for your payment.</p>
+                        <button
+                          className="mt-4 px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+                          onClick={async () => {
+                            const params = new URLSearchParams({
+                              payment_id: paymentResult.razorpay_payment_id,
+                              name: paymentResult.name,
+                              email: paymentResult.email,
+                              phone: paymentResult.phone,
+                              amount: paymentResult.amount?.toString() || "4399",
+                            });
+                            const response = await fetch(
+                              `/api/payment/invoice?${params.toString()}`,
+                            );
+                            const blob = await response.blob();
+                            const url = window.URL.createObjectURL(blob);
+                            const link = document.createElement("a");
+                            link.href = url;
+                            link.download = `invoice-${paymentResult.razorpay_payment_id}.pdf`;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            window.URL.revokeObjectURL(url);
+                          }}
+                        >
+                          Download Invoice
+                        </button>
+                      </>
                     )}
                   </>
                 ) : (

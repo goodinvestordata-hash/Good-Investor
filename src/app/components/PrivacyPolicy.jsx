@@ -24,15 +24,15 @@ export default function PrivacyPolicy() {
         <section>
           <h2 className="text-2xl font-bold mb-3">Introduction</h2>
           <p>
-            This Privacy Policy describes how <b>MS Sasikumar Peyyala</b> (“we”,
-            “our”, “us”) collect, use, share, protect or otherwise process your
-            personal data through our website{" "}
+            This Privacy Policy describes how <b>MS Eeda Damodara Rao </b>{" "}
+            (“we”, “our”, “us”) collect, use, share, protect or otherwise
+            process your personal data through our website{" "}
             <a
-              href="https://trademilaan.in/"
+              href="https://Good Investor.in/"
               target="_blank"
               className="text-blue-600 underline"
             >
-              https://trademilaan.in/
+              https://Good Investor.in/
             </a>{" "}
             (“Platform”). By using this Platform, you agree to be governed by
             this Privacy Policy and the laws of India. If you do not agree,

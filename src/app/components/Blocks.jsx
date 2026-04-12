@@ -6,13 +6,13 @@ import { FiArrowRight, FiMail, FiMapPin } from "react-icons/fi";
 
 export const RevealBento = () => {
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-white via-[#f7f9ff] to-white px-4 py-12">
+    <div className="relative min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100/50 px-4 py-12">
       <div
         className="pointer-events-none absolute inset-0 opacity-60 blur-3xl"
         aria-hidden
       >
-        <div className="absolute left-10 top-16 h-64 w-64 rounded-full bg-[#9BE749]/30" />
-        <div className="absolute right-12 bottom-28 h-72 w-72 rounded-full bg-[#6d5bff]/25" />
+        <div className="absolute left-10 top-16 h-64 w-64 rounded-full bg-sky-200/30" />
+        <div className="absolute right-12 bottom-28 h-72 w-72 rounded-full bg-teal-200/30" />
       </div>
       <motion.div
         initial="initial"
@@ -64,18 +64,18 @@ const Block = ({ className, ...rest }) => {
 
 const HeaderBlock = () => (
   <Block className="col-span-12 row-span-2 md:col-span-6">
-    <div className="mb-4 size-14 rounded-full bg-gradient-to-br from-[#9BE749] to-[#6d5bff] text-neutral-900 flex items-center justify-center text-3xl shadow-lg shadow-[#9BE749]/35">
+    <div className="mb-4 size-14 rounded-full bg-gradient-to-br from-sky-400 to-teal-500 text-white flex items-center justify-center text-3xl shadow-lg shadow-sky-300/35">
       📊
     </div>
     <h1 className="mb-12 text-4xl font-semibold leading-tight text-neutral-900">
-      trademilaan.{" "}
+      Good Investor.{" "}
       <span className="text-slate-500 font-normal">
         AI-Powered Market Insights for Smarter Trading.
       </span>
     </h1>
     <a
       href="/contact"
-      className="flex items-center gap-2 text-[#6d5bff] font-semibold hover:underline"
+      className="flex items-center gap-2 text-sky-700 font-semibold hover:underline"
     >
       Contact us <FiArrowRight />
     </a>
@@ -99,7 +99,7 @@ const HoverLiftBlock = ({ title, description }) => {
       }}
       className="relative col-span-6 md:col-span-3 h-48 cursor-pointer rounded-xl"
     >
-      <div className="relative h-full overflow-hidden rounded-xl border border-slate-200/70 bg-white/95 p-5 shadow-sm transition hover:-translate-y-1 hover:border-[#9BE749] hover:shadow-[0_18px_40px_rgba(109,91,255,0.22)]">
+      <div className="relative h-full overflow-hidden rounded-xl border border-slate-200/70 bg-white/95 p-5 shadow-sm transition hover:-translate-y-1 hover:border-sky-300 hover:shadow-[0_18px_40px_rgba(14,116,144,0.20)]">
         {/* Title (always visible) */}
         <motion.h3
           variants={{
@@ -157,7 +157,7 @@ const AboutBlock = () => (
     <p>
       Our mission is empowering traders.{" "}
       <span className="text-slate-500">
-        Sasikumar Peyyala leverages advanced AI and machine learning to simplify
+        Eeda Damodara Rao leverages advanced AI and machine learning to simplify
         complex market data into actionable insights. With nine years of
         financial expertise, we develop research-driven models that help traders
         and investors make smarter, faster, and more confident decisions in
@@ -169,9 +169,9 @@ const AboutBlock = () => (
 
 const LocationBlock = () => (
   <Block className="col-span-12 flex flex-col items-center gap-4 md:col-span-3">
-    <FiMapPin className="text-3xl text-[#6d5bff]" />
+    <FiMapPin className="text-3xl text-sky-700" />
     <p className="text-center text-lg text-slate-600">
-      Vijayawada, Andhra Pradesh
+      T2601, MY HOME TRIDASA,TELLAPUR SANGA REDDY, HYDERABAD, TELANGANA, 502032
     </p>
   </Block>
 );
@@ -188,11 +188,11 @@ const EmailListBlock = () => (
       <input
         type="email"
         placeholder="Enter your email"
-        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-neutral-900 shadow-inner shadow-slate-100 transition-colors placeholder:text-slate-400 focus:border-[#6d5bff] focus:ring-2 focus:ring-[#6d5bff]/25 focus:outline-0"
+        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-neutral-900 shadow-inner shadow-slate-100 transition-colors placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/25 focus:outline-0"
       />
       <button
         type="submit"
-        className="flex items-center gap-2 whitespace-nowrap rounded-lg bg-gradient-to-r from-[#9BE749] via-[#7ed957] to-[#6d5bff] px-4 py-2 text-sm font-semibold text-neutral-900 transition hover:shadow-[0_12px_30px_rgba(109,91,255,0.28)]"
+        className="flex items-center gap-2 whitespace-nowrap rounded-lg bg-gradient-to-r from-sky-600 to-teal-600 px-4 py-2 text-sm font-semibold text-white transition hover:shadow-[0_12px_30px_rgba(14,116,144,0.28)]"
       >
         <FiMail /> Subscribe
       </button>

@@ -3,16 +3,17 @@ import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { cn } from "@/app/lib/utils";
 
 /**
- * Menu:
- * - hover moves indicator
- * - mouse leave restores active route indicator
+ * Desktop nav: hover indicator + active route.
+ * @param {"light" | "dark"} tone — dark = fintech nav on navy
  */
-export const Menu = ({ children }) => {
+export const Menu = ({ children, tone = "light" }) => {
   const navRef = useRef(null);
   const [indicator, setIndicator] = useState(null);
   const pathname = usePathname();
+  const isDark = tone === "dark";
 
   const moveIndicatorToEl = (el) => {
     if (!el || !navRef.current) return;
@@ -26,15 +27,11 @@ export const Menu = ({ children }) => {
     });
   };
 
-  //  Move indicator to active route
   const moveToActiveRoute = () => {
-    const activeEl = navRef.current?.querySelector(
-      `[data-active="true"]`
-    );
+    const activeEl = navRef.current?.querySelector(`[data-active="true"]`);
     moveIndicatorToEl(activeEl);
   };
 
-  // On route change → sync indicator
   useEffect(() => {
     moveToActiveRoute();
   }, [pathname]);
@@ -42,45 +39,56 @@ export const Menu = ({ children }) => {
   return (
     <div
       ref={navRef}
-      onMouseLeave={moveToActiveRoute} 
-      className="relative flex items-center gap-6"
+      onMouseLeave={moveToActiveRoute}
+      className="relative flex items-center gap-5 xl:gap-6"
     >
       {React.Children.map(children, (child) =>
-        React.cloneElement(child, {
-          onHover: moveIndicatorToEl,
-        })
+        React.isValidElement(child)
+          ? React.cloneElement(child, {
+              onHover: moveIndicatorToEl,
+              tone,
+            })
+          : child,
       )}
 
       {indicator && (
         <motion.div
-          className="absolute -bottom-2 h-[2px] rounded-full bg-purple-500"
+          className={cn(
+            "absolute -bottom-2 h-0.5 rounded-full",
+            isDark ? "bg-[#4FD1C5]/85" : "bg-sky-500/90",
+          )}
           animate={{
             width: indicator.width,
             x: indicator.left,
           }}
-          transition={{ type: "spring", stiffness: 260, damping: 26 }}
+          transition={{ type: "spring", stiffness: 280, damping: 28 }}
         />
       )}
     </div>
   );
 };
 
-/**
- * MenuItem:
- * - reports hover
- * - exposes active state
- */
-export const MenuItem = ({ href, children, onHover }) => {
+export const MenuItem = ({ href, children, onHover, tone = "light" }) => {
   const pathname = usePathname();
   const isActive =
-    href === "/" ? pathname === href : pathname === href || pathname?.startsWith(`${href}/`);
-  
+    href === "/"
+      ? pathname === href
+      : pathname === href || pathname?.startsWith(`${href}/`);
+  const isDark = tone === "dark";
+
   return (
     <Link href={href}>
       <span
         data-active={isActive ? "true" : "false"}
         onMouseEnter={(e) => onHover && onHover(e.currentTarget)}
-        className="cursor-pointer font-medium text-black dark:text-white text-sm lg:text-base whitespace-nowrap"
+        className={cn(
+          "cursor-pointer text-sm font-medium whitespace-nowrap transition-colors lg:text-[0.9375rem]",
+          isDark
+            ? "text-white/70 hover:text-white"
+            : "text-slate-600 hover:text-slate-900",
+          isActive &&
+            (isDark ? "text-[#4FD1C5]" : "text-sky-700"),
+        )}
       >
         {children}
       </span>

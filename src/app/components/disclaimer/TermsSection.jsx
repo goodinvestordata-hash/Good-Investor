@@ -10,7 +10,7 @@ export default function TermsSection() {
       <div>
         <h2 className="text-2xl font-bold mb-4">
           Terms & Conditions of issuance of Research Report issued by SASIKUMAR
-          PEYYALA: INH000019327
+          PEYYALA: INH000024967
         </h2>
 
         <p className="text-gray-600 mb-3">
