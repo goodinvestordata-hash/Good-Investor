@@ -165,11 +165,13 @@ const transporter = nodemailer.createTransport({
   debug: process.env.NODE_ENV === "development",
 });
 
-// Verify SMTP
-transporter
-  .verify()
-  .then(() => console.log("SMTP READY — transporter verified"))
-  .catch((err) => console.error("SMTP VERIFY FAILED ❌", err));
+// Verify SMTP only when credentials exist (skips during CI / Vercel build without env)
+if (process.env.MAIL_USER && process.env.MAIL_PASS) {
+  transporter
+    .verify()
+    .then(() => console.log("SMTP READY — transporter verified"))
+    .catch((err) => console.error("SMTP VERIFY FAILED ❌", err));
+}
 
 export async function sendTermsAndConditionsMail(email) {
   if (!email) throw new Error("Recipient email missing");

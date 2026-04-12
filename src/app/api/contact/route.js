@@ -4,18 +4,6 @@ import connectDB from "@/app/lib/db";
 import ContactMessage from "@/app/lib/models/ContactMessage";
 import { createPerIpRateLimiter } from "@/app/lib/rateLimiter";
 
-// ✅ SECURITY: Get contact receiver from environment
-const CONTACT_RECEIVER_EMAIL =
-  process.env.CONTACT_RECEIVER_EMAIL || process.env.MAIL_FROM;
-
-if (!CONTACT_RECEIVER_EMAIL) {
-  throw new Error(
-    "CONTACT_RECEIVER_EMAIL or MAIL_FROM environment variable is required",
-  );
-}
-
-const RATE_LIMIT_WINDOW_MS = 60 * 1000;
-
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_REGEX = /^\d{8,15}$/;
 
@@ -61,6 +49,21 @@ export async function POST(request) {
           status: 429,
           headers: { "Retry-After": rateLimitCheck.retryAfter.toString() },
         },
+      );
+    }
+
+    const contactReceiverEmail =
+      process.env.CONTACT_RECEIVER_EMAIL || process.env.MAIL_FROM;
+    if (!contactReceiverEmail) {
+      console.error(
+        "CONTACT_RECEIVER_EMAIL or MAIL_FROM environment variable is required",
+      );
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Unable to send message right now. Please try again shortly.",
+        },
+        { status: 503 },
       );
     }
 
@@ -135,7 +138,7 @@ export async function POST(request) {
     });
 
     const fromAddress = process.env.MAIL_FROM || process.env.MAIL_USER;
-    const receiverMail = escapeHtml(CONTACT_RECEIVER_EMAIL);
+    const receiverMail = escapeHtml(contactReceiverEmail);
 
     const adminHtml = `
       <table width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;padding:24px;font-family:Arial,sans-serif;">
@@ -223,11 +226,11 @@ export async function POST(request) {
       </table>
     `;
 
-    const ackText = `Dear ${name},\n\nThank you for contacting Good Investor.\n\nWe have received your message and will get back to you shortly.\nReference ID: ${referenceId}\n\nFor urgent queries, call +91 9704648777 or email ${CONTACT_RECEIVER_EMAIL}.`;
+    const ackText = `Dear ${name},\n\nThank you for contacting Good Investor.\n\nWe have received your message and will get back to you shortly.\nReference ID: ${referenceId}\n\nFor urgent queries, call +91 9704648777 or email ${contactReceiverEmail}.`;
 
     await transporter.sendMail({
       from: fromAddress,
-      to: CONTACT_RECEIVER_EMAIL,
+      to: contactReceiverEmail,
       replyTo: email,
       subject: `New Contact Inquiry | ${name} | ${referenceId}`,
       text: adminText,
@@ -238,7 +241,7 @@ export async function POST(request) {
       await transporter.sendMail({
         from: fromAddress,
         to: email,
-        replyTo: CONTACT_RECEIVER_EMAIL,
+        replyTo: contactReceiverEmail,
         subject: `We Received Your Message | ${referenceId}`,
         text: ackText,
         html: ackHtml,
