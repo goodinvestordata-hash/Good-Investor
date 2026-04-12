@@ -87,15 +87,15 @@ export default function SensexChartBackdrop() {
 
   return (
     <div
-      className="pointer-events-none absolute inset-0 z-[1] overflow-visible"
+      className="pointer-events-none absolute inset-0 z-[1] overflow-hidden"
       aria-hidden
     >
       <div className="absolute inset-0" style={{ backgroundColor: BG }} />
 
       <svg
-        className="absolute inset-0 h-full w-full overflow-visible"
+        className="absolute inset-0 h-full w-full"
         viewBox={`0 0 ${VB_W} ${VB_H}`}
-        preserveAspectRatio="none"
+        preserveAspectRatio="xMidYMax meet"
         aria-hidden
       >
         <defs>
@@ -134,9 +134,10 @@ export default function SensexChartBackdrop() {
           d={line}
           fill="none"
           stroke={LINE}
-          strokeWidth="2"
+          strokeWidth="2.25"
           strokeLinecap="round"
           strokeLinejoin="round"
+          vectorEffect="nonScalingStroke"
           filter={`url(#${glow})`}
           initial={{ pathLength: initialPath }}
           animate={{ pathLength: 1 }}
@@ -151,9 +152,10 @@ export default function SensexChartBackdrop() {
           d={line}
           fill="none"
           stroke="rgba(255,255,255,0.18)"
-          strokeWidth="0.85"
+          strokeWidth="1"
           strokeLinecap="round"
           strokeLinejoin="round"
+          vectorEffect="nonScalingStroke"
           initial={{ pathLength: initialPath }}
           animate={{ pathLength: 1 }}
           transition={{
@@ -164,25 +166,30 @@ export default function SensexChartBackdrop() {
           }}
         />
 
-        {VERTICES.map(([x, y], i) => (
-          <motion.circle
-            key={`n-${i}`}
-            cx={x}
-            cy={y}
-            r="2.8"
-            fill="#E5E7EB"
-            stroke={LINE}
-            strokeWidth="0.9"
-            strokeOpacity="0.85"
-            initial={{ opacity: reduceMotion ? 1 : 0, scale: reduceMotion ? 1 : 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              delay: reduceMotion ? 0 : DRAW_DURATION * 0.9 + i * 0.04,
-              duration: 0.25,
-              ease: "easeOut",
-            }}
-          />
-        ))}
+        <g className="hidden sm:block">
+          {VERTICES.map(([x, y], i) => (
+            <motion.circle
+              key={`n-${i}`}
+              cx={x}
+              cy={y}
+              r="2.8"
+              fill="#E5E7EB"
+              stroke={LINE}
+              strokeWidth="0.9"
+              strokeOpacity="0.85"
+              initial={{
+                opacity: reduceMotion ? 1 : 0,
+                scale: reduceMotion ? 1 : 0,
+              }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                delay: reduceMotion ? 0 : DRAW_DURATION * 0.9 + i * 0.04,
+                duration: 0.25,
+                ease: "easeOut",
+              }}
+            />
+          ))}
+        </g>
       </svg>
 
       <div

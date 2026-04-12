@@ -7,7 +7,7 @@ import SensexChartBackdrop from "./SensexChartBackdrop";
 export default function HomeHero() {
   return (
     <section
-      className="relative flex min-h-[100dvh] w-full flex-col overflow-visible text-[#E5E7EB]"
+      className="relative flex min-h-[100dvh] w-full flex-col overflow-hidden text-[#E5E7EB]"
       style={{ backgroundColor: "#0A192F" }}
     >
       <SensexChartBackdrop />
