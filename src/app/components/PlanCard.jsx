@@ -2,15 +2,12 @@
 
 import { useState } from "react";
 import { Heart, ChevronRight, Check } from "lucide-react";
-import { useAuth } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
-import BuyNowModal from "@/app/components/buy/BuyNowModal";
+import { whatsappUrl } from "@/app/lib/siteContact";
 
 export default function PlanCard({ plan, activeSubscription = null }) {
-  const { user } = useAuth();
   const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const isPopular = plan.type?.toLowerCase() === "popular" || plan.type?.toLowerCase() === "pro";
   const isActivePlan = Boolean(activeSubscription?.expiresAt);
 
@@ -26,20 +23,13 @@ export default function PlanCard({ plan, activeSubscription = null }) {
     ? String(activeSubscription?.planType || plan?.type || "N/A").toUpperCase()
     : "";
 
-  const handleBuyNow = () => {
-    if (isActivePlan) {
-      router.push("/my-subscriptions");
-      return;
-    }
-
-    if (!user) {
-      router.push("/login");
-      return;
-    }
-
-    // Open the modal - same flow as existing services
-    setShowModal(true);
+  const handleActivePlanClick = () => {
+    if (isActivePlan) router.push("/my-subscriptions");
   };
+
+  const whatsappHref = whatsappUrl(
+    `Hi, I'm interested in "${plan.name}" (₹${Number(plan.price).toLocaleString("en-IN")}). Please share subscription details.`,
+  );
 
   return (
     <>
@@ -151,18 +141,27 @@ export default function PlanCard({ plan, activeSubscription = null }) {
             </ul>
           </div>
 
-          {/* CTA Button */}
-          <button
-            onClick={handleBuyNow}
-            className={`w-full px-6 py-2 sm:py-3 font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn transform shadow-lg hover:shadow-xl cursor-pointer ${
-              isActivePlan
-                ? "bg-neutral-200 text-neutral-700 hover:bg-neutral-300"
-                : "bg-sky-600 text-white hover:bg-sky-500"
-            }`}
-          >
-            {isActivePlan ? "View Active Subscription" : "Buy Now"}
-            <ChevronRight size={18} className="transition-transform group-hover/btn:translate-x-1" />
-          </button>
+          {/* CTA: subscriptions via WhatsApp (no on-site payment) */}
+          {isActivePlan ? (
+            <button
+              type="button"
+              onClick={handleActivePlanClick}
+              className="w-full px-6 py-2 sm:py-3 font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn transform shadow-lg hover:shadow-xl cursor-pointer bg-neutral-200 text-neutral-700 hover:bg-neutral-300"
+            >
+              View Active Subscription
+              <ChevronRight size={18} className="transition-transform group-hover/btn:translate-x-1" />
+            </button>
+          ) : (
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full px-6 py-2 sm:py-3 font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn transform shadow-lg hover:shadow-xl cursor-pointer bg-emerald-600 text-white hover:bg-emerald-500"
+            >
+              Subscribe on WhatsApp
+              <ChevronRight size={18} className="transition-transform group-hover/btn:translate-x-1" />
+            </a>
+          )}
 
           {isActivePlan && (
             <p className="text-xs text-green-700 text-center mt-3 font-semibold">
@@ -172,18 +171,10 @@ export default function PlanCard({ plan, activeSubscription = null }) {
 
           {/* Footer note */}
           <p className="text-xs text-neutral-500 text-center mt-4 font-medium">
-            Cancel anytime • No hidden charges
+            Subscriptions are confirmed directly with our team — no payment on this website.
           </p>
         </div>
       </div>
-
-      {/* Modal with same flow as existing services */}
-      {showModal && (
-        <BuyNowModal
-          onClose={() => setShowModal(false)}
-          planData={{ planId: plan._id, planName: plan.name, price: plan.price }}
-        />
-      )}
     </>
   );
 }
